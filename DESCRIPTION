@@ -1,0 +1,18 @@
+Package: colorplaner
+Type: Package
+Title: Inutitive Visualizations of Multiple Variables With a Single Color Aesthetic
+Version: 0.1
+Date: 2016-07-19
+Author: William Murphy
+Maintainer: William Murphy <william@datatitian.com>
+Description: More about what it does (maybe more than one line)
+License: What license is it under?
+LazyData: TRUE
+Imports:
+  grid,
+  colorscience,
+  lazyeval,
+  scales
+Depends:
+  ggplot2
+Suggests: testthat
