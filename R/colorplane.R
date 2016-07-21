@@ -23,7 +23,7 @@ colorplane <- function(x, y, Y = 128,
   # Y <- scales::rescale(sqrt((x - mean(xRange))^2 + (y - mean(yRange))^2),
   #                      to = c(0, 511))
   YUV <- as.matrix(cbind(Y, u, v))
-  YUV[is.na(x) | is.na(y), ]
+  #YUV[is.na(x) | is.na(y), ]
   out <- YUV2grDeviceRGB(YUV)
   ifelse(is.na(out), naColor, out)
 }

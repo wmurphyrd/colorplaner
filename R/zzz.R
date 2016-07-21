@@ -12,3 +12,10 @@
                  c(ggplot2:::.base_to_ggplot, "color2" = "colour2"),
                  asNamespace("ggplot2"))
 }
+
+`%||%` <- function (a, b)
+{
+  if (!is.null(a))
+    a
+  else b
+}
