@@ -90,27 +90,35 @@ guide_train.colorplane <- function(guide, scale) {
     return(NULL)
   }
 
-  browser()
+
   # create data frame for tick display
-  breaks <- list(scale$get_breaks(dir = "horizontal"),
-                 scale$get_breaks(dir = "vertical"))
-  if (length(unlist(breaks)) == 0 || all(is.na(unlist(breaks))))
+  breaks <- scale$get_breaks(dir = "horizontal")
+  if (length(breaks) == 0 || all(is.na(breaks)))
     return()
   #TODO split ticks into two data frames for horix & vert due to difering lengths
-  ticks <- as.data.frame(lapply(breaks, scale$map))
-  names(ticks) <- paste0(scale$aesthetics[1], c("", "_y"))
-  ticks$.value <- breaks[[1]]
-  ticks$.value_y <- breaks[[2]]
-  ticks$.label <- scale$get_labels(breaks[[1]], dir = "horizontal")
-  ticks$.label_y <- scale$get_labels(breaks[[2]], dir = "vertical")
+  ticks <- data.frame(scale$map(breaks, dir = "horizontal"),
+                      stringsAsFactors = FALSE)
+  names(ticks) <- scale$aesthetics[1]
+  ticks$.value <- breaks
+  ticks$.label <- scale$get_labels(breaks, dir = "horizontal")
+
+  breaks_y <- scale$get_breaks(dir = "vertical")
+  if (length(breaks_y) == 0 || all(is.na(breaks_y)))
+    return()
+  ticks_y <- data.frame(scale$map(breaks_y, dir = "vertical"),
+                        stringsAsFactors = FALSE)
+  names(ticks_y) <- scale$aesthetics[1]
+  ticks_y$.value <- breaks_y
+  ticks_y$.label <- scale$get_labels(breaks_y, dir = "vertical")
 
   guide$key <- ticks
+  guide$key_y <- ticks_y
 
   # bar specification (number of divs etc)
   .limits <- scale$get_limits(dir = "horizontal")
-  .bar <- scales::discard(pretty(.limits, n = guide$nbin), .limits)
+  .bar <- seq(.limits[1], .limits[2], length.out = guide$nbin)
   .limits_y <- scale$get_limits(dir = "vertical")
-  .bar_y <- scales::discard(pretty(.limits_y, n = guide$nbin), .limits_y)
+  .bar_y <- seq(.limits_y[1], .limits_y[2], length.out = guide$nbin)
 
   if (length(.bar) == 0) {
     .bar <- unique(.limits)
@@ -118,6 +126,7 @@ guide_train.colorplane <- function(guide, scale) {
   if (length(.bar_y) == 0) {
     .bar_y <- unique(.limits_y)
   }
+  browser()
   .plane <- expand.grid(.bar, .bar_y)
   names(.plane) <- scale$aesthetics
   .plane <- matrix(scale$map_df(.plane)[[scale$aesthetics[1]]],
@@ -130,7 +139,7 @@ guide_train.colorplane <- function(guide, scale) {
 #     guide$key <- guide$key[nrow(guide$key):1, ]
 #     guide$bar <- guide$bar[nrow(guide$bar):1, ]
 #   }
-  guide$hash <- with(guide, digest::digest(list(title, key$.label, key$.label_y,
+  guide$hash <- with(guide, digest::digest(list(title, key$.label, key_y$.label,
                                                 plane, name)))
   guide
 }
@@ -151,78 +160,98 @@ guide_geom.colorbar <- function(guide, ...) {
 guide_gengrob.colorbar <- function(guide, theme) {
 
   # settings of location and size
-  switch(guide$direction,
-         "horizontal" = {
-           label.position <- guide$label.position %||% "bottom"
-           if (!label.position %in% c("top", "bottom")) stop("label position \"", label.position, "\" is invalid")
+#   switch(guide$direction,
+#          "horizontal" = {
+#            label.position <- guide$label.position %||% "bottom"
+#            if (!label.position %in% c("top", "bottom")) stop("label position \"", label.position, "\" is invalid")
+#
+#            barwidth <- convertWidth(guide$barwidth %||% (theme$legend.key.width * 5), "mm")
+#            barheight <- convertHeight(guide$barheight %||% theme$legend.key.height, "mm")
+#          },
+#          "vertical" = {
+#            label.position <- guide$label.position %||% "right"
+#            if (!label.position %in% c("left", "right")) stop("label position \"", label.position, "\" is invalid")
+#
+#            barwidth <- convertWidth(guide$barwidth %||% theme$legend.key.width, "mm")
+#            barheight <- convertHeight(guide$barheight %||% (theme$legend.key.height * 5), "mm")
+#          })
+  planewidth <- grid::convertWidth(guide$barwidth %||%
+                                     (theme$legend.key.width * 5), "mm")
+  planeheight <- grid::convertHeight(guide$barheight %||%
+                                       (theme$legend.key.height * 5), "mm")
 
-           barwidth <- convertWidth(guide$barwidth %||% (theme$legend.key.width * 5), "mm")
-           barheight <- convertHeight(guide$barheight %||% theme$legend.key.height, "mm")
-         },
-         "vertical" = {
-           label.position <- guide$label.position %||% "right"
-           if (!label.position %in% c("left", "right")) stop("label position \"", label.position, "\" is invalid")
-
-           barwidth <- convertWidth(guide$barwidth %||% theme$legend.key.width, "mm")
-           barheight <- convertHeight(guide$barheight %||% (theme$legend.key.height * 5), "mm")
-         })
-
-  barwidth.c <- c(barwidth)
-  barheight.c <- c(barheight)
-  barlength.c <- switch(guide$direction, "horizontal" = barwidth.c, "vertical" = barheight.c)
+  planewidth.c <- c(barwidth)
+  planeheight.c <- c(barheight)
+  #barlength.c <- switch(guide$direction, "horizontal" = barwidth.c, "vertical" = barheight.c)
   nbreak <- nrow(guide$key)
+  nbreak_y <- nrow(guide$key_y)
 
   # gap between keys etc
-  hgap <- c(convertWidth(unit(0.3, "lines"), "mm"))
+  hgap <- c(grid::convertWidth(unit(0.3, "lines"), "mm"))
   vgap <- hgap
 
   grob.bar <-
-    if (guide$raster) {
-      image <- switch(guide$direction, horizontal = t(guide$bar$colour), vertical = rev(guide$bar$colour))
-      rasterGrob(image = image, width = barwidth.c, height = barheight.c, default.units = "mm", gp = gpar(col = NA), interpolate = TRUE)
-    } else {
-      switch(guide$direction,
-             horizontal = {
-               bw <- barwidth.c / nrow(guide$bar)
-               bx <- (seq(nrow(guide$bar)) - 1) * bw
-               rectGrob(x = bx, y = 0, vjust = 0, hjust = 0, width = bw, height = barheight.c, default.units = "mm",
-                        gp = gpar(col = NA, fill = guide$bar$colour))
-             },
-             vertical = {
-               bh <- barheight.c / nrow(guide$bar)
-               by <- (seq(nrow(guide$bar)) - 1) * bh
-               rectGrob(x = 0, y = by, vjust = 0, hjust = 0, width = barwidth.c, height = bh, default.units = "mm",
-                        gp = gpar(col = NA, fill = guide$bar$colour))
-             })
-    }
+    rasterGrob(guide$plane, width = planewidth.c, height = planeheight.c,
+               default.units = "mm", gp = gpar(col = NA), interpolate = TRUE)
+#     if (guide$raster) {
+#       image <- switch(guide$direction, horizontal = t(guide$bar$colour), vertical = rev(guide$bar$colour))
+#       rasterGrob(image = image, width = barwidth.c, height = barheight.c, default.units = "mm", gp = gpar(col = NA), interpolate = TRUE)
+#     } else {
+#       switch(guide$direction,
+#              horizontal = {
+#                bw <- barwidth.c / nrow(guide$bar)
+#                bx <- (seq(nrow(guide$bar)) - 1) * bw
+#                rectGrob(x = bx, y = 0, vjust = 0, hjust = 0, width = bw, height = barheight.c, default.units = "mm",
+#                         gp = gpar(col = NA, fill = guide$bar$colour))
+#              },
+#              vertical = {
+#                bh <- barheight.c / nrow(guide$bar)
+#                by <- (seq(nrow(guide$bar)) - 1) * bh
+#                rectGrob(x = 0, y = by, vjust = 0, hjust = 0, width = barwidth.c, height = bh, default.units = "mm",
+#                         gp = gpar(col = NA, fill = guide$bar$colour))
+#              })
+#     }
 
   # tick and label position
-  tic_pos.c <- rescale(guide$key$.value, c(0.5, guide$nbin - 0.5), guide$bar$value[c(1, nrow(guide$bar))]) * barlength.c / guide$nbin
+  tic_pos.c <- scales::rescale(guide$key$.value, c(0.5, guide$nbin - 0.5),
+                               range(attr(guide$plane, "value"),
+                                     na.rm = T, finite = T)) *
+    planewidth.c / guide$nbin
   label_pos <- unit(tic_pos.c, "mm")
   if (!guide$draw.ulim) tic_pos.c <- tic_pos.c[-1]
   if (!guide$draw.llim) tic_pos.c <- tic_pos.c[-length(tic_pos.c)]
 
+  tic_pos_y.c <- scales::rescale(guide$key_y$.value, c(0.5, guide$nbin - 0.5),
+                               range(attr(guide$plane, "value_y"),
+                                     na.rm = T, finite = T)) *
+    planeheight.c / guide$nbin
+  label_pos_y <- unit(tic_pos_y.c, "mm")
+  if (!guide$draw.ulim) tic_pos_y.c <- tic_pos_y.c[-1]
+  if (!guide$draw.llim) tic_pos_y.c <- tic_pos_y.c[-length(tic_pos_y.c)]
+
   # title
-  grob.title <- ggname("guide.title",
-                       element_grob(
-                         guide$title.theme %||% calc_element("legend.title", theme),
-                         label = guide$title,
-                         hjust = guide$title.hjust %||% theme$legend.title.align %||% 0,
-                         vjust = guide$title.vjust %||% 0.5
-                       )
+  grob.title <- ggplot2:::ggname(
+    "guide.title",
+    ggplot2::element_grob(
+      guide$title.theme %||% ggplot2::calc_element("legend.title", theme),
+      label = guide$title,
+      hjust = guide$title.hjust %||% theme$legend.title.align %||% 0,
+      vjust = guide$title.vjust %||% 0.5
+    )
   )
 
 
-  title_width <- convertWidth(grobWidth(grob.title), "mm")
+  title_width <- grid::convertWidth(grid::grobWidth(grob.title), "mm")
   title_width.c <- c(title_width)
-  title_height <- convertHeight(grobHeight(grob.title), "mm")
+  title_height <- grid::convertHeight(grid::grobHeight(grob.title), "mm")
   title_height.c <- c(title_height)
 
   # label
-  label.theme <- guide$label.theme %||% calc_element("legend.text", theme)
+  label.theme <- guide$label.theme %||%
+    ggplot2::calc_element("legend.text", theme)
   grob.label <- {
     if (!guide$label)
-      zeroGrob()
+      ggplot2::zeroGrob()
     else {
       hjust <- x <- guide$label.hjust %||% theme$legend.text.align %||%
         if (any(is.expression(guide$key$.label))) 1 else switch(guide$direction, horizontal = 0.5, vertical = 0)
@@ -253,7 +282,7 @@ guide_gengrob.colorbar <- function(guide, theme) {
 
   # ticks
   grob.ticks <-
-    if (!guide$ticks) zeroGrob()
+    if (!guide$ticks) ggplot2::zeroGrob()
   else {
     switch(guide$direction,
            "horizontal" = {
@@ -268,8 +297,8 @@ guide_gengrob.colorbar <- function(guide, theme) {
              x1 = c(rep(barwidth.c * (1/5), nbreak), rep(barwidth.c, nbreak))
              y1 = rep(tic_pos.c, 2)
            })
-    segmentsGrob(x0 = x0, y0 = y0, x1 = x1, y1 = y1,
-                 default.units = "mm", gp = gpar(col = "white", lwd = 0.5, lineend = "butt"))
+    grid::segmentsGrob(x0 = x0, y0 = y0, x1 = x1, y1 = y1,
+                       default.units = "mm", gp = gpar(col = "white", lwd = 0.5, lineend = "butt"))
   }
 
   # layout of bar and label
@@ -341,26 +370,26 @@ guide_gengrob.colorbar <- function(guide, theme) {
          })
 
   # background
-  grob.background <- element_render(theme, "legend.background")
+  grob.background <- ggplot2:::element_render(theme, "legend.background")
 
   # padding
   padding <- unit(1.5, "mm")
   widths <- c(padding, widths, padding)
   heights <- c(padding, heights, padding)
 
-  gt <- gtable(widths = unit(widths, "mm"), heights = unit(heights, "mm"))
-  gt <- gtable_add_grob(gt, grob.background, name = "background", clip = "off",
+  gt <- gtable::gtable(widths = unit(widths, "mm"), heights = unit(heights, "mm"))
+  gt <- gtable::gtable_add_grob(gt, grob.background, name = "background", clip = "off",
                         t = 1, r = -1, b = -1, l = 1)
-  gt <- gtable_add_grob(gt, grob.bar, name = "bar", clip = "off",
+  gt <- gtable::gtable_add_grob(gt, grob.bar, name = "bar", clip = "off",
                         t = 1 + min(vps$bar.row), r = 1 + max(vps$bar.col),
                         b = 1 + max(vps$bar.row), l = 1 + min(vps$bar.col))
-  gt <- gtable_add_grob(gt, grob.label, name = "label", clip = "off",
+  gt <- gtable::gtable_add_grob(gt, grob.label, name = "label", clip = "off",
                         t = 1 + min(vps$label.row), r = 1 + max(vps$label.col),
                         b = 1 + max(vps$label.row), l = 1 + min(vps$label.col))
-  gt <- gtable_add_grob(gt, grob.title, name = "title", clip = "off",
+  gt <- gtable::gtable_add_grob(gt, grob.title, name = "title", clip = "off",
                         t = 1 + min(vps$title.row), r = 1 + max(vps$title.col),
                         b = 1 + max(vps$title.row), l = 1 + min(vps$title.col))
-  gt <- gtable_add_grob(gt, grob.ticks, name = "ticks", clip = "off",
+  gt <- gtable::gtable_add_grob(gt, grob.ticks, name = "ticks", clip = "off",
                         t = 1 + min(vps$bar.row), r = 1 + max(vps$bar.col),
                         b = 1 + max(vps$bar.row), l = 1 + min(vps$bar.col))
 
