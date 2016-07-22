@@ -109,7 +109,6 @@ guide_train.colorplane <- function(guide, scale) {
     warning("colorplane guide needs continuous scales.")
     return(NULL)
   }
-
   # determine axis labels
   if(ggplot2:::is.waive(guide$axis_title)) guide$axis_title <-
       scale$axis_title
