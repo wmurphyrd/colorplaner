@@ -176,6 +176,10 @@ scale_color_colorplane <- function(name = waiver(),
     limits <- trans$transform(limits)
   }
 
+  # Handle waived names, ggplot would insert the horizontal axis name by
+  # default, which does not make sense in this context
+  if(ggplot2:::is.waive(name)) name <- "Color Key"
+
   ggproto(NULL, ScaleColorPlane,
           call = match.call(),
 
