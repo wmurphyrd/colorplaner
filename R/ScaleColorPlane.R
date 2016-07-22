@@ -207,3 +207,59 @@ scale_color_colorplane <- function(name = waiver(),
           guide = guide
   )
 }
+
+scale_fill_colorplane <- function(name = waiver(),
+                                   axis_title = waiver(),
+                                   axis_title_y = waiver(),
+                                   breaks = waiver(),
+                                   breaks_y = waiver(),
+                                   labels = waiver(),
+                                   labels_y = waiver(),
+                                   limits = NULL,
+                                   rescaler = scales::rescale,
+                                   oob = scales::censor, na.value = NA_real_,
+                                   guide = "none") {
+
+  ggplot2:::check_breaks_labels(breaks, labels)
+
+  if (is.null(breaks) && guide != "none") {
+    guide <- "none"
+  }
+  # TODO: attempt to re-implement transformations
+  trans <- scales::identity_trans()
+  if (!is.null(limits)) {
+    limits <- trans$transform(limits)
+  }
+
+  # Handle waived names, ggplot would insert the horizontal axis name by
+  # default, which does not make sense in this context
+  if(ggplot2:::is.waive(name)) name <- "Fill Color Key"
+
+  ggproto(NULL, ScaleColorPlane,
+          call = match.call(),
+
+          aesthetics = c("fill", "fill2"),
+          scale_name = "fillplane",
+          palette = scales::identity_pal(),
+          range = ggproto(NULL, ggplot2:::RangeContinuous),
+
+          limits = limits,
+          trans = trans,
+          na.value = na.value,
+          expand = function(range, ...) {range},
+          rescaler = rescaler,  # Used by diverging and n colour gradients
+          oob = oob,
+
+          name = name,
+          axis_title = axis_title,
+          axis_title_y = axis_title_y,
+
+          breaks = breaks,
+          breaks_y = breaks_y,
+
+          labels = labels,
+          labels_y = labels_y,
+          guide = guide
+  )
+}
+
