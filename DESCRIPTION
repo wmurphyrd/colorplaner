@@ -13,7 +13,8 @@ Imports:
   colorscience,
   lazyeval,
   scales,
-  gtable
+  gtable,
+  digest
 Depends:
   ggplot2
 Suggests: testthat
