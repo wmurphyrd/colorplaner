@@ -15,6 +15,7 @@ ScaleColorPlane <- ggproto("ScaleColorPlane", ScaleContinuous,
     if (length(aesthetics) != 2) {
      message("Number of aesthetics not equal to 2:", aesthetics)
     }
+    self$aesthetics <- aesthetics
 
     df[[aesthetics[1]]] <- colorplane(df[[aesthetics[1]]],
                                      df[[aesthetics[2]]])
