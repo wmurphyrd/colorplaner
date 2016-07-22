@@ -2,6 +2,8 @@ ScaleColorPlane <- ggproto("ScaleColorPlane", ScaleContinuous,
   limits_y = NULL,
   breaks_y = waiver(),
   labels_y = waiver(),
+  axis_title = waiver(),
+  axis_title_y = waiver(),
   range = ggproto(NULL, ggplot2:::RangeContinuous),
   range_y = ggproto(NULL, ggplot2:::RangeContinuous),
   map_df = function(self, df, i = NULL) {
@@ -33,6 +35,24 @@ ScaleColorPlane <- ggproto("ScaleColorPlane", ScaleContinuous,
     if (length(aesthetics) == 0) return()
     if (length(aesthetics) != 2) {
       message("Number of aesthetics not equal to 2:", aesthetics)
+    }
+    # default axis titles: cannot find any other way to access the original
+    # variable names in the plot data, so grabbing 'plot' object from
+    # ggplot_build in the call stack with dynGet. This can be avoided by
+    # specifying the axis titles
+    if(ggplot2:::is.waive(self$axis_title) ||
+       ggplot2:::is.waive(self$axis_title_y)) {
+      p <- dynGet("plot", ifnotfound = NULL)
+      if(ggplot2:::is.waive(self$axis_title)) {
+        if(!is.null(p) && !is.null(p$mapping)) {
+          self$axis_title <- p$mapping[[aesthetics[1]]]
+        } else self$axis_title <- NA
+      }
+      if(ggplot2:::is.waive(self$axis_title_y)) {
+        if(!is.null(p) && !is.null(p$mapping)) {
+          self$axis_title_y <- p$mapping[[aesthetics[2]]]
+        } else self$axis_title <- NA
+      }
     }
     self$range$train(df[[aesthetics[1]]])
     self$range_y$train(df[[aesthetics[2]]])
@@ -93,37 +113,7 @@ ScaleColorPlane <- ggproto("ScaleColorPlane", ScaleContinuous,
 
   get_breaks_minor = function(self, n = 2, b = self$break_positions(),
                               limits = self$get_limits()) {
-#     if (zero_range(as.numeric(limits))) {
-#       return()
-#     }
-#
-#     if (is.null(self$minor_breaks)) {
-#       return(NULL)
-#     } else if (identical(self$minor_breaks, NA)) {
-#       stop("Invalid minor_breaks specification. Use NULL, not NA", call. = FALSE)
-#     } else if (is.waive(self$minor_breaks)) {
-#       if (is.null(b)) {
-#         breaks <- NULL
-#       } else {
-#         b <- b[!is.na(b)]
-#         if (length(b) < 2) return()
-#
-#         bd <- diff(b)[1]
-#         if (min(limits) < min(b)) b <- c(b[1] - bd, b)
-#         if (max(limits) > max(b)) b <- c(b, b[length(b)] + bd)
-#         breaks <- unique(unlist(mapply(seq, b[-length(b)], b[-1], length.out = n + 1,
-#                                        SIMPLIFY = FALSE)))
-#       }
-#     } else if (is.function(self$minor_breaks)) {
-#       # Find breaks in data space, and convert to numeric
-#       breaks <- self$minor_breaks(self$trans$inverse(limits))
-#       breaks <- self$trans$transform(breaks)
-#     } else {
-#       breaks <- self$trans$transform(self$minor_breaks)
-#     }
-#
-#     # Any minor breaks outside the dimensions need to be thrown away
-#     discard(breaks, limits)
+    # minor breaks not implemented
     return()
   },
   get_labels = function(self, breaks = self$get_breaks(dir),
@@ -163,10 +153,10 @@ ScaleColorPlane <- ggproto("ScaleColorPlane", ScaleContinuous,
 )
 
 scale_color_colorplane <- function(name = waiver(),
+                                   axis_title = waiver(),
+                                   axis_title_y = waiver(),
                                    breaks = waiver(),
                                    breaks_y = waiver(),
-                                   minor_breaks = waiver(),
-                                   minor_breaks_y = waiver(),
                                    labels = waiver(),
                                    labels_y = waiver(),
                                    limits = NULL,
@@ -179,7 +169,7 @@ scale_color_colorplane <- function(name = waiver(),
   if (is.null(breaks) && guide != "none") {
     guide <- "none"
   }
-
+  # TODO: attempt to re-implement transformations
   trans <- scales::identity_trans()
   if (!is.null(limits)) {
     limits <- trans$transform(limits)
@@ -201,10 +191,11 @@ scale_color_colorplane <- function(name = waiver(),
           oob = oob,
 
           name = name,
+          axis_title = axis_title,
+          axis_title_y = axis_title_y,
+
           breaks = breaks,
           breaks_y = breaks_y,
-          minor_breaks = minor_breaks,
-          minor_breaks_y = minor_breaks_y,
 
           labels = labels,
           labels_y = labels_y,
