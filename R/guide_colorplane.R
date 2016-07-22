@@ -79,7 +79,6 @@ guide_colorplane <- function(
 
 #' @export
 guide_train.colorplane <- function(guide, scale) {
-
   # do nothing if scale are inappropriate
   if (!is(scale, "ScaleColorPlane")) {
     warning("colorplane guide needs scale_color_colorplane or scale_fill_colorplane.")
@@ -91,11 +90,10 @@ guide_train.colorplane <- function(guide, scale) {
   }
 
 
-  # create data frame for tick display
+  # create data frames for tick display
   breaks <- scale$get_breaks(dir = "horizontal")
   if (length(breaks) == 0 || all(is.na(breaks)))
     return()
-  #TODO split ticks into two data frames for horix & vert due to difering lengths
   ticks <- data.frame(scale$map(breaks, dir = "horizontal"),
                       stringsAsFactors = FALSE)
   names(ticks) <- scale$aesthetics[1]
@@ -309,9 +307,9 @@ guide_gengrob.colorplane <- function(guide, theme) {
   grob.ticks <- ggplot2::zeroGrob()
   if (guide$ticks) {
       x0 = rep(tic_pos.c, 2)
-      y0 = c(rep(0, nbreak), rep(planeheight.c * (4/5), nbreak))
+      y0 = c(rep(0, nbreak), rep(planeheight.c * (9/10), nbreak))
       x1 = rep(tic_pos.c, 2)
-      y1 = c(rep(planeheight.c * (1/5), nbreak), rep(planeheight.c, nbreak))
+      y1 = c(rep(planeheight.c * (1/10), nbreak), rep(planeheight.c, nbreak))
       grob.ticks <- grid::segmentsGrob(x0 = x0, y0 = y0, x1 = x1, y1 = y1,
                                        default.units = "mm",
                                        gp = grid::gpar(col = "white", lwd = 0.5,
@@ -322,9 +320,9 @@ guide_gengrob.colorplane <- function(guide, theme) {
   # ticks - vertical
   grob.ticks_y <- ggplot2::zeroGrob()
   if (guide$ticks) {
-    x0 = c(rep(0, nbreak), rep(planewidth.c * (4/5), nbreak))
+    x0 = c(rep(0, nbreak_y), rep(planewidth.c * (9/10), nbreak_y))
     y0 = rep(tic_pos_y.c, 2)
-    x1 = c(rep(planewidth.c * (1/5), nbreak), rep(planewidth.c, nbreak))
+    x1 = c(rep(planewidth.c * (1/10), nbreak_y), rep(planewidth.c, nbreak_y))
     y1 = rep(tic_pos_y.c, 2)
     grob.ticks_y <- grid::segmentsGrob(x0 = x0, y0 = y0, x1 = x1, y1 = y1,
                                      default.units = "mm",
@@ -397,6 +395,5 @@ guide_gengrob.colorplane <- function(guide, theme) {
                                 r = 1 + max(vps$plane.col),
                                 b = 1 + max(vps$plane.row),
                                 l = 1 + min(vps$plane.col))
-  browser()
   gt
 }
