@@ -1,12 +1,16 @@
 Package: colorplaner
 Type: Package
-Title: Inutitive Visualizations of Multiple Variables With a Single Color Aesthetic
-Version: 0.1
-Date: 2016-07-19
+Title: ggplot2 Extenstion to Visualize Two Variables Per Color Aesthetic through Color Space Projection
+Version: 0.0.0.9000
+Date: 2016-07-22
 Author: William Murphy
 Maintainer: William Murphy <william@datatitian.com>
-Description: More about what it does (maybe more than one line)
-License: What license is it under?
+Description: Add additional dimensionality to visualizations by using the color
+ and/or fill aesthetics to convey the values of two continous variables each. By
+ projecting variable values onto YUV colorspace, a scale is created that allows
+ viewers to intuitively determine the values of both variables from the single
+ displayed color. Includes two new scales and a new guide for ggplot2.
+License: AGPL-3
 LazyData: TRUE
 Imports:
   grid,
