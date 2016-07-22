@@ -35,8 +35,6 @@ guide_colorplane <- function(
 
   # ticks
   ticks = TRUE,
-  draw.ulim= TRUE,
-  draw.llim = TRUE,
 
   # general
   #direction = NULL,
@@ -86,10 +84,8 @@ guide_colorplane <- function(
 
     # ticks
     ticks = ticks,
-    draw.ulim = draw.ulim,
-    draw.llim = draw.llim,
 
-    # general
+      # general
     #direction = direction,
     default.unit = default.unit,
     #reverse = reverse,
@@ -222,16 +218,12 @@ guide_gengrob.colorplane <- function(guide, theme) {
                                      na.rm = T, finite = T)
                                ) * planewidth.c / guide$nbin
   label_pos <- unit(tic_pos.c, "mm")
-  if (!guide$draw.ulim) tic_pos.c <- tic_pos.c[-1]
-  if (!guide$draw.llim) tic_pos.c <- tic_pos.c[-length(tic_pos.c)]
 
   tic_pos_y.c <- scales::rescale(guide$key_y$.value, c(0.5, guide$nbin - 0.5),
                                  range(attr(guide$plane, "value_y"),
                                        na.rm = T, finite = T)
                                  ) * planeheight.c / guide$nbin
   label_pos_y <- unit(tic_pos_y.c, "mm")
-  if (!guide$draw.ulim) tic_pos_y.c <- tic_pos_y.c[-1]
-  if (!guide$draw.llim) tic_pos_y.c <- tic_pos_y.c[-length(tic_pos_y.c)]
 
   # title
   grob.title <- ggplot2:::ggname(
