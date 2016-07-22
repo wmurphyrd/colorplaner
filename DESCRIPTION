@@ -12,7 +12,8 @@ Imports:
   grid,
   colorscience,
   lazyeval,
-  scales
+  scales,
+  gtable
 Depends:
   ggplot2
 Suggests: testthat
