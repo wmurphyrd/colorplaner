@@ -28,7 +28,6 @@ ScaleColorPlane <- ggproto("ScaleColorPlane", ScaleContinuous,
   },
   train_df = function(self, df) {
     if (is.null(df) || nrow(df) == 0 || ncol(df) == 0) return()
-
     aesthetics <- sort(intersect(self$aesthetics, names(df)))
     names(aesthetics) <- aesthetics
     if (length(aesthetics) == 0) return()
@@ -82,10 +81,6 @@ ScaleColorPlane <- ggproto("ScaleColorPlane", ScaleContinuous,
 
     # Breaks in data space need to be converted back to transformed space
     # And any breaks outside the dimensions need to be flagged as missing
-    #
-    # @kohske
-    # TODO: replace NA with something else for flag.
-    #       guides cannot discriminate oob from missing value.
     breaks <- scales::censor(self$trans$transform(breaks),
                              self$trans$transform(limits),
                              only.finite = FALSE)
