@@ -20,4 +20,10 @@
   else b
 }
 
+# this version of as.trans will work without importing all *_trans functions
+# from scales (unlike scales::as.trans)
+as.trans <- function(x) {
+  if (scales::is.trans(x)) return(x)
+  get(paste0(x, "_trans"), asNamespace("scales"), mode = "function")()
+}
 

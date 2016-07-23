@@ -11,4 +11,6 @@
 #' @docType package
 #' @name colorplaner
 #' @import ggplot2
+#' @importFrom scales rescale
+#' @importFrom scales censor
 NULL
