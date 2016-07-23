@@ -1,24 +1,27 @@
 Package: colorplaner
 Type: Package
-Title: ggplot2 Extenstion to Visualize Two Variables Per Color Aesthetic through Color Space Projection
+Title: ggplot2 Extenstion to Visualize Two Variables Per Color Aesthetic through
+    Color Space Projection
 Version: 0.0.0.9000
 Date: 2016-07-22
 Author: William Murphy
 Maintainer: William Murphy <william@datatitian.com>
 Description: Add additional dimensionality to visualizations by using the color
- and/or fill aesthetics to convey the values of two continous variables each. By
- projecting variable values onto YUV colorspace, a scale is created that allows
- viewers to intuitively determine the values of both variables from the single
- displayed color. Includes two new scales and a new guide for ggplot2.
+    and/or fill aesthetics to convey the values of two continous variables each. By
+    projecting variable values onto YUV colorspace, a scale is created that allows
+    viewers to intuitively determine the values of both variables from the single
+    displayed color. Includes two new scales and a new guide for ggplot2.
 License: GPL-3
 LazyData: TRUE
 Imports:
-  grid (>= 3.2.2),
-  colorscience (>= 1.0.2),
-  scales (>= 0.3.0),
-  gtable (>= 0.1.2),
-  digest (>= 0.6.8)
+    grid (>= 3.2.2),
+    colorscience (>= 1.0.2),
+    scales (>= 0.3.0),
+    gtable (>= 0.1.2),
+    digest (>= 0.6.8)
 Depends:
-  R (>= 3.2.2),
-  ggplot2 (>= 2.1.0)
-Suggests: testthat
+    R (>= 3.2.2),
+    ggplot2 (>= 2.1.0)
+Suggests:
+    testthat
+RoxygenNote: 5.0.1

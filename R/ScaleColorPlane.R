@@ -1,11 +1,12 @@
-ScaleColorPlane <- ggproto("ScaleColorPlane", ScaleContinuous,
+#' @export
+ScaleColorPlane <- ggplot2::ggproto("ScaleColorPlane", ggplot2::ScaleContinuous,
   limits_y = NULL,
-  breaks_y = waiver(),
-  labels_y = waiver(),
-  axis_title = waiver(),
-  axis_title_y = waiver(),
-  range = ggproto(NULL, ggplot2:::RangeContinuous),
-  range_y = ggproto(NULL, ggplot2:::RangeContinuous),
+  breaks_y = ggplot2::waiver(),
+  labels_y = ggplot2::waiver(),
+  axis_title = ggplot2::waiver(),
+  axis_title_y = ggplot2::waiver(),
+  range = ggplot2::ggproto(NULL, ggplot2:::RangeContinuous),
+  range_y = ggplot2::ggproto(NULL, ggplot2:::RangeContinuous),
   map_df = function(self, df, i = NULL) {
     if (is.null(df) || nrow(df) == 0 || ncol(df) == 0) return()
 
@@ -153,6 +154,7 @@ ScaleColorPlane <- ggproto("ScaleColorPlane", ScaleContinuous,
   }
 )
 
+#' @export
 scale_color_colorplane <- function(name = waiver(),
                                    axis_title = waiver(),
                                    axis_title_y = waiver(),
@@ -209,6 +211,7 @@ scale_color_colorplane <- function(name = waiver(),
   )
 }
 
+#' @export
 scale_fill_colorplane <- function(name = waiver(),
                                    axis_title = waiver(),
                                    axis_title_y = waiver(),

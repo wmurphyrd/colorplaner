@@ -1,13 +1,6 @@
-#library(colorscience)
-#library(ggplot2)
-
-scaleUV <- function(x) {
-  x <- scales::rescale(x, to = c(-255, 255))
-}
-
-
 YUV2grDeviceRGB <- function(YUV) {
   out <- colorscience::YUV2RGB(YUV)
+#  out <- YUV2RGB(YUV)
   out <- round(out)
   out <- pmax(out, 0)
   out <- pmin(out, 255)
