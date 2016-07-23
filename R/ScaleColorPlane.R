@@ -154,6 +154,30 @@ ScaleColorPlane <- ggplot2::ggproto("ScaleColorPlane", ggplot2::ScaleContinuous,
   }
 )
 
+#' Two-Dimensional Color Space Projection Scale
+#'
+#' Maps two continutous variables into a single display color, using either the
+#' \code{color} and \code{color2} aesthetics (\code{scale_color_colorplane}) or
+#' the \code{fill} and \code{fill2} aesthetics (\code{scale_fill_colorplane}).
+#'
+#' The variable values are projected onto YUV color space to create a 2-D
+#' gradient that can be interpreted visually...
+#'
+#' @inheritParams ggplot2::continuous_scale
+#' @inheritParams guide_colorplane
+#' @param breaks_y As \code{breaks}, but pertaining to vertical axis (i.e.
+#'   \code{color2} or \code{fill2})
+#' @param labels_y As \code{labels}, but pertaining to vertical axis (i.e.
+#'   \code{color2} or \code{fill2})
+#' @param limits_y As \code{limits}, but pertaining to vertical axis (i.e.
+#'   \code{color2} or \code{fill2})
+#' @param name Character string or expression to be used as guide title.
+#'   Defaults to "Color Key" or "Fill Color Key" to match the scale function
+#'   used.
+#' @param guide Name of guide object, or object itself. Defaults to
+#'   \code{\link{guide_colorplane}} designed for this scale. Behavior of other
+#'   guides with this scale is not defined.
+#'
 #' @export
 scale_color_colorplane <- function(name = waiver(),
                                    axis_title = waiver(),
@@ -163,19 +187,25 @@ scale_color_colorplane <- function(name = waiver(),
                                    labels = waiver(),
                                    labels_y = waiver(),
                                    limits = NULL,
-                                   rescaler = scales::rescale,
-                                   oob = scales::censor, na.value = NA_real_,
-                                   guide = "none") {
+                                   limits_y = NULL,
+                                   rescaler = rescale,
+                                   oob = censor,
+                                   trans = "identity",
+                                   na.value = NA_real_,
+                                   guide = "colorplane") {
 
   ggplot2:::check_breaks_labels(breaks, labels)
 
   if (is.null(breaks) && guide != "none") {
     guide <- "none"
   }
-  # TODO: attempt to re-implement transformations
-  trans <- scales::identity_trans()
+  # using local version of as.trans to avoid namespace issues (see zzz.r)
+  trans <- as.trans(trans)
   if (!is.null(limits)) {
     limits <- trans$transform(limits)
+  }
+  if(!is.null(limits_y)) {
+    limits_y <- trans$transform(limits_y)
   }
 
   # Handle waived names, ggplot would insert the horizontal axis name by
@@ -192,6 +222,7 @@ scale_color_colorplane <- function(name = waiver(),
           range_y = ggproto(NULL, ggplot2:::RangeContinuous),
 
           limits = limits,
+          limits_y = limits_y,
           trans = trans,
           na.value = na.value,
           expand = function(range, ...) {range},
@@ -212,17 +243,19 @@ scale_color_colorplane <- function(name = waiver(),
 }
 
 #' @export
+#' @rdname scale_color_colorplane
 scale_fill_colorplane <- function(name = waiver(),
-                                   axis_title = waiver(),
-                                   axis_title_y = waiver(),
-                                   breaks = waiver(),
-                                   breaks_y = waiver(),
-                                   labels = waiver(),
-                                   labels_y = waiver(),
-                                   limits = NULL,
-                                   rescaler = scales::rescale,
-                                   oob = scales::censor, na.value = NA_real_,
-                                   guide = "none") {
+                                  axis_title = waiver(),
+                                  axis_title_y = waiver(),
+                                  breaks = waiver(),
+                                  breaks_y = waiver(),
+                                  labels = waiver(),
+                                  labels_y = waiver(),
+                                  limits = NULL,
+                                  limits_y = NULL,
+                                  rescaler = scales::rescale,
+                                  oob = scales::censor, na.value = NA_real_,
+                                  guide = "colorplane") {
 
   ggplot2:::check_breaks_labels(breaks, labels)
 
@@ -233,6 +266,9 @@ scale_fill_colorplane <- function(name = waiver(),
   trans <- scales::identity_trans()
   if (!is.null(limits)) {
     limits <- trans$transform(limits)
+  }
+  if (!is.null(limits_y)) {
+    limits_y <- trans$transform(limits_y)
   }
 
   # Handle waived names, ggplot would insert the horizontal axis name by
@@ -249,6 +285,7 @@ scale_fill_colorplane <- function(name = waiver(),
           range_y = ggproto(NULL, ggplot2:::RangeContinuous),
 
           limits = limits,
+          limits_y = limits_y,
           trans = trans,
           na.value = na.value,
           expand = function(range, ...) {range},
@@ -267,4 +304,9 @@ scale_fill_colorplane <- function(name = waiver(),
           guide = guide
   )
 }
-
+#' @export
+#' @rdname scale_color_colorplane
+scale_colour_colourplane <- scale_color_colorplane
+#' @export
+#' @rdname scale_color_colorplane
+scale_fill_colourplane <- scale_fill_colorplane
