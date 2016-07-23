@@ -10,15 +10,15 @@ Description: Add additional dimensionality to visualizations by using the color
  projecting variable values onto YUV colorspace, a scale is created that allows
  viewers to intuitively determine the values of both variables from the single
  displayed color. Includes two new scales and a new guide for ggplot2.
-License: AGPL-3
+License: GPL-3
 LazyData: TRUE
 Imports:
-  grid,
-  colorscience,
-  lazyeval,
-  scales,
-  gtable,
-  digest
+  grid (>= 3.2.2),
+  colorscience (>= 1.0.2),
+  scales (>= 0.3.0),
+  gtable (>= 0.1.2),
+  digest (>= 0.6.8)
 Depends:
-  ggplot2
+  R (>= 3.2.2),
+  ggplot2 (>= 2.1.0)
 Suggests: testthat
