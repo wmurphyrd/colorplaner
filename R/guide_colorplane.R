@@ -14,7 +14,7 @@
 #'   the positions of the axis titles. \code{axis_title.position}: one of "top"
 #'   or "bottom" (default). \code{axis_title_y.position}: one of "left"
 #'   (default) or "right". Not yet implemented.
-#' @param axis_title.theme,axis.title_y.theme Theme objects for rendering the
+#' @param axis_title.theme,axis_title_y.theme Theme objects for rendering the
 #'   axis title text. Typically an \code{\link[ggplot2]{element_text}} object.
 #'   Defaults to settings for \code{axis.title.x} and \code{axis.title.y} in the
 #'   main plot theme.
@@ -95,9 +95,9 @@ guide_colorplane <- function(
 
   ...) {
 
-  if (!is.null(planewidth) && !is.unit(planewidth)) planewidth <-
+  if (!is.null(planewidth) && !grid::is.unit(planewidth)) planewidth <-
       unit(planewidth, default.unit)
-  if (!is.null(planeheight) && !is.unit(planeheight)) planeheight <-
+  if (!is.null(planeheight) && !grid::is.unit(planeheight)) planeheight <-
       unit(planeheight, default.unit)
 
   structure(list(
@@ -149,6 +149,14 @@ guide_colorplane <- function(
   )
 }
 
+#' Colorplane method for guide_train
+#'
+#' Called by ggplot2 engine when building the plot.
+#'
+#' @param guide Object of class "colorplane" generate by
+#'   \code{\link{guide_colorplane}}
+#' @param scale ggproto object instance of \code{\link{ScaleColorPlane}}
+#'
 #' @export
 guide_train.colorplane <- function(guide, scale) {
   # do nothing if scale inappropriate
@@ -217,18 +225,36 @@ guide_train.colorplane <- function(guide, scale) {
   guide
 }
 
-# simply discards the new guide
+#' Colorplane method for guide_merge
+#'
+#' Called by ggplot2 engine. Ignores attempts to merge guides.
+#'
+#' @inheritParams guide_train.colorplane
+#' @param new_guide New guide object
+#'
 #' @export
 guide_merge.colorplane <- function(guide, new_guide) {
   guide
 }
 
-# this guide is not geom-based.
+#' Colorplane method for guide_geom
+#'
+#' Called by ggplot2 engine. Takes no action as this guide is not geom-based.
+#'
+#' @inheritParams guide_train.colorplane
+#' @param ... Not used
 #' @export
 guide_geom.colorplane <- function(guide, ...) {
   guide
 }
 
+#' Colorplane method for guide_gengrob
+#'
+#' Called by ggplot2 engine to create graphical objects for the guide.
+#'
+#' @inheritParams guide_train.colorplane
+#' @param theme Plot theme object
+#'
 #' @export
 guide_gengrob.colorplane <- function(guide, theme) {
 # TODO: implement label and axis title position options

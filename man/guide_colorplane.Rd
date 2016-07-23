@@ -61,7 +61,7 @@ the positions of the axis titles. \code{axis_title.position}: one of "top"
 or "bottom" (default). \code{axis_title_y.position}: one of "left"
 (default) or "right". Not yet implemented.}
 
-\item{axis_title.theme, axis.title_y.theme}{Theme objects for rendering the
+\item{axis_title.theme, axis_title_y.theme}{Theme objects for rendering the
 axis title text. Typically an \code{\link[ggplot2]{element_text}} object.
 Defaults to settings for \code{axis.title.x} and \code{axis.title.y} in the
 main plot theme.}

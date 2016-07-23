@@ -1,6 +1,5 @@
 YUV2grDeviceRGB <- function(YUV) {
   out <- colorscience::YUV2RGB(YUV)
-#  out <- YUV2RGB(YUV)
   out <- round(out)
   out <- pmax(out, 0)
   out <- pmin(out, 255)

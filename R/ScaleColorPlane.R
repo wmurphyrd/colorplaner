@@ -1,3 +1,8 @@
+#' Color Plane Scale ggproto Object
+#'
+#' This ggproto object inherits from \code{\link[ggplot2]{ScaleContinuous}} and
+#' implements methods and default values needed for color plane scale instances.
+#' See \code{\link{scale_color_colorplane}} for usage.
 #' @export
 ScaleColorPlane <- ggplot2::ggproto("ScaleColorPlane", ggplot2::ScaleContinuous,
   limits_y = NULL,
