@@ -1,3 +1,50 @@
+#' Add Guide for Colorplane
+#'
+#' Generates a guide to explain the colors plotted via
+#' \code{\link{scale_color_colorplane}} and \code{\link{scale_fill_colorplane}}.
+#'
+#' The guide is similar to \code{\link[ggplot2]{guide_colorbar}}, but as a plane
+#' of colors with ticks and labels for both variables in the scale.
+#'
+#' @param axis_title,axis_title_y Character strings or expressions inidicating
+#'   the horizontal and vertical axis titles in the guide, respectively. If
+#'   \code{NULL}, the title is not shown. By default (\link[ggplot2]{waiver}),
+#'   the name of the scale or the name of the variable mapped to the aesthetic.
+#' @param axis_title.position,axis_title_y.position Character strings indicating
+#'   the positions of the axis titles. \code{axis_title.position}: one of "top"
+#'   or "bottom" (default). \code{axis_title_y.position}: one of "left"
+#'   (default) or "right". Not yet implemented.
+#' @param axis_title.theme,axis.title_y.theme Theme objects for rendering the
+#'   axis title text. Typically an \code{\link[ggplot2]{element_text}} object.
+#'   Defaults to settings for \code{axis.title.x} and \code{axis.title.y} in the
+#'   main plot theme.
+#' @param axis_title.hjust,axis_title_y.hjust Numbers specifying horizontal
+#'   justification of the axis title text.
+#' @param axis_title.vjust,axis_title_y.vjust Numbers specifing veritcal
+#'   justification of the axis title text.
+#' @param planewidth,planeheight Numeric or \code{\link[grid]{unit}} objects
+#'   specifying the width and height of the colorplane. Default values are 5
+#'   times the legend.key.width or legend.key.size in the theme.
+#' @param nbin Number specifying how many color pixels are generated for each
+#'   dimension of the colorplane. Higher numbers increase guide color accuracy
+#'   (especially for larger sized guides) at the expense of speed.
+#' @param label.position,label_y.position Character strings indicating the
+#'   positions of axis labels. For \code{label.position}, "top" or "bottom"
+#'   (default). For \code{label_y.position}, "left" (default) or "right". Not
+#'   yet implemented.
+#' @param label.theme,label_y.theme	Theme objects for rendering axis label text.
+#'   Usually the object of \code{\link[ggplot2]{element_text}} is expected. By
+#'   default, the theme is specified by \code{axis.text.*} in the plot theme.
+#' @param label.hjust,label_y.hjust Numerics specifying horizontal justification
+#'   of the axis label text. Defauls to value in \code{label.theme} /
+#'   \code{label_y.theme} if set or \code{axis.text.*} in the plot theme.
+#' @param label.vjust,label_y.vjust Numerics specifying vertical justification
+#'   of the axis label text. Defauls to value in \code{label.theme} /
+#'   \code{label_y.theme} if set or \code{axis.text.*} in the plot theme.
+#'
+#' @inheritParams ggplot2::guide_colorbar
+#'
+#' @export
 guide_colorplane <- function(
 
   # title
@@ -26,6 +73,10 @@ guide_colorplane <- function(
   label.theme = NULL,
   label.hjust = NULL,
   label.vjust = NULL,
+  label_y.position = NULL,
+  label_y.theme = NULL,
+  label_y.hjust = NULL,
+  label_y.vjust = NULL,
 
   # plane
   planewidth = NULL,
@@ -189,9 +240,9 @@ guide_gengrob.colorplane <- function(guide, theme) {
 #            label.position <- guide$label.position %||% "right"
 #            if (!label.position %in% c("left", "right")) stop("label position \"", label.position, "\" is invalid")
 #          })
-  planewidth <- grid::convertWidth(guide$barwidth %||%
+  planewidth <- grid::convertWidth(guide$planewidth %||%
                                      (theme$legend.key.width * 5), "mm")
-  planeheight <- grid::convertHeight(guide$barheight %||%
+  planeheight <- grid::convertHeight(guide$planeheight %||%
                                        (theme$legend.key.height * 5), "mm")
 
   planewidth.c <- c(planewidth)
@@ -230,8 +281,10 @@ guide_gengrob.colorplane <- function(guide, theme) {
     ggplot2::element_grob(
       guide$title.theme %||% ggplot2::calc_element("legend.title", theme),
       label = guide$title,
-      hjust = guide$title.hjust %||% theme$legend.title.align %||% 0.5,
-      vjust = guide$title.vjust %||% 0.5
+      hjust = guide$title.hjust %||% theme$legend.title.align %||%
+        calc_element("legend.title", theme)$hjust %||% 0.5,
+      vjust = guide$title.vjust %||%
+        calc_element("legend.title", theme)$hjust %||% 0.5
     )
   )
 
@@ -246,8 +299,10 @@ guide_gengrob.colorplane <- function(guide, theme) {
     ggplot2::element_grob(
       guide$axis_title.theme %||% ggplot2::calc_element("axis.title.x", theme),
       label = guide$axis_title,
-      hjust = guide$axis_title.hjust %||% 0.5,
-      vjust = guide$title.vjust %||% 0.5
+      hjust = guide$axis_title.hjust %||%
+        calc_element("axis.title.x", theme)$hjust %||% 0.5,
+      vjust = guide$title.vjust %||%
+        calc_element("axis.title.x", theme)$vjust %||% 0.5
     )
   )
 
@@ -263,8 +318,10 @@ guide_gengrob.colorplane <- function(guide, theme) {
       guide$axis_title_y.theme %||%
         ggplot2::calc_element("axis.title.y", theme),
       label = guide$axis_title_y,
-      hjust = guide$axis_title_y.hjust %||% 0.5,
-      vjust = guide$title_y.vjust %||% 0.5
+      hjust = guide$axis_title_y.hjust %||%
+        calc_element("axis.title.y", theme)$hjust %||% 0.5,
+      vjust = guide$title_y.vjust %||%
+        calc_element("axis.title.y", theme)$vjust %||% 0.5
     )
   )
 
@@ -278,12 +335,12 @@ guide_gengrob.colorplane <- function(guide, theme) {
 
   # label
   label.theme <- guide$label.theme %||%
-    ggplot2::calc_element("legend.text", theme)
+    ggplot2::calc_element("axis.text.x", theme)
   grob.label <- ggplot2::zeroGrob()
   if (guide$label) {
-    hjust <- guide$label.hjust %||% theme$legend.text.align %||%
-      if (any(is.expression(guide$key$.label))) 1 else 0.5 #switch(guide$direction, horizontal = 0.5, vertical = 0)
-    vjust <- y <- guide$label.vjust %||% 0.5
+    hjust <- guide$label.hjust %||% label.theme$hjust %||%
+      if (any(is.expression(guide$key$.label))) 1 else 0.5
+    vjust <- y <- guide$label.vjust %||% label.theme$vjust %||% 0.5
     x <- label_pos
 
     label <- guide$key$.label
@@ -308,11 +365,13 @@ guide_gengrob.colorplane <- function(guide, theme) {
   label_height <- grid::convertHeight(grid::grobHeight(grob.label), "mm")
   label_height.c <- c(label_height)
 
+  label_y.theme <- guide$label_y.theme %||%
+    ggplot2::calc_element("axis.text.y", theme)
   grob.label_y <- ggplot2::zeroGrob()
   if (guide$label) {
-    hjust <- x <- guide$label.hjust %||% theme$legend.text.align %||%
-      if (any(is.expression(guide$key$.label))) 1 else 0.5 #switch(guide$direction, horizontal = 0.5, vertical = 0)
-    vjust <- guide$label.vjust %||% 0.5
+    hjust <- x <- guide$label_y.hjust %||% label_y.theme$hjust %||%
+      if (any(is.expression(guide$key_y$.label))) 1 else 0.5
+    vjust <- guide$label_y.vjust %||% label_y.theme$vjust %||% 0.5
     y <- label_pos_y
 
     label <- guide$key_y$.label
@@ -326,7 +385,7 @@ guide_gengrob.colorplane <- function(guide, theme) {
       })
       label <- do.call(c, label)
     }
-    g <- ggplot2::element_grob(element = label.theme, label = label,
+    g <- ggplot2::element_grob(element = label_y.theme, label = label,
                       x = x, y = y, hjust = hjust, vjust = vjust)
     grob.label_y <- ggplot2:::ggname("guide.label_y", g)
   }
@@ -460,3 +519,7 @@ guide_gengrob.colorplane <- function(guide, theme) {
                                 l = 1 + min(vps$plane.col))
   gt
 }
+
+#' @export
+#' @rdname guide_colorplane
+guide_colourplane <- guide_colorplane
