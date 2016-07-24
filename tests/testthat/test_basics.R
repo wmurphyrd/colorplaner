@@ -25,5 +25,6 @@ test_that("Transformed colorplane scale plots without error", {
 test_that("OOB and NA data handled without error", {
   expect_silent(ggplot(mtcars, aes(x = wt, y = mpg, color = qsec, colour2 = hp)) +
                   geom_point(size = 4) +
-                  scale_color_colorplane(limits = c(NA, 18.9)))
+                  scale_color_colorplane(limits = c(NA, 18.9),
+                                         na.color = "yellow"))
 })

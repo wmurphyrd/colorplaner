@@ -27,6 +27,8 @@ ScaleColorPlane <- ggplot2::ggproto("ScaleColorPlane", ggplot2::ScaleContinuous,
     df[[aesthetics[1]]] <- colorplane(
       self$oob(df[[aesthetics[1]]], self$get_limits(dir = "horizontal")),
       self$oob(df[[aesthetics[2]]], self$get_limits(dir = "vertical")),
+      xRange = self$get_limits(dir = "horizontal"),
+      yRange = self$get_limits(dir = "vertical"),
       naColor = self$na.color)
     # This handling for optional paramter i is in the default method for Scale
     # proto, but the method is only ever called from ggplot_build without it
