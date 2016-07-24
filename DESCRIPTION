@@ -1,11 +1,13 @@
 Package: colorplaner
 Type: Package
-Title: ggplot2 Extenstion to Visualize Two Variables Per Color Aesthetic through
+Title: ggplot2 Extension to Visualize Two Variables Per Color Aesthetic through
     Color Space Projection
 Version: 0.0.0.9000
-Date: 2016-07-22
+Date: 2016-07-21
 Author: William Murphy
-Maintainer: William Murphy <william@datatitian.com>
+Maintainer: William Murphy <william.murphy.rd@gmail.com>
+Authors@R: person("William", "Murphy", email = "william.murphy.rd@gmail.com",
+  role = c("aut", "cre"))
 Description: Add additional dimensionality to visualizations by using the color
     and/or fill aesthetics to convey the values of two continous variables each. By
     projecting variable values onto YUV colorspace, a scale is created that allows
@@ -25,3 +27,7 @@ Depends:
 Suggests:
     testthat
 RoxygenNote: 5.0.1
+Copyright: Copyright 2016 William Murphy.
+    This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+    This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+    See the GNU General Public License for more details. You should have received a copy of the GNU General Public License along with this program.  If not, see <http://www.gnu.org/licenses/>.
