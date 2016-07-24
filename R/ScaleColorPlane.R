@@ -12,6 +12,7 @@ ScaleColorPlane <- ggplot2::ggproto("ScaleColorPlane", ggplot2::ScaleContinuous,
   axis_title_y = ggplot2::waiver(),
   range = ggplot2::ggproto(NULL, ggplot2:::RangeContinuous),
   range_y = ggplot2::ggproto(NULL, ggplot2:::RangeContinuous),
+  na.color = NULL,
   map_df = function(self, df, i = NULL) {
     if (is.null(df) || nrow(df) == 0 || ncol(df) == 0) return()
 
@@ -23,8 +24,10 @@ ScaleColorPlane <- ggplot2::ggproto("ScaleColorPlane", ggplot2::ScaleContinuous,
     }
     self$aesthetics <- aesthetics
 
-    df[[aesthetics[1]]] <- colorplane(df[[aesthetics[1]]],
-                                     df[[aesthetics[2]]])
+    df[[aesthetics[1]]] <- colorplane(
+      self$oob(df[[aesthetics[1]]], self$get_limits(dir = "horizontal")),
+      self$oob(df[[aesthetics[2]]], self$get_limits(dir = "vertical")),
+      naColor = self$na.color)
     # This handling for optional paramter i is in the default method for Scale
     # proto, but the method is only ever called from ggplot_build without it
 
@@ -179,6 +182,8 @@ ScaleColorPlane <- ggplot2::ggproto("ScaleColorPlane", ggplot2::ScaleContinuous,
 #' @param name Character string or expression to be used as guide title.
 #'   Defaults to "Color Key" or "Fill Color Key" to match the scale function
 #'   used.
+#' @param na.color Characater string containing a valid R color to use when
+#'   plotting missing data or data outside the limits.
 #' @param guide Name of guide object, or object itself. Defaults to
 #'   \code{\link{guide_colorplane}} designed for this scale. Behavior of other
 #'   guides with this scale is not defined.
@@ -209,6 +214,7 @@ scale_color_colorplane <- function(name = waiver(),
                                    rescaler = rescale,
                                    oob = censor,
                                    trans = "identity",
+                                   na.color = "black",
                                    na.value = NA_real_,
                                    guide = "colorplane") {
 
@@ -242,6 +248,7 @@ scale_color_colorplane <- function(name = waiver(),
           limits = limits,
           limits_y = limits_y,
           trans = trans,
+          na.color = na.color,
           na.value = na.value,
           expand = function(range, ...) {range},
           rescaler = rescaler,  # Used by diverging and n colour gradients

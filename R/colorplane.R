@@ -9,15 +9,19 @@ YUV2grDeviceRGB <- function(YUV) {
 colorplane <- function(x, y, Y = 128,
                        xRange = range(x, na.rm = TRUE, finite = TRUE),
                        yRange = range(y, na.rm = TRUE, finite = TRUE),
-                       naColor = "#f7f7f2") {
+                       naColor = "black") {
+  naColor <- colorscience::RGB2YUV(t(grDevices::col2rgb(naColor[1])))
   u <- scales::rescale(x, to = c(-255, 255), from = xRange)
   v <- scales::rescale(y, to = c(-255, 255), from = yRange)
   # Y <- scales::rescale(sqrt((x - mean(xRange))^2 + (y - mean(yRange))^2),
   #                      to = c(0, 511))
   YUV <- as.matrix(cbind(Y, u, v))
-  #YUV[is.na(x) | is.na(y), ]
-  out <- YUV2grDeviceRGB(YUV)
-  ifelse(is.na(out), naColor, out)
+  if(anyNA(x) || anyNA(y)) {
+    naIndices <- cbind(c(rep(which(is.na(x)), 3), rep(which(is.na(y)), 3)), 1:3)
+    YUV[naIndices] <- naColor
+  }
+
+  YUV2grDeviceRGB(YUV)
 }
 
 

@@ -17,7 +17,13 @@ test_that("Basic plotting occurs without error", {
 })
 
 test_that("Transformed colorplane scale plots without error", {
-  expect_silent( ggplot(mtcars, aes(x = wt, y = mpg, color = disp, colour2 = hp)) +
-                   geom_point() +
-                   scale_color_colorplane(trans = "log"))
+  expect_silent(ggplot(mtcars, aes(x = wt, y = mpg, color = disp, colour2 = hp)) +
+                  geom_point() +
+                  scale_color_colorplane(trans = "log"))
+})
+
+test_that("OOB and NA data handled without error", {
+  expect_silent(ggplot(mtcars, aes(x = wt, y = mpg, color = qsec, colour2 = hp)) +
+                  geom_point(size = 4) +
+                  scale_color_colorplane(limits = c(NA, 18.9)))
 })
