@@ -182,7 +182,17 @@ ScaleColorPlane <- ggplot2::ggproto("ScaleColorPlane", ggplot2::ScaleContinuous,
 #' @param guide Name of guide object, or object itself. Defaults to
 #'   \code{\link{guide_colorplane}} designed for this scale. Behavior of other
 #'   guides with this scale is not defined.
-#'
+#' @examples
+#' if(requireNamespace("maps")) {
+#'   crimes <- data.frame(state = tolower(rownames(USArrests)), USArrests)
+#'   states_map <- map_data("state")
+#'   ggplot(crimes,
+#'          aes(map_id = state, fill = Murder, fill2 = UrbanPop)) +
+#'     geom_map(map = states_map) +
+#'     scale_fill_colorplane() +
+#'     expand_limits(x = states_map$long, y = states_map$lat) +
+#'     coord_map()
+#'  }
 #' @export
 scale_color_colorplane <- function(name = waiver(),
                                    axis_title = waiver(),
