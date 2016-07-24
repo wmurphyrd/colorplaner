@@ -57,7 +57,7 @@
 #'     expand_limits(x = states_map$long, y = states_map$lat) +
 #'     coord_map() +
 #'     guides(fill = guide_colorplane("My Title", axis_title = "Murder Rate",
-#'     axis_title_y = "Urban Population %")
+#'     axis_title_y = "Urban Population %"))
 #'  }
 #' @export
 guide_colorplane <- function(
