@@ -11,24 +11,24 @@ scale_color_colorplane(name = waiver(), axis_title = waiver(),
   axis_title_y = waiver(), breaks = waiver(), breaks_y = waiver(),
   labels = waiver(), labels_y = waiver(), limits = NULL,
   limits_y = NULL, rescaler = rescale, oob = censor, trans = "identity",
-  na.value = NA_real_, guide = "colorplane")
+  na.color = "black", na.value = NA_real_, guide = "colorplane")
 
 scale_fill_colorplane(name = waiver(), axis_title = waiver(),
   axis_title_y = waiver(), breaks = waiver(), breaks_y = waiver(),
   labels = waiver(), labels_y = waiver(), limits = NULL,
-  limits_y = NULL, rescaler = scales::rescale, oob = scales::censor,
+  limits_y = NULL, rescaler = rescale, oob = censor,
   na.value = NA_real_, guide = "colorplane")
 
 scale_colour_colourplane(name = waiver(), axis_title = waiver(),
   axis_title_y = waiver(), breaks = waiver(), breaks_y = waiver(),
   labels = waiver(), labels_y = waiver(), limits = NULL,
   limits_y = NULL, rescaler = rescale, oob = censor, trans = "identity",
-  na.value = NA_real_, guide = "colorplane")
+  na.color = "black", na.value = NA_real_, guide = "colorplane")
 
 scale_fill_colourplane(name = waiver(), axis_title = waiver(),
   axis_title_y = waiver(), breaks = waiver(), breaks_y = waiver(),
   labels = waiver(), labels_y = waiver(), limits = NULL,
-  limits_y = NULL, rescaler = scales::rescale, oob = scales::censor,
+  limits_y = NULL, rescaler = rescale, oob = censor,
   na.value = NA_real_, guide = "colorplane")
 }
 \arguments{
@@ -94,6 +94,9 @@ A function used to scale the input values to the range [0, 1].}
   \code{\link[scales]{boxcox_trans}}. You can create your own
   transformation with \code{\link[scales]{trans_new}}.}
 
+\item{na.color}{Characater string containing a valid R color to use when
+plotting missing data or data outside the limits.}
+
 \item{na.value}{Missing values will be replaced with this value.}
 
 \item{guide}{Name of guide object, or object itself. Defaults to
@@ -108,5 +111,20 @@ the \code{fill} and \code{fill2} aesthetics (\code{scale_fill_colorplane}).
 \details{
 The variable values are projected onto YUV color space to create a 2-D
 gradient that can be interpreted visually...
+}
+\examples{
+if(requireNamespace("maps")) {
+  crimes <- data.frame(state = tolower(rownames(USArrests)), USArrests)
+  states_map <- map_data("state")
+  ggplot(crimes,
+         aes(map_id = state, fill = Murder, fill2 = UrbanPop)) +
+    geom_map(map = states_map) +
+    scale_fill_colorplane() +
+    expand_limits(x = states_map$long, y = states_map$lat) +
+    coord_map()
+ }
+ggplot(mtcars, aes(x = wt, y = mpg, color = qsec, colour2 = hp)) +
+  geom_point(size = 4) +
+  scale_color_colorplane(limits = c(NA, 18.9))
 }
 

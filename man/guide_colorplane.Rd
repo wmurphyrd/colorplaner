@@ -6,7 +6,7 @@
 \title{Add Guide for Colorplane}
 \usage{
 guide_colorplane(title = waiver(), title.position = NULL,
-  title.theme = NULL, title.hjust = NULL, title.vjust = NULL,
+  title.theme = NULL, title.hjust = 0.5, title.vjust = NULL,
   axis_title = waiver(), axis_title.position = NULL,
   axis_title.theme = NULL, axis_title.hjust = NULL,
   axis_title.vjust = NULL, axis_title_y = waiver(),
@@ -19,7 +19,7 @@ guide_colorplane(title = waiver(), title.position = NULL,
   order = 0, ...)
 
 guide_colourplane(title = waiver(), title.position = NULL,
-  title.theme = NULL, title.hjust = NULL, title.vjust = NULL,
+  title.theme = NULL, title.hjust = 0.5, title.vjust = NULL,
   axis_title = waiver(), axis_title.position = NULL,
   axis_title.theme = NULL, axis_title.hjust = NULL,
   axis_title.vjust = NULL, axis_title_y = waiver(),
@@ -63,14 +63,16 @@ or "bottom" (default). \code{axis_title_y.position}: one of "left"
 
 \item{axis_title.theme, axis_title_y.theme}{Theme objects for rendering the
 axis title text. Typically an \code{\link[ggplot2]{element_text}} object.
-Defaults to settings for \code{axis.title.x} and \code{axis.title.y} in the
-main plot theme.}
+When \code{NULL}, defaults to settings for \code{axis.title.x} and
+\code{axis.title.y} in the plot theme.}
 
 \item{axis_title.hjust, axis_title_y.hjust}{Numbers specifying horizontal
-justification of the axis title text.}
+justification of the axis title text. When \code{NULL}, defaults to
+\code{axis_title.theme} or \code{axis.title.x} in plot theme.}
 
 \item{axis_title.vjust, axis_title_y.vjust}{Numbers specifing veritcal
-justification of the axis title text.}
+justification of the axis title text. When \code{NULL}, defaults to
+\code{axis_title*.theme} if set or \code{axis.title.*} in plot theme.}
 
 \item{label}{logical. If \code{TRUE} then the labels are drawn. If
 \code{FALSE} then the labels are invisible.}
@@ -94,7 +96,8 @@ of the axis label text. Defauls to value in \code{label.theme} /
 
 \item{planewidth, planeheight}{Numeric or \code{\link[grid]{unit}} objects
 specifying the width and height of the colorplane. Default values are 5
-times the legend.key.width or legend.key.size in the theme.}
+times the \code{legend.key.width/height} or \code{legend.key.size} in the
+plot theme.}
 
 \item{nbin}{Number specifying how many color pixels are generated for each
 dimension of the colorplane. Higher numbers increase guide color accuracy
@@ -120,5 +123,19 @@ Generates a guide to explain the colors plotted via
 \details{
 The guide is similar to \code{\link[ggplot2]{guide_colorbar}}, but as a plane
 of colors with ticks and labels for both variables in the scale.
+}
+\examples{
+if(requireNamespace("maps")) {
+  crimes <- data.frame(state = tolower(rownames(USArrests)), USArrests)
+  states_map <- map_data("state")
+  ggplot(crimes,
+         aes(map_id = state, fill = Murder, fill2 = UrbanPop)) +
+    geom_map(map = states_map) +
+    scale_fill_colorplane() +
+    expand_limits(x = states_map$long, y = states_map$lat) +
+    coord_map() +
+    guides(fill = guide_colorplane("My Title", axis_title = "Murder Rate",
+    axis_title_y = "Urban Population \%")
+ }
 }
 
