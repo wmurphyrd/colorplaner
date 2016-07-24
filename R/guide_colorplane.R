@@ -16,15 +16,18 @@
 #'   (default) or "right". Not yet implemented.
 #' @param axis_title.theme,axis_title_y.theme Theme objects for rendering the
 #'   axis title text. Typically an \code{\link[ggplot2]{element_text}} object.
-#'   Defaults to settings for \code{axis.title.x} and \code{axis.title.y} in the
-#'   main plot theme.
+#'   When \code{NULL}, defaults to settings for \code{axis.title.x} and
+#'   \code{axis.title.y} in the plot theme.
 #' @param axis_title.hjust,axis_title_y.hjust Numbers specifying horizontal
-#'   justification of the axis title text.
+#'   justification of the axis title text. When \code{NULL}, defaults to
+#'   \code{axis_title.theme} or \code{axis.title.x} in plot theme.
 #' @param axis_title.vjust,axis_title_y.vjust Numbers specifing veritcal
-#'   justification of the axis title text.
+#'   justification of the axis title text. When \code{NULL}, defaults to
+#'   \code{axis_title*.theme} if set or \code{axis.title.*} in plot theme.
 #' @param planewidth,planeheight Numeric or \code{\link[grid]{unit}} objects
 #'   specifying the width and height of the colorplane. Default values are 5
-#'   times the legend.key.width or legend.key.size in the theme.
+#'   times the \code{legend.key.width/height} or \code{legend.key.size} in the
+#'   plot theme.
 #' @param nbin Number specifying how many color pixels are generated for each
 #'   dimension of the colorplane. Higher numbers increase guide color accuracy
 #'   (especially for larger sized guides) at the expense of speed.
@@ -43,7 +46,19 @@
 #'   \code{label_y.theme} if set or \code{axis.text.*} in the plot theme.
 #'
 #' @inheritParams ggplot2::guide_colorbar
-#'
+#' @examples
+#' if(requireNamespace("maps")) {
+#'   crimes <- data.frame(state = tolower(rownames(USArrests)), USArrests)
+#'   states_map <- map_data("state")
+#'   ggplot(crimes,
+#'          aes(map_id = state, fill = Murder, fill2 = UrbanPop)) +
+#'     geom_map(map = states_map) +
+#'     scale_fill_colorplane() +
+#'     expand_limits(x = states_map$long, y = states_map$lat) +
+#'     coord_map() +
+#'     guides(fill = guide_colorplane("My Title", axis_title = "Murder Rate",
+#'     axis_title_y = "Urban Population %")
+#'  }
 #' @export
 guide_colorplane <- function(
 
@@ -51,7 +66,7 @@ guide_colorplane <- function(
   title = waiver(),
   title.position = NULL,
   title.theme = NULL,
-  title.hjust = NULL,
+  title.hjust = 0.5,
   title.vjust = NULL,
 
   #axis titles
