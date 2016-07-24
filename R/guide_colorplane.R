@@ -207,9 +207,9 @@ guide_train.colorplane <- function(guide, scale) {
   if (length(.bar_y) == 0) {
     .bar_y <- unique(.limits_y)
   }
-  .plane <- expand.grid(.bar, .bar_y)
+  .plane <- expand.grid(.bar, rev(.bar_y))
   names(.plane) <- scale$aesthetics
-  .plane <- matrix(scale$map_df(.plane)[[scale$aesthetics[1]]],
+  .plane <- matrix(scale$map_df(.plane)[[scale$aesthetics[1]]], byrow = T,
                    nrow = guide$nbin)
   attr(.plane, "aesthetic") <- scale$aesthetics[1]
   attr(.plane, "value") <- .bar
