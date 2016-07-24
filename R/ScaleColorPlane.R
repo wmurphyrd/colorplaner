@@ -190,7 +190,7 @@ ScaleColorPlane <- ggplot2::ggproto("ScaleColorPlane", ggplot2::ScaleContinuous,
 #'   \code{\link{guide_colorplane}} designed for this scale. Behavior of other
 #'   guides with this scale is not defined.
 #' @examples
-#' if(requireNamespace("maps")) {
+#' if(requireNamespace("mapproj")) {
 #'   crimes <- data.frame(state = tolower(rownames(USArrests)), USArrests)
 #'   states_map <- map_data("state")
 #'   ggplot(crimes,

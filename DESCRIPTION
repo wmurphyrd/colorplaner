@@ -6,11 +6,9 @@ Version: 0.0.0.9000
 Date: 2016-07-21
 Author: William Murphy
 Maintainer: William Murphy <william.murphy.rd@gmail.com>
-Authors@R: person("William", "Murphy", email = "william.murphy.rd@gmail.com",
-  role = c("aut", "cre"))
 Description: Add additional dimensionality to visualizations by using the color
-    and/or fill aesthetics to convey the values of two continous variables each. By
-    projecting variable values onto YUV colorspace, a scale is created that allows
+    and/or fill aesthetics to convey the values of two continuous variables each. By
+    projecting variable values onto YUV color space, a scale is created that allows
     viewers to intuitively determine the values of both variables from the single
     displayed color. Includes two new scales and a new guide for ggplot2.
 License: GPL-3
@@ -26,9 +24,13 @@ Depends:
     ggplot2 (>= 2.1.0)
 Suggests:
     testthat,
-    maps
+    maps,
+    mapproj,
+    knitr,
+    rmarkdown
 RoxygenNote: 5.0.1
 Copyright: Copyright 2016 William Murphy.
     This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
     This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
     See the GNU General Public License for more details. You should have received a copy of the GNU General Public License along with this program.  If not, see <http://www.gnu.org/licenses/>.
+VignetteBuilder: knitr
