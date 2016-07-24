@@ -47,7 +47,7 @@
 #'
 #' @inheritParams ggplot2::guide_colorbar
 #' @examples
-#' if(requireNamespace("maps")) {
+#' if(requireNamespace("mapproj")) {
 #'   crimes <- data.frame(state = tolower(rownames(USArrests)), USArrests)
 #'   states_map <- map_data("state")
 #'   ggplot(crimes,
@@ -141,6 +141,10 @@ guide_colorplane <- function(
     label.theme = label.theme,
     label.hjust = label.hjust,
     label.vjust = label.vjust,
+    label_y.position = label_y.position,
+    label_y.theme = label_y.theme,
+    label_y.hjust = label_y.hjust,
+    label_y.vjust = label_y.vjust,
 
     # plane
     planewidth = planewidth,
