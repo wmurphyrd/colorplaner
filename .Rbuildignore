@@ -2,3 +2,4 @@
 ^\.Rproj\.user$
 ^figure.*
 [rR]eadme
+\.travis\.yml
