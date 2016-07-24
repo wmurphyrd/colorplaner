@@ -193,6 +193,9 @@ ScaleColorPlane <- ggplot2::ggproto("ScaleColorPlane", ggplot2::ScaleContinuous,
 #'     expand_limits(x = states_map$long, y = states_map$lat) +
 #'     coord_map()
 #'  }
+#' ggplot(mtcars, aes(x = wt, y = mpg, color = qsec, colour2 = hp)) +
+#'   geom_point(size = 4) +
+#'   scale_color_colorplane(limits = c(NA, 18.9))
 #' @export
 scale_color_colorplane <- function(name = waiver(),
                                    axis_title = waiver(),
@@ -268,8 +271,8 @@ scale_fill_colorplane <- function(name = waiver(),
                                   labels_y = waiver(),
                                   limits = NULL,
                                   limits_y = NULL,
-                                  rescaler = scales::rescale,
-                                  oob = scales::censor, na.value = NA_real_,
+                                  rescaler = rescale,
+                                  oob = censor, na.value = NA_real_,
                                   guide = "colorplane") {
 
   ggplot2:::check_breaks_labels(breaks, labels)
