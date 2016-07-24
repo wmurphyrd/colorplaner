@@ -194,7 +194,6 @@ guide_train.colorplane <- function(guide, scale) {
 
   guide$key <- ticks
   guide$key_y <- ticks_y
-
   # plan dimension specification (number of divs etc)
   .limits <- scale$get_limits(dir = "horizontal")
   .bar <- seq(.limits[1], .limits[2], length.out = guide$nbin)
@@ -255,6 +254,7 @@ guide_geom.colorplane <- function(guide, ...) {
 #' @inheritParams guide_train.colorplane
 #' @param theme Plot theme object
 #'
+#' @seealso \code{\link{scale_color_colorplane}}
 #' @export
 guide_gengrob.colorplane <- function(guide, theme) {
 # TODO: implement label and axis title position options
