@@ -1,16 +1,4 @@
----
-title: "Color Space Aesthetic Mapping with colorplaner: Concepts and Usage"
-date: "2016-07-24"
-output:
-  rmarkdown::html_vignette:
-    fig_caption: yes
-vignette: >
-  %\VignetteIndexEntry{colorplaner}
-  %\VignetteEngine{knitr::rmarkdown}
-  %\VignetteEncoding{UTF-8}
----
-
-
+#colorplaner
 
 The colorplaner R package is a ggplot2 extension to visualize two variables through one color aesthetic via mapping to a color space projection. The extension implements two new scales, `scale_color_colorplane` and `scale_fill_colorplane`, two new aesthetics, `color2` and `fill2`, and a new guide `guide_colorplane`. 
 
