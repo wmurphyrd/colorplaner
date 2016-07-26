@@ -1,13 +1,27 @@
 [![BuildStatus](https://travis-ci.org/wmurphyrd/colorplaner.svg?branch=master)](https://travis-ci.org/wmurphyrd/colorplaner)
 
-#colorplaner
+# colorplaner
+
+To install:
+
+
+```r
+devtools::install_github("wmurphyrd/colorplaner")
+```
+
+
+
+
+
 
 The colorplaner R package is a ggplot2 extension to visualize two variables through one color aesthetic via mapping to a color space projection. The extension implements two new scales, `scale_color_colorplane` and `scale_fill_colorplane`, two new aesthetics, `color2` and `fill2`, and a new guide `guide_colorplane`. 
 
 ## Motivation
 
-While Tufte praises map visualizations as inherently high in dimensionality due
-to their geographic data, in practice maps are generally limited to no more than 
+While Edward Tufte praises map visualizations as inherently high in
+dimensionality due
+to their geographic data, 
+in practice maps are generally limited to no more than 
 a single variable as a fill color without becoming uninterpretable. 
 
 The colorplaner package is an exploration into the possibility of using a 
@@ -20,9 +34,9 @@ The spectrum of visible colors can be represented as a variety of different colo
 
 The YUV color space ([wikipedia](https://en.wikipedia.org/wiki/YUV)) was designed at the advent of color television broadcasting to encode color data in a manner that would be backwards-compatible with black & white sets. To do this, the luminance of each pixel is encoded into one component (Y), which provides all of the information used by black & white displays, and all of the color information (chrominance) is encoded into the remaining two components (U & V). 
 
-When Y is held constant, remaining color space is a U-V *plane* with corners of saturated green, red, fuchsia, and blue and smooth gradients in between. 
+When Y is held constant, remaining color space is a U-V *plane* with corners of saturated green, orange, fuchsia, and blue and smooth gradients in between. 
 
-![Holding Y constant at 25% yields this U-V color plane](figure/colorplane-concept-1.png) 
+![Holding Y constant at 25% yields this U-V color plane](figure/colorplane-concept-1.png)
 
 ## Usage
 
@@ -36,7 +50,7 @@ ggplot(mtcars, aes(x = wt, y = mpg, color = disp, color2 = hp)) +
   scale_color_colorplane() 
 ```
 
-![plot of chunk colorplane-basics](figure/colorplane-basics-1.png) 
+![plot of chunk colorplane-basics](figure/colorplane-basics-1.png)
 
 ```r
 if(require(mapproj)) {
@@ -50,7 +64,7 @@ if(require(mapproj)) {
 }
 ```
 
-![plot of chunk colorplane-basics](figure/colorplane-basics-2.png) 
+![plot of chunk colorplane-basics](figure/colorplane-basics-2.png)
 
 ## Settings
 
@@ -92,5 +106,5 @@ if(require(mapproj)) {
 }
 ```
 
-![plot of chunk colorplane-advanced](figure/colorplane-advanced-1.png) 
+![plot of chunk colorplane-advanced](figure/colorplane-advanced-1.png)
 

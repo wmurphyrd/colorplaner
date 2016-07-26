@@ -113,7 +113,7 @@ The variable values are projected onto YUV color space to create a 2-D
 gradient that can be interpreted visually...
 }
 \examples{
-if(requireNamespace("maps") && requireNamespace("mapproj")) {
+if(requireNamespace("mapproj")) {
   crimes <- data.frame(state = tolower(rownames(USArrests)), USArrests)
   states_map <- map_data("state")
   ggplot(crimes,
