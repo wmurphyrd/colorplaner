@@ -18,7 +18,8 @@ Imports:
     colorscience (>= 1.0.2),
     scales (>= 0.3.0),
     gtable (>= 0.1.2),
-    digest (>= 0.6.8)
+    digest (>= 0.6.8),
+    methods
 Depends:
     R (>= 3.2.2),
     ggplot2 (>= 2.1.0)

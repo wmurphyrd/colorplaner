@@ -1,5 +1,5 @@
 ---
-title: "Color Space Aesthetic Mapping with colorplaner: Concepts and Usage"
+title: "Color Space Aesthetic Mapping with colorplaner, Concepts and Usage"
 date: "`r Sys.Date()`"
 output:
   rmarkdown::html_vignette:
@@ -18,8 +18,10 @@ The colorplaner R package is a ggplot2 extension to visualize two variables thro
 
 ## Motivation
 
-While Tufte praises map visualizations as inherently high in dimensionality due
-to their geographic data, in practice maps are generally limited to no more than 
+While Edward Tufte praises map visualizations as inherently high in
+dimensionality due
+to their geographic data, 
+in practice maps are generally limited to no more than 
 a single variable as a fill color without becoming uninterpretable. 
 
 The colorplaner package is an exploration into the possibility of using a 
@@ -32,7 +34,7 @@ The spectrum of visible colors can be represented as a variety of different colo
 
 The YUV color space ([wikipedia](https://en.wikipedia.org/wiki/YUV)) was designed at the advent of color television broadcasting to encode color data in a manner that would be backwards-compatible with black & white sets. To do this, the luminance of each pixel is encoded into one component (Y), which provides all of the information used by black & white displays, and all of the color information (chrominance) is encoded into the remaining two components (U & V). 
 
-When Y is held constant, remaining color space is a U-V *plane* with corners of saturated green, red, fuchsia, and blue and smooth gradients in between. 
+When Y is held constant, remaining color space is a U-V *plane* with corners of saturated green, orange, fuchsia, and blue and smooth gradients in between. 
 
 ```{r colorplane-concept, echo = FALSE, warning = FALSE, message =FALSE, fig.cap="Holding Y constant at 25% yields this U-V color plane"}
 ggplot(expand.grid(a = seq(0, 1, length.out = 50), 

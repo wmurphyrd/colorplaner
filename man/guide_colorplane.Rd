@@ -125,7 +125,7 @@ The guide is similar to \code{\link[ggplot2]{guide_colorbar}}, but as a plane
 of colors with ticks and labels for both variables in the scale.
 }
 \examples{
-if(requireNamespace("maps") && requireNamespace("mapproj")) {
+if(requireNamespace("mapproj")) {
   crimes <- data.frame(state = tolower(rownames(USArrests)), USArrests)
   states_map <- map_data("state")
   ggplot(crimes,
