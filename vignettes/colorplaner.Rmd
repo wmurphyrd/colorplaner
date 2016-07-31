@@ -53,7 +53,7 @@ ggplot(expand.grid(a = seq(0, 1, length.out = 50),
 
 To implement color plane mapping in a `ggplot`, simply create aesthetic mappings to `color` and `color2` or `fill` and `fill2` and add the corresponding color plane scale to the plot. The corresponding guide is added by default. 
 
-```{r colorplane-basics, fig.width=6, message=FALSE, warning=FALSE}
+```{r colorplane-basics, fig.width=6, message=FALSE, warning=FALSE, fig.cap=""}
 data(mtcars)
 ggplot(mtcars, aes(x = wt, y = mpg, color = disp, color2 = hp)) +
   geom_point(size = 5) +
@@ -82,7 +82,7 @@ Like ggplot2, colorplaner works with sensible defaults but allows ample tweaking
 
 View `?scale_color_colorplane` and `?guide_colorplane` for all available options. 
 
-```{r colorplane-advanced, fig.height=5, fig.width=4}
+```{r colorplane-advanced, fig.height=5, fig.width=4, fig.cap=""}
 if(require(mapproj)) {
   crimes <- data.frame(state = tolower(rownames(USArrests)), USArrests)
   states_map <- map_data("state")
@@ -99,7 +99,7 @@ if(require(mapproj)) {
           panel.background = element_blank(),
           axis.text = element_blank(),
           axis.ticks = element_blank(),
-          text = element_text(size = 8)) +
+          text = element_text(size = 9)) +
     labs(x = "", y = "", title = paste("1973 U.S. Arrest Data:\nMurder Rate",
                                        "v. Urban Population by State")) +
     guides(fill = guide_colorplane(

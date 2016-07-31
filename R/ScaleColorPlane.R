@@ -1,3 +1,6 @@
+#' @include other_package_compatibility.R
+NULL
+
 #' Color Plane Scale ggproto Object
 #'
 #' This ggproto object inherits from \code{\link[ggplot2]{ScaleContinuous}} and
@@ -10,19 +13,19 @@ ScaleColorPlane <- ggplot2::ggproto("ScaleColorPlane", ggplot2::ScaleContinuous,
   labels_y = ggplot2::waiver(),
   axis_title = ggplot2::waiver(),
   axis_title_y = ggplot2::waiver(),
-  range = ggplot2::ggproto(NULL, ggplot2:::RangeContinuous),
-  range_y = ggplot2::ggproto(NULL, ggplot2:::RangeContinuous),
+  range = ggplot2::ggproto(NULL, RangeContinuous),
+  range_y = ggplot2::ggproto(NULL, RangeContinuous),
   na.color = NULL,
   map_df = function(self, df, i = NULL) {
     if (is.null(df) || nrow(df) == 0 || ncol(df) == 0) return()
-
-    aesthetics <- sort(intersect(self$aesthetics, names(df)))
-    names(aesthetics) <- aesthetics
-    if (length(aesthetics) == 0) return()
-    if (length(aesthetics) != 2) {
-     message("Number of aesthetics not equal to 2:", aesthetics)
+    aes_check <- intersect(self$aesthetics, names(df))
+    if (length(aes_check) == 0) return()
+    if (length(aes_check) != 2) {
+      message("Number of aesthetics not equal to 2:", aesthetics)
+      return()
     }
-    self$aesthetics <- aesthetics
+
+    aesthetics <- self$aesthetics
 
     df[[aesthetics[1]]] <- colorplane(
       self$oob(df[[aesthetics[1]]], self$get_limits(dir = "horizontal")),
@@ -42,25 +45,30 @@ ScaleColorPlane <- ggplot2::ggproto("ScaleColorPlane", ggplot2::ScaleContinuous,
   },
   train_df = function(self, df) {
     if (is.null(df) || nrow(df) == 0 || ncol(df) == 0) return()
-    aesthetics <- sort(intersect(self$aesthetics, names(df)))
+    aesthetics <- intersect(self$aesthetics, names(df))
+    aesthetics <- aesthetics[c(grep("[[:digit:]]", aesthetics, invert = TRUE),
+                               grep("[[:digit:]]", aesthetics))]
     names(aesthetics) <- aesthetics
+
     if (length(aesthetics) == 0) return()
     if (length(aesthetics) != 2) {
       message("Number of aesthetics not equal to 2:", aesthetics)
+      return()
     }
+    self$aesthetics <- aesthetics
     # default axis titles: cannot find any other way to access the original
     # variable names in the plot data, so grabbing 'plot' object from
     # ggplot_build in the call stack with dynGet. This can be avoided by
     # specifying the axis titles
-    if(ggplot2:::is.waive(self$axis_title) ||
-       ggplot2:::is.waive(self$axis_title_y)) {
+    if(is.waive(self$axis_title) ||
+       is.waive(self$axis_title_y)) {
       p <- dynGet("plot", ifnotfound = NULL)
-      if(ggplot2:::is.waive(self$axis_title)) {
+      if(is.waive(self$axis_title)) {
         if(!is.null(p) && !is.null(p$mapping)) {
           self$axis_title <- p$mapping[[aesthetics[1]]]
         } else self$axis_title <- NA
       }
-      if(ggplot2:::is.waive(self$axis_title_y)) {
+      if(is.waive(self$axis_title_y)) {
         if(!is.null(p) && !is.null(p$mapping)) {
           self$axis_title_y <- p$mapping[[aesthetics[2]]]
         } else self$axis_title <- NA
@@ -105,7 +113,7 @@ ScaleColorPlane <- ggplot2::ggproto("ScaleColorPlane", ggplot2::ScaleContinuous,
       stop("Invalid breaks specification. Use NULL, not NA")
     } else if (scales::zero_range(as.numeric(limits))) {
       breaks <- limits[1]
-    } else if (ggplot2:::is.waive(breaks)) {
+    } else if (is.waive(breaks)) {
       breaks <- self$trans$breaks(limits)
     } else if (is.function(breaks)) {
       breaks <- breaks(limits)
@@ -141,7 +149,7 @@ ScaleColorPlane <- ggplot2::ggproto("ScaleColorPlane", ggplot2::ScaleContinuous,
       return(NULL)
     } else if (identical(labels, NA)) {
       stop("Invalid labels specification. Use NULL, not NA", call. = FALSE)
-    } else if (ggplot2:::is.waive(labels)) {
+    } else if (is.waive(labels)) {
       labels <- self$trans$format(breaks)
     } else if (is.function(labels)) {
       labels <- labels(breaks)
@@ -220,7 +228,7 @@ scale_color_colorplane <- function(name = waiver(),
                                    na.value = NA_real_,
                                    guide = "colorplane") {
 
-  ggplot2:::check_breaks_labels(breaks, labels)
+  check_breaks_labels(breaks, labels)
 
   if (is.null(breaks) && guide != "none") {
     guide <- "none"
@@ -236,16 +244,16 @@ scale_color_colorplane <- function(name = waiver(),
 
   # Handle waived names, ggplot would insert the horizontal axis name by
   # default, which does not make sense in this context
-  if(ggplot2:::is.waive(name)) name <- "Color Key"
+  if(is.waive(name)) name <- "Color Key"
 
   ggproto(NULL, ScaleColorPlane,
           call = match.call(),
 
-          aesthetics = c("colour", "colour2"),
+          aesthetics = c("colour", "colour2", "color2"),
           scale_name = "colorplane",
           palette = scales::identity_pal(),
-          range = ggproto(NULL, ggplot2:::RangeContinuous),
-          range_y = ggproto(NULL, ggplot2:::RangeContinuous),
+          range = ggproto(NULL, RangeContinuous),
+          range_y = ggproto(NULL, RangeContinuous),
 
           limits = limits,
           limits_y = limits_y,
@@ -284,7 +292,7 @@ scale_fill_colorplane <- function(name = waiver(),
                                   oob = censor, na.value = NA_real_,
                                   guide = "colorplane") {
 
-  ggplot2:::check_breaks_labels(breaks, labels)
+  check_breaks_labels(breaks, labels)
 
   if (is.null(breaks) && guide != "none") {
     guide <- "none"
@@ -300,7 +308,7 @@ scale_fill_colorplane <- function(name = waiver(),
 
   # Handle waived names, ggplot would insert the horizontal axis name by
   # default, which does not make sense in this context
-  if(ggplot2:::is.waive(name)) name <- "Fill Color Key"
+  if(is.waive(name)) name <- "Fill Color Key"
 
   ggproto(NULL, ScaleColorPlane,
           call = match.call(),
@@ -308,8 +316,8 @@ scale_fill_colorplane <- function(name = waiver(),
           aesthetics = c("fill", "fill2"),
           scale_name = "fillplane",
           palette = scales::identity_pal(),
-          range = ggproto(NULL, ggplot2:::RangeContinuous),
-          range_y = ggproto(NULL, ggplot2:::RangeContinuous),
+          range = ggproto(NULL, RangeContinuous),
+          range_y = ggproto(NULL, RangeContinuous),
 
           limits = limits,
           limits_y = limits_y,
