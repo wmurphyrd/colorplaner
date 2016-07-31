@@ -5,31 +5,35 @@
 \alias{scale_colour_colourplane}
 \alias{scale_fill_colorplane}
 \alias{scale_fill_colourplane}
-\title{Two-Dimensional Color Space Projection Scale}
+\title{Bivariate Color Space Projection Scale}
 \usage{
 scale_color_colorplane(name = waiver(), axis_title = waiver(),
   axis_title_y = waiver(), breaks = waiver(), breaks_y = waiver(),
   labels = waiver(), labels_y = waiver(), limits = NULL,
-  limits_y = NULL, rescaler = rescale, oob = censor, trans = "identity",
-  na.color = "black", na.value = NA_real_, guide = "colorplane")
+  limits_y = NULL, color_projection = "YUV", rescaler = rescale,
+  oob = censor, trans = "identity", na.color = "black",
+  na.value = NA_real_, guide = "colorplane")
 
 scale_fill_colorplane(name = waiver(), axis_title = waiver(),
   axis_title_y = waiver(), breaks = waiver(), breaks_y = waiver(),
   labels = waiver(), labels_y = waiver(), limits = NULL,
-  limits_y = NULL, rescaler = rescale, oob = censor, trans = "identity",
-  na.color = "black", na.value = NA_real_, guide = "colorplane")
+  limits_y = NULL, color_projection = "YUV", rescaler = rescale,
+  oob = censor, trans = "identity", na.color = "black",
+  na.value = NA_real_, guide = "colorplane")
 
 scale_colour_colourplane(name = waiver(), axis_title = waiver(),
   axis_title_y = waiver(), breaks = waiver(), breaks_y = waiver(),
   labels = waiver(), labels_y = waiver(), limits = NULL,
-  limits_y = NULL, rescaler = rescale, oob = censor, trans = "identity",
-  na.color = "black", na.value = NA_real_, guide = "colorplane")
+  limits_y = NULL, color_projection = "YUV", rescaler = rescale,
+  oob = censor, trans = "identity", na.color = "black",
+  na.value = NA_real_, guide = "colorplane")
 
 scale_fill_colourplane(name = waiver(), axis_title = waiver(),
   axis_title_y = waiver(), breaks = waiver(), breaks_y = waiver(),
   labels = waiver(), labels_y = waiver(), limits = NULL,
-  limits_y = NULL, rescaler = rescale, oob = censor, trans = "identity",
-  na.color = "black", na.value = NA_real_, guide = "colorplane")
+  limits_y = NULL, color_projection = "YUV", rescaler = rescale,
+  oob = censor, trans = "identity", na.color = "black",
+  na.value = NA_real_, guide = "colorplane")
 }
 \arguments{
 \item{name}{Character string or expression to be used as guide title.
@@ -76,6 +80,10 @@ Use \code{NA} to refer to the existing minimum or maximum.}
 \item{limits_y}{As \code{limits}, but pertaining to vertical axis (i.e.
 \code{color2} or \code{fill2})}
 
+\item{color_projection}{Projection mapping to use. Either the name of an
+included projection or a function that performs the projection.
+See \code{\link{color_projections}}.}
+
 \item{rescaler}{Used by diverging and n colour gradients
 (i.e. \code{\link{scale_colour_gradient2}}, \code{\link{scale_colour_gradientn}}).
 A function used to scale the input values to the range [0, 1].}
@@ -109,7 +117,7 @@ Maps two continutous variables into a single display color, using either the
 the \code{fill} and \code{fill2} aesthetics (\code{scale_fill_colorplane}).
 }
 \details{
-The variable values are projected onto YUV color space to create a 2-D
+The variable values are projected onto YUV color space to create a bivaraite
 gradient that can be interpreted visually...
 }
 \examples{

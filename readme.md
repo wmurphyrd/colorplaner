@@ -38,8 +38,13 @@ To install:
 
 
 ```r
-devtools::install_github("wmurphyrd/colorplaner")
+devtools::install_github("wmurphyrd/colorplaner", ref = "other_projections")
 ```
+
+#### Development branch: other_projections
+* Support for providing alternate color space projections through the `color_projection` argument to `scale_fill_colorplane` and `scale_color_colorplane`
+* Sample alternate projection `red_blue_projection`
+* Documentation for creating alternate projections added at `?color_projections`
 
 #### Known Issues and Incomplete Features
 * Cannot alter title and axis label positions in guide_colorplane (#2)
@@ -106,7 +111,8 @@ if(require(mapproj)) {
     scale_fill_colorplane(labels_y = scales::percent,
                           axis_title = "Murder arrests\nper 100,000 people",
                           axis_title_y = "Percent Urban Population",
-                          limits_y = c(0,1)) +
+                          limits_y = c(0,1),
+                          color_projection = red_blue_projection) +
     expand_limits(x = states_map$long, y = states_map$lat) +
     coord_map() +
     theme(legend.position = "bottom",
