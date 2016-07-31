@@ -1,17 +1,8 @@
 [![BuildStatus](https://travis-ci.org/wmurphyrd/colorplaner.svg?branch=master)](https://travis-ci.org/wmurphyrd/colorplaner)
 
+
+
 # colorplaner
-
-To install:
-
-
-```r
-devtools::install_github("wmurphyrd/colorplaner")
-```
-
-
-
-Branch `internalize`: removes dependencies on internal objects in `ggplot2` and passes R CMD check without notes
 
 
 
@@ -40,6 +31,27 @@ When Y is held constant, remaining color space is a U-V *plane* with corners of 
 
 ![Holding Y constant at 25% yields this U-V color plane](figure/colorplane-concept-1.png)
 
+
+## Installation
+
+To install:
+
+
+```r
+devtools::install_github("wmurphyrd/colorplaner")
+```
+
+#### Known Issues and Incomplete Features
+* Cannot alter title and axis label positions in guide_colorplane (#2)
+* Large list of dependencies and namespace attachments inherited from colorscience package (#4)
+* Colors render incorrectly when discrete variables assigned to color/colour/fill (#1) 
+
+#### Version 0.0.0.9001
+* Removed all dependencies on unexported objects from ggplot2
+
+#### Version 0.0.0.9000
+* Adds `scale_color_colorplane`, `scale_fill_colorplane`, and `guide_colorplane` extensions to ggplot2
+
 ## Usage
 
 To implement color plane mapping in a `ggplot`, simply create aesthetic mappings to `color` and `color2` or `fill` and `fill2` and add the corresponding color plane scale to the plot. The corresponding guide is added by default. 
@@ -52,7 +64,7 @@ ggplot(mtcars, aes(x = wt, y = mpg, color = disp, color2 = hp)) +
   scale_color_colorplane() 
 ```
 
-![plot of chunk colorplane-basics](figure/colorplane-basics-1.png)
+![](figure/colorplane-basics-1.png)
 
 ```r
 if(require(mapproj)) {
@@ -66,7 +78,7 @@ if(require(mapproj)) {
 }
 ```
 
-![plot of chunk colorplane-basics](figure/colorplane-basics-2.png)
+![](figure/colorplane-basics-2.png)
 
 ## Settings
 
@@ -98,7 +110,7 @@ if(require(mapproj)) {
           panel.background = element_blank(),
           axis.text = element_blank(),
           axis.ticks = element_blank(),
-          text = element_text(size = 8)) +
+          text = element_text(size = 9)) +
     labs(x = "", y = "", title = paste("1973 U.S. Arrest Data:\nMurder Rate",
                                        "v. Urban Population by State")) +
     guides(fill = guide_colorplane(
@@ -108,5 +120,5 @@ if(require(mapproj)) {
 }
 ```
 
-![plot of chunk colorplane-advanced](figure/colorplane-advanced-1.png)
+![](figure/colorplane-advanced-1.png)
 
