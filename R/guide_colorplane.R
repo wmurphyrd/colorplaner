@@ -1,3 +1,6 @@
+#' @include other_package_compatibility.R
+NULL
+
 #' Add Guide for Colorplane
 #'
 #' Generates a guide to explain the colors plotted via
@@ -188,9 +191,9 @@ guide_train.colorplane <- function(guide, scale) {
     return(NULL)
   }
   # determine axis labels
-  if(ggplot2:::is.waive(guide$axis_title)) guide$axis_title <-
+  if(is.waive(guide$axis_title)) guide$axis_title <-
       scale$axis_title
-  if(ggplot2:::is.waive(guide$axis_title_y)) guide$axis_title_y <-
+  if(is.waive(guide$axis_title_y)) guide$axis_title_y <-
       scale$axis_title_y
   # create data frames for tick display
   breaks <- scale$get_breaks(dir = "horizontal")
@@ -321,7 +324,7 @@ guide_gengrob.colorplane <- function(guide, theme) {
   label_pos_y <- unit(tic_pos_y.c, "mm")
 
   # title
-  grob.title <- ggplot2:::ggname(
+  grob.title <- ggname(
     "guide.title",
     ggplot2::element_grob(
       guide$title.theme %||% ggplot2::calc_element("legend.title", theme),
@@ -339,7 +342,7 @@ guide_gengrob.colorplane <- function(guide, theme) {
   title_height.c <- c(title_height)
 
   #axis titles
-  grob.axis_title <- ggplot2:::ggname(
+  grob.axis_title <- ggname(
     "guide.axis_title",
     ggplot2::element_grob(
       guide$axis_title.theme %||% ggplot2::calc_element("axis.title.x", theme),
@@ -357,7 +360,7 @@ guide_gengrob.colorplane <- function(guide, theme) {
     grid::convertHeight(grid::grobHeight(grob.axis_title), "mm")
   axis_title_height.c <- c(axis_title_height)
 
-  grob.axis_title_y <- ggplot2:::ggname(
+  grob.axis_title_y <- ggname(
     "guide.axis_title_y",
     ggplot2::element_grob(
       guide$axis_title_y.theme %||%
@@ -401,7 +404,7 @@ guide_gengrob.colorplane <- function(guide, theme) {
     }
     g <- ggplot2::element_grob(element = label.theme, label = label,
                                x = x, y = y, hjust = hjust, vjust = vjust)
-    grob.label <- ggplot2:::ggname("guide.label", g)
+    grob.label <- ggname("guide.label", g)
   }
 
 
@@ -432,7 +435,7 @@ guide_gengrob.colorplane <- function(guide, theme) {
     }
     g <- ggplot2::element_grob(element = label_y.theme, label = label,
                       x = x, y = y, hjust = hjust, vjust = vjust)
-    grob.label_y <- ggplot2:::ggname("guide.label_y", g)
+    grob.label_y <- ggname("guide.label_y", g)
   }
 
   label_width_y <- grid::convertWidth(grid::grobWidth(grob.label_y), "mm")
@@ -502,7 +505,7 @@ guide_gengrob.colorplane <- function(guide, theme) {
     ))
 
   # background
-  grob.background <- ggplot2:::element_render(theme, "legend.background")
+  grob.background <- element_render(theme, "legend.background")
 
   # padding
   padding <- unit(1.5, "mm")
