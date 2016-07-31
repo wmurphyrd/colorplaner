@@ -41,7 +41,7 @@ Copyright: Copyright 2016 William Murphy. This program is free software: you
 VignetteBuilder: knitr
 Collate:
     'other_package_compatibility.R'
-    'ScaleColorPlane.R'
     'colorplane.R'
+    'ScaleColorPlane.R'
     'colorplaner.R'
     'guide_colorplane.R'

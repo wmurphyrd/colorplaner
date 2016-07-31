@@ -1,3 +1,8 @@
+# Development branch: other_projections
+* Support for providing alternate color space projections through the `color_projection` argument to `scale_fill_colorplane` and `scale_color_colorplane`
+* Sample alternate projection `red_blue_projection`
+* Documentation for creating alternate projections added at `?color_projections`
+
 # Known Issues and Incomplete Features
 * Cannot alter title and axis label positions in guide_colorplane (#2)
 * Colors render incorrectly when discrete variables assigned to color/colour/fill (#1) 

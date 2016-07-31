@@ -92,7 +92,8 @@ if(require(mapproj)) {
     scale_fill_colorplane(labels_y = scales::percent,
                           axis_title = "Murder arrests\nper 100,000 people",
                           axis_title_y = "Percent Urban Population",
-                          limits_y = c(0,1)) +
+                          limits_y = c(0,1),
+                          color_projection = red_blue_projection) +
     expand_limits(x = states_map$long, y = states_map$lat) +
     coord_map() +
     theme(legend.position = "bottom",
