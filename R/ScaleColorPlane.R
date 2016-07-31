@@ -18,17 +18,14 @@ ScaleColorPlane <- ggplot2::ggproto("ScaleColorPlane", ggplot2::ScaleContinuous,
   na.color = NULL,
   map_df = function(self, df, i = NULL) {
     if (is.null(df) || nrow(df) == 0 || ncol(df) == 0) return()
-    aesthetics <- intersect(self$aesthetics, names(df))
-    aesthetics <- aesthetics[c(grep("[[:digit:]]", aesthetics, invert = TRUE),
-                               grep("[[:digit:]]", aesthetics))]
-    names(aesthetics) <- aesthetics
-
-    if (length(aesthetics) == 0) return()
-    if (length(aesthetics) != 2) {
+    aes_check <- intersect(self$aesthetics, names(df))
+    if (length(aes_check) == 0) return()
+    if (length(aes_check) != 2) {
       message("Number of aesthetics not equal to 2:", aesthetics)
       return()
     }
-    self$aesthetics <- aesthetics
+
+    aesthetics <- self$aesthetics
 
     df[[aesthetics[1]]] <- colorplane(
       self$oob(df[[aesthetics[1]]], self$get_limits(dir = "horizontal")),
@@ -48,12 +45,17 @@ ScaleColorPlane <- ggplot2::ggproto("ScaleColorPlane", ggplot2::ScaleContinuous,
   },
   train_df = function(self, df) {
     if (is.null(df) || nrow(df) == 0 || ncol(df) == 0) return()
-    aesthetics <- sort(intersect(self$aesthetics, names(df)))
+    aesthetics <- intersect(self$aesthetics, names(df))
+    aesthetics <- aesthetics[c(grep("[[:digit:]]", aesthetics, invert = TRUE),
+                               grep("[[:digit:]]", aesthetics))]
     names(aesthetics) <- aesthetics
+
     if (length(aesthetics) == 0) return()
     if (length(aesthetics) != 2) {
       message("Number of aesthetics not equal to 2:", aesthetics)
+      return()
     }
+    self$aesthetics <- aesthetics
     # default axis titles: cannot find any other way to access the original
     # variable names in the plot data, so grabbing 'plot' object from
     # ggplot_build in the call stack with dynGet. This can be avoided by
