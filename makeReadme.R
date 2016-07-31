@@ -15,6 +15,8 @@ ins <- c("[![BuildStatus](https://travis-ci.org/wmurphyrd/colorplaner.svg?branch
          "```{r include = F}",
          "knitr::opts_chunk$set(fig.width = 5, fig.height = 5)",
          "```",
+         "",
+         "Branch `internalize`: removes dependencies on internal objects in `ggplot2` and passes R CMD check without notes",
          "")
 
 knitr::knit(text = c(ins, readme[seq(loc[2] + 1, length(readme))]),

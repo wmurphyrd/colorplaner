@@ -11,6 +11,8 @@ devtools::install_github("wmurphyrd/colorplaner")
 
 
 
+Branch `internalize`: removes dependencies on internal objects in `ggplot2` and passes R CMD check without notes
+
 
 
 
