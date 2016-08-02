@@ -233,7 +233,7 @@ scale_color_colorplane <- function(name = waiver(),
   if (is.null(breaks) && guide != "none") {
     guide <- "none"
   }
-  # using local version of as.trans to avoid namespace issues (see zzz.r)
+  # using local version of as.trans to avoid namespace issues
   trans <- as.trans(trans)
   if (!is.null(limits)) {
     limits <- trans$transform(limits)
@@ -289,7 +289,10 @@ scale_fill_colorplane <- function(name = waiver(),
                                   limits = NULL,
                                   limits_y = NULL,
                                   rescaler = rescale,
-                                  oob = censor, na.value = NA_real_,
+                                  oob = censor,
+                                  trans = "identity",
+                                  na.color = "black",
+                                  na.value = NA_real_,
                                   guide = "colorplane") {
 
   check_breaks_labels(breaks, labels)
@@ -297,8 +300,8 @@ scale_fill_colorplane <- function(name = waiver(),
   if (is.null(breaks) && guide != "none") {
     guide <- "none"
   }
-  # TODO: attempt to re-implement transformations
-  trans <- scales::identity_trans()
+  # using local version of as.trans to avoid namespace issues
+  trans <- as.trans(trans)
   if (!is.null(limits)) {
     limits <- trans$transform(limits)
   }
@@ -322,6 +325,7 @@ scale_fill_colorplane <- function(name = waiver(),
           limits = limits,
           limits_y = limits_y,
           trans = trans,
+          na.color = na.color,
           na.value = na.value,
           expand = function(range, ...) {range},
           rescaler = rescaler,  # Used by diverging and n colour gradients

@@ -1,8 +1,8 @@
+# colorplaner
+
 [![BuildStatus](https://travis-ci.org/wmurphyrd/colorplaner.svg?branch=master)](https://travis-ci.org/wmurphyrd/colorplaner)
 
 
-
-# colorplaner
 
 
 
@@ -43,8 +43,11 @@ devtools::install_github("wmurphyrd/colorplaner")
 
 #### Known Issues and Incomplete Features
 * Cannot alter title and axis label positions in guide_colorplane (#2)
-* Large list of dependencies and namespace attachments inherited from colorscience package (#4)
 * Colors render incorrectly when discrete variables assigned to color/colour/fill (#1) 
+
+#### Version 0.0.0.9002
+* Removed dependency on `pkg:colorscience` (and all of its imports and depends); replaced with super fast matrix-math YUV-RGB conversions (#4)
+* Added missing arguments to `scale_fill_colorplane`: `na.color`, `trans`
 
 #### Version 0.0.0.9001
 * Removed all dependencies on unexported objects from ggplot2
