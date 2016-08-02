@@ -4,13 +4,13 @@ loc <- grep("^---$", readme)
 
 news_loc <- grep("^## Usage$", readme)[1] - 1
 
-ins <- c("[![BuildStatus](https://travis-ci.org/wmurphyrd/colorplaner.svg?branch=master)](https://travis-ci.org/wmurphyrd/colorplaner)",
+ins <- c("# colorplaner",
+         "",
+         "[![BuildStatus](https://travis-ci.org/wmurphyrd/colorplaner.svg?branch=master)](https://travis-ci.org/wmurphyrd/colorplaner)",
          "",
          "```{r include = F}",
          "knitr::opts_chunk$set(fig.width = 5, fig.height = 5)",
          "```",
-         "",
-         "# colorplaner",
          "")
 news <- readLines("NEWS.md")
 news <- gsub("^#", "####", news)
