@@ -2,7 +2,7 @@ Package: colorplaner
 Type: Package
 Title: ggplot2 Extension to Visualize Two Variables per Color Aesthetic Through
     Color Space Projection
-Version: 0.0.0.9001
+Version: 0.0.0.9002
 Date: 2016-07-21
 Author: William Murphy
 Maintainer: William Murphy <william.murphy.rd@gmail.com>
@@ -15,7 +15,6 @@ License: GPL-3
 LazyData: TRUE
 Imports:
     grid (>= 3.2.2),
-    colorscience (>= 1.0.2),
     scales (>= 0.3.0),
     gtable (>= 0.1.2),
     digest (>= 0.6.8),
