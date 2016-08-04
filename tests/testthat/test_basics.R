@@ -40,3 +40,8 @@ test_that("OOB and NA data handled without error", {
     })
 
 })
+
+test_that("Scale constructors are in sync", {
+  expect_identical(formals(scale_color_colorplane),
+                   formals(scale_fill_colorplane))
+})
