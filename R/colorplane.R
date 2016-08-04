@@ -14,12 +14,12 @@ YUV2grDeviceRGB <- function(YUV) {
 
 #input range (0,1), (0,1), (0,1)
 #output range (0,1), (-.043599,0.536), (-0.615, 0.615)
-RGB2YUV <- function(x) {
-  t(matrix(c(0.299, 0.587, 0.114,
-           -0.14713, -0.28886, 0.436,
-           0.615, -0.51499, -0.10001), nrow = 3, byrow = TRUE) %*%
-    t(x))
-}
+# RGB2YUV <- function(x) {
+#   t(matrix(c(0.299, 0.587, 0.114,
+#            -0.14713, -0.28886, 0.436,
+#            0.615, -0.51499, -0.10001), nrow = 3, byrow = TRUE) %*%
+#     t(x))
+# }
 
 #' @name color_projections
 #'
@@ -52,18 +52,18 @@ YUV_projection <- function(x, y, Y = .35,
                        xRange = range(x, na.rm = TRUE, finite = TRUE),
                        yRange = range(y, na.rm = TRUE, finite = TRUE),
                        naColor = "black") {
-  naColor <- RGB2YUV(t(grDevices::col2rgb(naColor[1])))
+  #ensure naColor is a valid #xxxxxx format color
+  naColor <- grDevices::rgb(t(grDevices::col2rgb(naColor[1])),
+                            maxColorValue = 255)
   u <- scales::rescale(x, to = c(-0.43599, .436), from = xRange)
   v <- scales::rescale(y, to = c(-0.615, 0.615), from = yRange)
   # Y <- scales::rescale(sqrt((x - mean(xRange))^2 + (y - mean(yRange))^2),
   #                      to = c(0, 511))
   YUV <- as.matrix(cbind(Y, u, v))
-  if(anyNA(x) || anyNA(y)) {
-    naIndices <- cbind(c(rep(which(is.na(x)), 3), rep(which(is.na(y)), 3)), 1:3)
-    YUV[naIndices] <- naColor
-  }
-
-  YUV2grDeviceRGB(YUV)
+  out <- rep(naColor, length(x))
+  whichOK <- !apply(YUV, 1, anyNA)
+  out[whichOK] <- YUV2grDeviceRGB(YUV[whichOK, ])
+  out
 }
 
 
