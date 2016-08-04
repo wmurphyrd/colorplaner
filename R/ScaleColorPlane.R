@@ -29,12 +29,25 @@ ScaleColorPlane <- ggplot2::ggproto("ScaleColorPlane", ggplot2::ScaleContinuous,
 
     aesthetics <- self$aesthetics
 
-    df[[aesthetics[1]]] <- self$projection_function(
-      x = self$oob(df[[aesthetics[1]]], self$get_limits(dir = "horizontal")),
-      y = self$oob(df[[aesthetics[2]]], self$get_limits(dir = "vertical")),
-      xRange = self$get_limits(dir = "horizontal"),
-      yRange = self$get_limits(dir = "vertical"),
-      naColor = self$na.color)
+    xlim <- self$get_limits(dir = "horizontal")
+    x <-  self$oob(df[[aesthetics[1]]], xlim)
+    x <- self$rescaler(x, c(0,1), xlim)
+
+    ylim <- self$get_limits(dir = "vertical")
+    y <- self$oob(df[[aesthetics[2]]], ylim)
+    y <- self$rescaler(y, c(0,1), ylim)
+
+    # prefill with the NA color so we can do the projection as an inset, process
+    # the NA color to ensure proper #xxxxxx form regardless of unput type
+    df[[aesthetics[1]]] <- grDevices::rgb(
+      t(grDevices::col2rgb(self$na.color[1])),
+      maxColorValue = 255)
+    whichOK <- !is.na(x) & !is.na(y)
+    # TODO: support extra argument pass_through
+    df[whichOK, aesthetics[1]] <- do.call(self$projection_function,
+                                          list(x = x[whichOK],
+                                               y = y[whichOK]))
+
     # This handling for optional paramter i is in the default method for Scale
     # proto, but the method is only ever called from ggplot_build without it
 

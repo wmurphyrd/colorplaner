@@ -1,9 +1,38 @@
 # Wikipedia page on converions:
 # https://en.wikipedia.org/wiki/YUV
 
-#input range (0,1), (-.043599,0.536), (-0.615, 0.615)
-#output range #000000,#ffffff
-YUV2grDeviceRGB <- function(YUV) {
+#' @name color_projections
+#'
+#' @title Color Space Projections
+#'
+#' @description Functions to define how variables are mapped into color space.
+#'   Custom functions can also be defined following this signature.
+#'
+#' @details Color space projection functions take two numeric vectors and return
+#'   a single character vector of the same length that specifies the colors to
+#'   plot in the form "#rrggbb", as returned by \code{\link[grDevices]{rgb}}.
+#'   Additional projection functions can be defined following the same signature
+#'   and passed to the \code{color_projection} arugment of the
+#'   \code{scale_*_colorplane} scale constructors. When writing custom
+#'   projection functions, expect two arguments that are numeric vectors scaled
+#'   to a range of 0 to 1 and that do not contain missing values. Custom
+#'   projections can accept additional arguments that are passed through from
+#'   the \code{...} of \code{scale_*_colorplane}.
+#'
+#' @param x,y numeric vectors of equal length containing the values to be mapped
+#'   to the horizontal and vertical axes of the colorplane.
+#' @param Y numeric value for the fixed lumosity level in YUV projections.
+#' @seealso \code{\link{scale_color_colorplane}},
+#'   \code{\link{scale_fill_colorplane}}
+NULL
+
+#' @export
+#' @rdname color_projections
+#' @references YUV conversion matrix from \url{https://en.wikipedia.org/wiki/YUV}
+YUV_projection <- function(x, y, Y = .35) {
+  YUV <- cbind(Y,
+               scales::rescale(x, to = c(-0.436, .436), from = c(0, 1)),
+               scales::rescale(y, to = c(-0.615, 0.615), from = c(0, 1)))
   out <- t(matrix(c(1, 0, 1.13983,
                     1, -0.39465, -0.58060,
                     1, 2.03211, 0), ncol = 3, byrow = TRUE) %*%
@@ -12,78 +41,15 @@ YUV2grDeviceRGB <- function(YUV) {
   grDevices::rgb(out, maxColorValue = 1)
 }
 
-#input range (0,1), (0,1), (0,1)
-#output range (0,1), (-.043599,0.536), (-0.615, 0.615)
-# RGB2YUV <- function(x) {
-#   t(matrix(c(0.299, 0.587, 0.114,
-#            -0.14713, -0.28886, 0.436,
-#            0.615, -0.51499, -0.10001), nrow = 3, byrow = TRUE) %*%
-#     t(x))
-# }
-
-#' @name color_projections
-#'
-#' @title Color Space Projections
-#'
-#' @description Functions to define how variables are mapped into color space. Custom
-#' functions can also be defined following this signature.
-#'
-#' @details Color space projection functions take two numeric vectors and return a single
-#' character vector of the same length that specifies the colors to plot in the
-#' form "#rrggbb", as is returned by \code{\link[grDevices]{rgb}}.
-#' Additional projection functions can be defined following the same signature
-#' and passed to the \code{color_projection} arugment of the scale_*_colorplane
-#' scale constructors.
-#'
-#' @param x,y numeric vectors of equal length containing the values to be mapped
-#'   to the horizontal and vertical axes of the colorplane.
-#' @param Y numeric value for the fixed lumosity level in YUV projections.
-#' @param xRange,yRange numeric vectors of length 2 specifying the lower and
-#'   upper bounds of the scale for each dimension. Defaults to the range of
-#'   \code{x} and \code{y}.
-#' @param naColor character string specifying a color to use when either
-#'   \code{x} or \code{y} are \code{NA}. Accepts standard \code{R} color
-#'   specifications.
-NULL
-
 #' @export
 #' @rdname color_projections
-YUV_projection <- function(x, y, Y = .35,
-                       xRange = range(x, na.rm = TRUE, finite = TRUE),
-                       yRange = range(y, na.rm = TRUE, finite = TRUE),
-                       naColor = "black") {
-  #ensure naColor is a valid #xxxxxx format color
-  naColor <- grDevices::rgb(t(grDevices::col2rgb(naColor[1])),
-                            maxColorValue = 255)
-  u <- scales::rescale(x, to = c(-0.43599, .436), from = xRange)
-  v <- scales::rescale(y, to = c(-0.615, 0.615), from = yRange)
-  # Y <- scales::rescale(sqrt((x - mean(xRange))^2 + (y - mean(yRange))^2),
-  #                      to = c(0, 511))
-  YUV <- as.matrix(cbind(Y, u, v))
-  out <- rep(naColor, length(x))
-  whichOK <- !apply(YUV, 1, anyNA)
-  out[whichOK] <- YUV2grDeviceRGB(YUV[whichOK, ])
-  out
-}
-
-
-#' @export
-#' @rdname color_projections
-red_blue_projection <- function(x, y, Y = NULL,
-                           xRange = range(x, na.rm = TRUE, finite = TRUE),
-                           yRange = range(y, na.rm = TRUE, finite = TRUE),
-                           naColor = "black") {
-  naColor <- t(grDevices::col2rgb(naColor[1]))
-  x <- scales::rescale(x, to = c(0, 255), from = xRange)
-  y <- scales::rescale(y, to = c(0, 255), from = yRange)
+red_blue_projection <- function(x, y) {
+  x <- scales::rescale(x, to = c(0, 255), from = c(0,1))
+  y <- scales::rescale(y, to = c(0, 255), from = c(0,1))
   r <- 255 - pmax(0, y - x)
   b <- 255 - pmax(0, x - y)
   g <- 255 - (x + y) / 2
   rgb_mat <- cbind(r, g, b)
-  if(anyNA(x) || anyNA(y)) {
-    naIndices <- cbind(c(rep(which(is.na(x)), 3), rep(which(is.na(y)), 3)), 1:3)
-    rgb_mat[naIndices] <- naColor
-  }
   grDevices::rgb(rgb_mat, maxColorValue = 255)
 }
 

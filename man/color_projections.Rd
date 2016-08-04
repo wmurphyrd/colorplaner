@@ -6,36 +6,37 @@
 \alias{red_blue_projection}
 \title{Color Space Projections}
 \usage{
-YUV_projection(x, y, Y = 0.35, xRange = range(x, na.rm = TRUE, finite =
-  TRUE), yRange = range(y, na.rm = TRUE, finite = TRUE), naColor = "black")
+YUV_projection(x, y, Y = 0.35)
 
-red_blue_projection(x, y, Y = NULL, xRange = range(x, na.rm = TRUE, finite =
-  TRUE), yRange = range(y, na.rm = TRUE, finite = TRUE), naColor = "black")
+red_blue_projection(x, y)
 }
 \arguments{
 \item{x, y}{numeric vectors of equal length containing the values to be mapped
 to the horizontal and vertical axes of the colorplane.}
 
 \item{Y}{numeric value for the fixed lumosity level in YUV projections.}
-
-\item{xRange, yRange}{numeric vectors of length 2 specifying the lower and
-upper bounds of the scale for each dimension. Defaults to the range of
-\code{x} and \code{y}.}
-
-\item{naColor}{character string specifying a color to use when either
-\code{x} or \code{y} are \code{NA}. Accepts standard \code{R} color
-specifications.}
 }
 \description{
-Functions to define how variables are mapped into color space. Custom
-functions can also be defined following this signature.
+Functions to define how variables are mapped into color space.
+  Custom functions can also be defined following this signature.
 }
 \details{
-Color space projection functions take two numeric vectors and return a single
-character vector of the same length that specifies the colors to plot in the
-form "#rrggbb", as is returned by \code{\link[grDevices]{rgb}}.
-Additional projection functions can be defined following the same signature
-and passed to the \code{color_projection} arugment of the scale_*_colorplane
-scale constructors.
+Color space projection functions take two numeric vectors and return
+  a single character vector of the same length that specifies the colors to
+  plot in the form "#rrggbb", as returned by \code{\link[grDevices]{rgb}}.
+  Additional projection functions can be defined following the same signature
+  and passed to the \code{color_projection} arugment of the
+  \code{scale_*_colorplane} scale constructors. When writing custom
+  projection functions, expect two arguments that are numeric vectors scaled
+  to a range of 0 to 1 and that do not contain missing values. Custom
+  projections can accept additional arguments that are passed through from
+  the \code{...} of \code{scale_*_colorplane}.
+}
+\references{
+YUV conversion matrix from \url{https://en.wikipedia.org/wiki/YUV}
+}
+\seealso{
+\code{\link{scale_color_colorplane}},
+  \code{\link{scale_fill_colorplane}}
 }
 
