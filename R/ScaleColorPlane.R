@@ -18,6 +18,7 @@ ScaleColorPlane <- ggplot2::ggproto("ScaleColorPlane", ggplot2::ScaleContinuous,
   range_y = ggplot2::ggproto(NULL, RangeContinuous),
   na.color = NULL,
   projection_function = NULL,
+  projection_function_args = list(),
   map_df = function(self, df, i = NULL) {
     if (is.null(df) || nrow(df) == 0 || ncol(df) == 0) return()
     aes_check <- intersect(self$aesthetics, names(df))
@@ -45,8 +46,9 @@ ScaleColorPlane <- ggplot2::ggproto("ScaleColorPlane", ggplot2::ScaleContinuous,
     whichOK <- !is.na(x) & !is.na(y)
     # TODO: support extra argument pass_through
     df[whichOK, aesthetics[1]] <- do.call(self$projection_function,
-                                          list(x = x[whichOK],
-                                               y = y[whichOK]))
+                                          c(list(x = x[whichOK],
+                                               y = y[whichOK]),
+                                            self$projection_function_args))
 
     # This handling for optional paramter i is in the default method for Scale
     # proto, but the method is only ever called from ggplot_build without it
@@ -217,6 +219,7 @@ ScaleColorPlane <- ggplot2::ggproto("ScaleColorPlane", ggplot2::ScaleContinuous,
 #' @param color_projection Projection mapping to use. Either the name of an
 #'   included projection or a function that performs the projection.
 #'   See \code{\link{color_projections}}.
+#' @param ... Additional arguments to pass on to \code{color_projection} function.
 #' @examples
 #' if(requireNamespace("mapproj")) {
 #'   crimes <- data.frame(state = tolower(rownames(USArrests)), USArrests)
@@ -247,7 +250,8 @@ scale_color_colorplane <- function(name = waiver(),
                                    trans = "identity",
                                    na.color = "black",
                                    na.value = NA_real_,
-                                   guide = "colorplane") {
+                                   guide = "colorplane",
+                                   ...) {
 
   check_breaks_labels(breaks, labels)
 
@@ -274,6 +278,7 @@ scale_color_colorplane <- function(name = waiver(),
           aesthetics = c("colour", "colour2", "color2"),
           scale_name = "colorplane",
           projection_function = color_projection,
+          projection_function_args = list(...),
           palette = scales::identity_pal(),
           range = ggproto(NULL, RangeContinuous),
           range_y = ggproto(NULL, RangeContinuous),
@@ -317,7 +322,8 @@ scale_fill_colorplane <- function(name = waiver(),
                                   trans = "identity",
                                   na.color = "black",
                                   na.value = NA_real_,
-                                  guide = "colorplane") {
+                                  guide = "colorplane",
+                                  ...) {
 
   check_breaks_labels(breaks, labels)
 
@@ -344,6 +350,7 @@ scale_fill_colorplane <- function(name = waiver(),
           aesthetics = c("fill", "fill2"),
           scale_name = "fillplane",
           projection_function = color_projection,
+          projection_function_args = list(...),
           palette = scales::identity_pal(),
           range = ggproto(NULL, RangeContinuous),
           range_y = ggproto(NULL, RangeContinuous),

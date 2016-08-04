@@ -12,28 +12,28 @@ scale_color_colorplane(name = waiver(), axis_title = waiver(),
   labels = waiver(), labels_y = waiver(), limits = NULL,
   limits_y = NULL, color_projection = "YUV", rescaler = rescale,
   oob = censor, trans = "identity", na.color = "black",
-  na.value = NA_real_, guide = "colorplane")
+  na.value = NA_real_, guide = "colorplane", ...)
 
 scale_fill_colorplane(name = waiver(), axis_title = waiver(),
   axis_title_y = waiver(), breaks = waiver(), breaks_y = waiver(),
   labels = waiver(), labels_y = waiver(), limits = NULL,
   limits_y = NULL, color_projection = "YUV", rescaler = rescale,
   oob = censor, trans = "identity", na.color = "black",
-  na.value = NA_real_, guide = "colorplane")
+  na.value = NA_real_, guide = "colorplane", ...)
 
 scale_colour_colourplane(name = waiver(), axis_title = waiver(),
   axis_title_y = waiver(), breaks = waiver(), breaks_y = waiver(),
   labels = waiver(), labels_y = waiver(), limits = NULL,
   limits_y = NULL, color_projection = "YUV", rescaler = rescale,
   oob = censor, trans = "identity", na.color = "black",
-  na.value = NA_real_, guide = "colorplane")
+  na.value = NA_real_, guide = "colorplane", ...)
 
 scale_fill_colourplane(name = waiver(), axis_title = waiver(),
   axis_title_y = waiver(), breaks = waiver(), breaks_y = waiver(),
   labels = waiver(), labels_y = waiver(), limits = NULL,
   limits_y = NULL, color_projection = "YUV", rescaler = rescale,
   oob = censor, trans = "identity", na.color = "black",
-  na.value = NA_real_, guide = "colorplane")
+  na.value = NA_real_, guide = "colorplane", ...)
 }
 \arguments{
 \item{name}{Character string or expression to be used as guide title.
@@ -110,6 +110,8 @@ plotting missing data or data outside the limits.}
 \item{guide}{Name of guide object, or object itself. Defaults to
 \code{\link{guide_colorplane}} designed for this scale. Behavior of other
 guides with this scale is not defined.}
+
+\item{...}{Additional arguments to pass on to \code{color_projection} function.}
 }
 \description{
 Maps two continutous variables into a single display color, using either the
