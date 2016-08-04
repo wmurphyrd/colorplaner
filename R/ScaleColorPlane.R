@@ -1,4 +1,5 @@
-#' @include other_package_compatibility.R
+#' @include colorplane.R other_package_compatibility.R
+#'
 NULL
 
 #' Color Plane Scale ggproto Object
@@ -16,6 +17,8 @@ ScaleColorPlane <- ggplot2::ggproto("ScaleColorPlane", ggplot2::ScaleContinuous,
   range = ggplot2::ggproto(NULL, RangeContinuous),
   range_y = ggplot2::ggproto(NULL, RangeContinuous),
   na.color = NULL,
+  projection_function = NULL,
+  projection_function_args = list(),
   map_df = function(self, df, i = NULL) {
     if (is.null(df) || nrow(df) == 0 || ncol(df) == 0) return()
     aes_check <- intersect(self$aesthetics, names(df))
@@ -27,12 +30,26 @@ ScaleColorPlane <- ggplot2::ggproto("ScaleColorPlane", ggplot2::ScaleContinuous,
 
     aesthetics <- self$aesthetics
 
-    df[[aesthetics[1]]] <- colorplane(
-      self$oob(df[[aesthetics[1]]], self$get_limits(dir = "horizontal")),
-      self$oob(df[[aesthetics[2]]], self$get_limits(dir = "vertical")),
-      xRange = self$get_limits(dir = "horizontal"),
-      yRange = self$get_limits(dir = "vertical"),
-      naColor = self$na.color)
+    xlim <- self$get_limits(dir = "horizontal")
+    x <-  self$oob(df[[aesthetics[1]]], xlim)
+    x <- self$rescaler(x, c(0,1), xlim)
+
+    ylim <- self$get_limits(dir = "vertical")
+    y <- self$oob(df[[aesthetics[2]]], ylim)
+    y <- self$rescaler(y, c(0,1), ylim)
+
+    # prefill with the NA color so we can do the projection as an inset, process
+    # the NA color to ensure proper #xxxxxx form regardless of unput type
+    df[[aesthetics[1]]] <- grDevices::rgb(
+      t(grDevices::col2rgb(self$na.color[1])),
+      maxColorValue = 255)
+    whichOK <- !is.na(x) & !is.na(y)
+    # TODO: support extra argument pass_through
+    df[whichOK, aesthetics[1]] <- do.call(self$projection_function,
+                                          c(list(x = x[whichOK],
+                                               y = y[whichOK]),
+                                            self$projection_function_args))
+
     # This handling for optional paramter i is in the default method for Scale
     # proto, but the method is only ever called from ggplot_build without it
 
@@ -172,14 +189,16 @@ ScaleColorPlane <- ggplot2::ggproto("ScaleColorPlane", ggplot2::ScaleContinuous,
   }
 )
 
-#' Two-Dimensional Color Space Projection Scale
+#' Bivariate Color Space Projection Scale
 #'
 #' Maps two continutous variables into a single display color, using either the
 #' \code{color} and \code{color2} aesthetics (\code{scale_color_colorplane}) or
 #' the \code{fill} and \code{fill2} aesthetics (\code{scale_fill_colorplane}).
 #'
-#' The variable values are projected onto YUV color space to create a 2-D
+#' The variable values are projected onto YUV color space to create a bivaraite
 #' gradient that can be interpreted visually...
+#'
+#'
 #'
 #' @inheritParams ggplot2::continuous_scale
 #' @inheritParams guide_colorplane
@@ -197,6 +216,10 @@ ScaleColorPlane <- ggplot2::ggproto("ScaleColorPlane", ggplot2::ScaleContinuous,
 #' @param guide Name of guide object, or object itself. Defaults to
 #'   \code{\link{guide_colorplane}} designed for this scale. Behavior of other
 #'   guides with this scale is not defined.
+#' @param color_projection Projection mapping to use. Either the name of an
+#'   included projection or a function that performs the projection.
+#'   See \code{\link{color_projections}}.
+#' @param ... Additional arguments to pass on to \code{color_projection} function.
 #' @examples
 #' if(requireNamespace("mapproj")) {
 #'   crimes <- data.frame(state = tolower(rownames(USArrests)), USArrests)
@@ -221,18 +244,21 @@ scale_color_colorplane <- function(name = waiver(),
                                    labels_y = waiver(),
                                    limits = NULL,
                                    limits_y = NULL,
+                                   color_projection = "YUV",
                                    rescaler = rescale,
                                    oob = censor,
                                    trans = "identity",
                                    na.color = "black",
                                    na.value = NA_real_,
-                                   guide = "colorplane") {
+                                   guide = "colorplane",
+                                   ...) {
 
   check_breaks_labels(breaks, labels)
 
   if (is.null(breaks) && guide != "none") {
     guide <- "none"
   }
+  color_projection <- get_projection(color_projection)
   # using local version of as.trans to avoid namespace issues
   trans <- as.trans(trans)
   if (!is.null(limits)) {
@@ -251,6 +277,8 @@ scale_color_colorplane <- function(name = waiver(),
 
           aesthetics = c("colour", "colour2", "color2"),
           scale_name = "colorplane",
+          projection_function = color_projection,
+          projection_function_args = list(...),
           palette = scales::identity_pal(),
           range = ggproto(NULL, RangeContinuous),
           range_y = ggproto(NULL, RangeContinuous),
@@ -288,18 +316,21 @@ scale_fill_colorplane <- function(name = waiver(),
                                   labels_y = waiver(),
                                   limits = NULL,
                                   limits_y = NULL,
+                                  color_projection = "YUV",
                                   rescaler = rescale,
                                   oob = censor,
                                   trans = "identity",
                                   na.color = "black",
                                   na.value = NA_real_,
-                                  guide = "colorplane") {
+                                  guide = "colorplane",
+                                  ...) {
 
   check_breaks_labels(breaks, labels)
 
   if (is.null(breaks) && guide != "none") {
     guide <- "none"
   }
+  color_projection <- get_projection(color_projection)
   # using local version of as.trans to avoid namespace issues
   trans <- as.trans(trans)
   if (!is.null(limits)) {
@@ -318,6 +349,8 @@ scale_fill_colorplane <- function(name = waiver(),
 
           aesthetics = c("fill", "fill2"),
           scale_name = "fillplane",
+          projection_function = color_projection,
+          projection_function_args = list(...),
           palette = scales::identity_pal(),
           range = ggproto(NULL, RangeContinuous),
           range_y = ggproto(NULL, RangeContinuous),

@@ -2,7 +2,7 @@ Package: colorplaner
 Type: Package
 Title: ggplot2 Extension to Visualize Two Variables per Color Aesthetic Through
     Color Space Projection
-Version: 0.0.0.9002
+Version: 0.0.0.9003
 Date: 2016-07-21
 Author: William Murphy
 Maintainer: William Murphy <william.murphy.rd@gmail.com>
@@ -41,7 +41,7 @@ Copyright: Copyright 2016 William Murphy. This program is free software: you
 VignetteBuilder: knitr
 Collate:
     'other_package_compatibility.R'
-    'ScaleColorPlane.R'
     'colorplane.R'
+    'ScaleColorPlane.R'
     'colorplaner.R'
     'guide_colorplane.R'

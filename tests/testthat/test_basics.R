@@ -31,11 +31,11 @@ test_that("OOB and NA data handled without error", {
   expect_silent({
     ggplot(mtcars, aes(x = wt, y = mpg, color = qsec, colour2 = hp)) +
       geom_point(size = 4) +
-      scale_color_colorplane(limits = c(NA, 18.9),
+      scale_color_colorplane(limits = c(NA, 18.9), limits_y = c(60, 300),
                              na.color = "yellow")
     ggplot(mtcars, aes(x = wt, y = mpg, fill = qsec, fill2 = hp)) +
       geom_point(shape = 23, size = 5) +
-      scale_fill_colorplane(limits = c(NA, 18.9),
+      scale_fill_colorplane(limits = c(NA, 18.9), limits_y = c(60, 300),
                             na.color = "yellow")
     })
 
@@ -45,3 +45,13 @@ test_that("Scale constructors are in sync", {
   expect_identical(formals(scale_color_colorplane),
                    formals(scale_fill_colorplane))
 })
+
+test_that("Arguments can be passed to projection functions", {
+  expect_silent({
+    ggplot(mtcars, aes(x = wt, y = mpg, color = qsec, colour2 = hp)) +
+    geom_point(size = 4) +
+    scale_color_colorplane(limits = c(NA, 18.9), limits_y = c(60, 300),
+                           na.color = "red", Y = .9)
+  })
+})
+
