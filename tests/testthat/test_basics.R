@@ -54,3 +54,4 @@ test_that("Arguments can be passed to projection functions", {
                            na.color = "red", Y = .9)
   })
 })
+

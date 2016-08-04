@@ -38,17 +38,18 @@ To install:
 
 
 ```r
-devtools::install_github("wmurphyrd/colorplaner", ref = "other_projections")
+devtools::install_github("wmurphyrd/colorplaner")
 ```
-
-#### Development branch: other_projections
-* Support for providing alternate color space projections through the `color_projection` argument to `scale_fill_colorplane` and `scale_color_colorplane`
-* Sample alternate projection `red_blue_projection`
-* Documentation for creating alternate projections added at `?color_projections`
 
 #### Known Issues and Incomplete Features
 * Cannot alter title and axis label positions in guide_colorplane (#2)
 * Colors render incorrectly when discrete variables assigned to color/colour/fill (#1) 
+
+#### Version 0.0.0.9003
+* NEW: color projection customization options in `scale_color_colorplane` and `scale_fill_colorplane`! (#3)
+    * Can specify a `Y` value for default `YUV` projection to set the luminosity
+    * Can specify `color_projection = "red_blue"` for a red, blue, and purple scale
+    * Can create any arbitrary scale with `interpolate_projection`
 
 #### Version 0.0.0.9002
 * Removed dependency on `pkg:colorscience` (and all of its imports and depends); replaced with super fast matrix-math YUV-RGB conversions (#4)
@@ -96,7 +97,8 @@ Like ggplot2, colorplaner works with sensible defaults but allows ample tweaking
 2. Override the above plot theme setting in the guide to retain its scales (`label.theme`, `label_y.theme`)
 4. Improve the guide titles (`axis_title`, `axis_title_y`, `title`)
 3. Improve the guide vertical axis labels (`fill2`, `labels_y`)
-4. Force the percentage based scale to range from 0% to 100% (`limits_y`, notice how this alters the colors of the states compared to the above map). 
+4. Force the percentage based scale to range from 0% to 100% (`limits_y`). 
+5. Change to a different color space projection (`color_projection`, see `?color_projections` for more)
 
 View `?scale_color_colorplane` and `?guide_colorplane` for all available options. 
 
@@ -112,7 +114,7 @@ if(require(mapproj)) {
                           axis_title = "Murder arrests\nper 100,000 people",
                           axis_title_y = "Percent Urban Population",
                           limits_y = c(0,1),
-                          color_projection = red_blue_projection) +
+                          color_projection = "red_blue") +
     expand_limits(x = states_map$long, y = states_map$lat) +
     coord_map() +
     theme(legend.position = "bottom",

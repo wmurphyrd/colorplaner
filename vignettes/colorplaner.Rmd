@@ -78,7 +78,8 @@ Like ggplot2, colorplaner works with sensible defaults but allows ample tweaking
 2. Override the above plot theme setting in the guide to retain its scales (`label.theme`, `label_y.theme`)
 4. Improve the guide titles (`axis_title`, `axis_title_y`, `title`)
 3. Improve the guide vertical axis labels (`fill2`, `labels_y`)
-4. Force the percentage based scale to range from 0% to 100% (`limits_y`, notice how this alters the colors of the states compared to the above map). 
+4. Force the percentage based scale to range from 0% to 100% (`limits_y`). 
+5. Change to a different color space projection (`color_projection`, see `?color_projections` for more)
 
 View `?scale_color_colorplane` and `?guide_colorplane` for all available options. 
 
@@ -93,7 +94,7 @@ if(require(mapproj)) {
                           axis_title = "Murder arrests\nper 100,000 people",
                           axis_title_y = "Percent Urban Population",
                           limits_y = c(0,1),
-                          color_projection = red_blue_projection) +
+                          color_projection = "red_blue") +
     expand_limits(x = states_map$long, y = states_map$lat) +
     coord_map() +
     theme(legend.position = "bottom",
