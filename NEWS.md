@@ -1,11 +1,12 @@
-# Development branch: other_projections
-* Support for providing alternate color space projections through the `color_projection` argument to `scale_fill_colorplane` and `scale_color_colorplane`
-* Sample alternate projection `red_blue_projection`
-* Documentation for creating alternate projections added at `?color_projections`
-
 # Known Issues and Incomplete Features
 * Cannot alter title and axis label positions in guide_colorplane (#2)
 * Colors render incorrectly when discrete variables assigned to color/colour/fill (#1) 
+
+# Version 0.0.0.9003
+* NEW: color projection customization options in `scale_color_colorplane` and `scale_fill_colorplane`! (#3)
+    * Can specify a `Y` value for default `YUV` projection to set the luminosity
+    * Can specify `color_projection = "red_blue"` for a red, blue, and purple scale
+    * Can create any arbitrary scale with `interpolate_projection`
 
 # Version 0.0.0.9002
 * Removed dependency on `pkg:colorscience` (and all of its imports and depends); replaced with super fast matrix-math YUV-RGB conversions (#4)
