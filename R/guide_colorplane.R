@@ -471,101 +471,113 @@ guide_gengrob.colorplane <- function(guide, theme) {
                                      )
   }
 
-  # layout of bar and label
-  pl_widths <- c(label_width_y.c, hgap, planewidth.c)
-  pl_heights <- c(planeheight.c, vgap, label_height.c)
-  vps <- list(plane.row = 1, plane.col = 3,
-              label.row = 3, label.col = 3,
-              label_y.row = 1, label_y.col = 1)
-  # add in axis titles
-  # vertical
-  widths <- c(axis_title_y_width.c, hgap, pl_widths)
-  heights <- c(max(0, axis_title_y_height.c - sum(pl_heights)), pl_heights)
-  vps <- with(vps,
-              list(plane.row = plane.row + 1, plane.col = plane.col + 2,
-                   label.row = label.row + 1, label.col = label.col + 2,
-                   label_y.row = label_y.row + 1, label_y.col = label_y.col + 2,
-                   axis_title_y.row = 1:2, axis_title_y.col = 1))
-  # horizontal
-  widths <- c(widths, max(0, axis_title_width.c - sum(widths)))
-  heights <- c(heights, vgap, axis_title_height.c)
-  vps <- c(vps, list(axis_title.row = length(heights),
-                     axis_title.col = vps$plane.col:length(widths)))
+  #setup layout
+  lay <- list(
+    widths = planewidth.c,
+    heights = planeheight.c,
+    rows = list(1),
+    cols = list(1),
+    grobs = list(grob.plane)
+  )
 
-  # layout with title
-  widths <- c(widths, max(0, title_width.c - sum(widths)))
-  heights <- c(title_height.c, vgap, heights)
-  vps <- with(vps, list(
-    plane.row = plane.row + 2, plane.col = plane.col,
-    label.row = label.row + 2, label.col = label.col,
-    label_y.row = label_y.row + 2, label_y.col = label_y.col,
-    axis_title.row = axis_title.row + 2, axis_title.col = axis_title.col,
-    axis_title_y.row = axis_title_y.row + 2, axis_title_y.col = axis_title_y.col,
-    title.row = 1, title.col = plane.col:length(widths)
-    ))
+  add_to_layout <- function(lay, grobside) {
+    grob <- grobside[[1]]
+    side <- grobside[[2]]
+    w <- grid::convertWidth(grid::grobWidth(grob), "mm", valueOnly = TRUE)
+    h <- grid::convertHeight(grid::grobHeight(grob), "mm", valueOnly = TRUE)
+    # accumulates all list positions used when adding to multiple sides
+    all_pos <- length(lay$grobs) + 1
+    if ("overlay" %in% side) {
+      pos <- all_pos[length(all_pos)]
+      lay$rows[[pos]] <- seq_along(lay$heights)
+      lay$cols[[pos]] <- seq_along(lay$widths)
+      all_pos <- c(all_pos, pos + 1)
+    }
+    if ("top" %in% side) {
+      pos <- all_pos[length(all_pos)]
+      lay$heights <- c(h, vgap, lay$heights)
+      lay$rows <- lapply(lay$rows, function(x){x + 2})
+      lay$rows[[pos]] <- 1
+      if (w > sum(lay$widths)) {
+        lay$widths <- c(lay$widths, w - sum(lay$widths))
+      }
+      lay$cols[[pos]] <- seq_along(lay$widths)
+      all_pos <- c(all_pos, pos + 1)
+    }
+    if ("bottom" %in% side) {
+      pos <- all_pos[length(all_pos)]
+      lay$heights <- c(lay$heights, vgap, h)
+      lay$rows[[pos]] <- length(lay$heights)
+      if(w > sum(lay$widths)) {
+        lay$widths <- c(lay$widths, w - sum(lay$widths))
+      }
+      lay$cols[[pos]] <- seq_along(lay$widths)
+      all_pos <- c(all_pos, pos + 1)
+    }
+    if ("left" %in% side) {
+      pos <- all_pos[length(all_pos)]
+      lay$widths <- c(w, hgap, lay$widths)
+      lay$cols <- lapply(lay$cols, function(x){x + 2})
+      lay$cols[[pos]] <- 1
+      if(h > sum(lay$heights)) {
+        lay$heights <- c(lay$heights, h - sum(lay$heights))
+      }
+      lay$rows[[pos]] <- seq_along(lay$heights)
+      all_pos <- c(all_pos, pos + 1)
+    }
+    if ("right" %in% side) {
+      pos <- all_pos[length(all_pos)]
+      lay$widths <- c(lay$widths, hgap, w)
+      lay$cols[[pos]] <- length(lay$widths)
+      if(h > sum(lay$heights)) {
+        lay$heights <- c(lay$heights, h - sum(lay$heights))
+      }
+      lay$rows[[pos]] <- seq_along(lay$heights)
+      all_pos <- c(all_pos, pos + 1)
+    }
+    # add the grob to the list multiple times when multiple sides used
+    all_pos <- all_pos[-length(all_pos)]
+    lay$grobs <- c(lay$grobs, rep(list(grob), length(all_pos)))
+    lay
+  }
 
+  grob.padding <- grid::rectGrob(width = unit(1.5, "mm"),
+                                 height = unit(1.5, "mm"),
+                                 gp = grid::gpar(alpha = 0))
+
+  lay <- Reduce(add_to_layout, init = lay,
+                list(
+                  list(grob.ticks, "overlay"),
+                  list(grob.ticks_y, "overlay"),
+                  list(grob.title, "top"),
+                  list(grob.label, "bottom"),
+                  list(grob.label_y, "left"),
+                  list(grob.axis_title, "bottom"),
+                  list(grob.axis_title_y, "left"),
+                  list(grob.padding, c("top", "left", "bottom", "right"))
+                ))
   # background
   grob.background <- element_render(theme, "legend.background")
 
-  # padding
-  padding <- unit(1.5, "mm")
-  widths <- c(padding, widths, padding)
-  heights <- c(padding, heights, padding)
-
-  gt <- gtable::gtable(widths = unit(widths, "mm"),
-                       heights = unit(heights, "mm"))
+  gt <- gtable::gtable(widths = unit(lay$widths, "mm"),
+                       heights = unit(lay$heights, "mm"))
   gt <- gtable::gtable_add_grob(gt, grob.background,
                                 name = "background", clip = "off",
                                 t = 1, r = -1, b = -1, l = 1)
-  gt <- gtable::gtable_add_grob(gt, grob.plane,
-                                name = "plane", clip = "off",
-                                t = 1 + min(vps$plane.row),
-                                r = 1 + max(vps$plane.col),
-                                b = 1 + max(vps$plane.row),
-                                l = 1 + min(vps$plane.col))
-  gt <- gtable::gtable_add_grob(gt, grob.label,
-                                name = "label", clip = "off",
-                                t = 1 + min(vps$label.row),
-                                r = 1 + max(vps$label.col),
-                                b = 1 + max(vps$label.row),
-                                l = 1 + min(vps$label.col))
-  gt <- gtable::gtable_add_grob(gt, grob.label_y,
-                                name = "label_y", clip = "off",
-                                t = 1 + min(vps$label_y.row),
-                                r = 1 + max(vps$label_y.col),
-                                b = 1 + max(vps$label_y.row),
-                                l = 1 + min(vps$label_y.col))
-  gt <- gtable::gtable_add_grob(gt, grob.axis_title,
-                                name = "axis_title", clip = "off",
-                                t = 1 + min(vps$axis_title.row),
-                                r = 1 + max(vps$axis_title.col),
-                                b = 1 + max(vps$axis_title.row),
-                                l = 1 + min(vps$axis_title.col))
-  gt <- gtable::gtable_add_grob(gt, grob.axis_title_y,
-                                name = "axis_title_y", clip = "off",
-                                t = 1 + min(vps$axis_title_y.row),
-                                r = 1 + max(vps$axis_title_y.col),
-                                b = 1 + max(vps$axis_title_y.row),
-                                l = 1 + min(vps$axis_title_y.col))
-  gt <- gtable::gtable_add_grob(gt, grob.title,
-                                name = "title", clip = "off",
-                                t = 1 + min(vps$title.row),
-                                r = 1 + max(vps$title.col),
-                                b = 1 + max(vps$title.row),
-                                l = 1 + min(vps$title.col))
-  gt <- gtable::gtable_add_grob(gt, grob.ticks,
-                                name = "ticks", clip = "off",
-                                t = 1 + min(vps$plane.row),
-                                r = 1 + max(vps$plane.col),
-                                b = 1 + max(vps$plane.row),
-                                l = 1 + min(vps$plane.col))
-  gt <- gtable::gtable_add_grob(gt, grob.ticks_y,
-                                name = "ticks_y", clip = "off",
-                                t = 1 + min(vps$plane.row),
-                                r = 1 + max(vps$plane.col),
-                                b = 1 + max(vps$plane.row),
-                                l = 1 + min(vps$plane.col))
-  gt
+  table_grobs <- mapply(function(grob, row, col){
+    list(grob = grob, row = row, col = col)
+  }, lay$grobs, lay$rows, lay$cols)
+  add_to_table <- function(gt, obj) {
+    gtable::gtable_add_grob(gt, obj$grob, clip = "off",
+                            t = min(obj$row), b = max(obj$row),
+                            l = min(obj$col), r = max(obj$col))
+  }
+  # grob and position lists need to be transposed for Reduce to traverse them
+  mapply(lay$grobs, lay$rows, lay$cols, SIMPLIFY = FALSE,
+         FUN = function(grob, row, col){
+           list(grob = grob, row = row, col = col)
+         }) %>%
+    Reduce(f = add_to_table, init = gt)
 }
 
 #' @export
