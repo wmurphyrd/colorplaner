@@ -13,10 +13,10 @@ NULL
 #'   the horizontal and vertical axis titles in the guide, respectively. If
 #'   \code{NULL}, the title is not shown. By default (\link[ggplot2]{waiver}),
 #'   the name of the scale or the name of the variable mapped to the aesthetic.
-#' @param axis_title.position,axis_title_y.position Character strings indicating
-#'   the positions of the axis titles. \code{axis_title.position}: one of "top"
-#'   or "bottom" (default). \code{axis_title_y.position}: one of "left"
-#'   (default) or "right". Not yet implemented.
+#' @param axis_title.position,axis_title_y.position Character vectors indicating
+#'   the position(s) of axis titles. \code{axis_title.position}: "top" and/or
+#'   "bottom" (default). \code{axis_title_y.position}: "left" (default)
+#'   and/or "right".
 #' @param axis_title.theme,axis_title_y.theme Theme objects for rendering the
 #'   axis title text. Typically an \code{\link[ggplot2]{element_text}} object.
 #'   When \code{NULL}, defaults to settings for \code{axis.title.x} and
@@ -34,10 +34,9 @@ NULL
 #' @param nbin Number specifying how many color pixels are generated for each
 #'   dimension of the colorplane. Higher numbers increase guide color accuracy
 #'   (especially for larger sized guides) at the expense of speed.
-#' @param label.position,label_y.position Character strings indicating the
-#'   positions of axis labels. For \code{label.position}, "top" or "bottom"
-#'   (default). For \code{label_y.position}, "left" (default) or "right". Not
-#'   yet implemented.
+#' @param label.position,label_y.position Character vectors indicating the
+#'   position(s) of axis labels. For \code{label.position}, "top" and/or "bottom"
+#'   (default). For \code{label_y.position}, "left" (default) and/or "right".
 #' @param label.theme,label_y.theme	Theme objects for rendering axis label text.
 #'   Usually the object of \code{\link[ggplot2]{element_text}} is expected. By
 #'   default, the theme is specified by \code{axis.text.*} in the plot theme.
@@ -47,6 +46,8 @@ NULL
 #' @param label.vjust,label_y.vjust Numerics specifying vertical justification
 #'   of the axis label text. Defauls to value in \code{label.theme} /
 #'   \code{label_y.theme} if set or \code{axis.text.*} in the plot theme.
+#' @param title.position Character string indicating position for the main
+#'   title. One of "top" (default) or "bottom".
 #'
 #' @inheritParams ggplot2::guide_colorbar
 #' @examples
@@ -60,7 +61,8 @@ NULL
 #'     expand_limits(x = states_map$long, y = states_map$lat) +
 #'     coord_map() +
 #'     guides(fill = guide_colorplane("My Title", axis_title = "Murder Rate",
-#'     axis_title_y = "Urban Population %"))
+#'     axis_title_y = "Urban Population %", label.position = c("top", "bottom"),
+#'     label_y.position = c("left", "right")))
 #'  }
 #' @export
 guide_colorplane <- function(
