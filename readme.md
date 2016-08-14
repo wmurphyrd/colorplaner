@@ -29,7 +29,7 @@ The YUV color space ([wikipedia](https://en.wikipedia.org/wiki/YUV)) was designe
 
 When Y is held constant, remaining color space is a U-V *plane* with corners of saturated green, orange, fuchsia, and blue and smooth gradients in between. 
 
-![Holding Y constant at 25% yields this U-V color plane](figure/colorplane-concept-1.png)
+![Holding Y constant at 35% yields this U-V color plane](figure/colorplane-concept-1.png)
 
 
 ## Installation
@@ -42,14 +42,17 @@ devtools::install_github("wmurphyrd/colorplaner")
 ```
 
 #### Known Issues and Incomplete Features
-* Cannot alter title and axis label positions in guide_colorplane (#2)
-* Colors render incorrectly when discrete variables assigned to color/colour/fill (#1) 
+* Colors render incorrectly when both scale_color_colorplane and scale_fill_colorplane used in same plot (#1) 
+
+#### Version 0.0.0.9004
+* Can customize positions of title, axis titles, and labels in the colorplane guide. See `?guide_colorplane` for details (#2)
 
 #### Version 0.0.0.9003
 * NEW: color projection customization options in `scale_color_colorplane` and `scale_fill_colorplane`! (#3)
     * Can specify a `Y` value for default `YUV` projection to set the luminosity
     * Can specify `color_projection = "red_blue"` for a red, blue, and purple scale
     * Can create any arbitrary scale with `interpolate_projection`
+    * Can supply own custom projection functions as well, see `?color_projections`
 
 #### Version 0.0.0.9002
 * Removed dependency on `pkg:colorscience` (and all of its imports and depends); replaced with super fast matrix-math YUV-RGB conversions (#4)
@@ -99,6 +102,7 @@ Like ggplot2, colorplaner works with sensible defaults but allows ample tweaking
 3. Improve the guide vertical axis labels (`fill2`, `labels_y`)
 4. Force the percentage based scale to range from 0% to 100% (`limits_y`). 
 5. Change to a different color space projection (`color_projection`, see `?color_projections` for more)
+6. Duplicate guide labels on both sides (`label.position`, `label_y.position`)
 
 View `?scale_color_colorplane` and `?guide_colorplane` for all available options. 
 
@@ -127,7 +131,9 @@ if(require(mapproj)) {
     guides(fill = guide_colorplane(
       title = "State Color Key",
       label.theme = calc_element("axis.text", theme_gray()),
-      label_y.theme = calc_element("axis.text", theme_gray())))
+      label_y.theme = calc_element("axis.text", theme_gray()),
+      label.position = c("top", "bottom"),
+      label_y.position = c("left", "right")))
 }
 ```
 
