@@ -497,8 +497,6 @@ guide_gengrob.colorplane <- function(guide, theme) {
   add_to_layout <- function(lay, grobside) {
     grob <- grobside[[1]]
     side <- grobside[[2]]
-    w <- grid::convertWidth(grid::grobWidth(grob), "mm", valueOnly = TRUE)
-    h <- grid::convertHeight(grid::grobHeight(grob), "mm", valueOnly = TRUE)
     # accumulates all list positions used when adding to multiple sides
     all_pos <- length(lay$grobs) + 1
     if ("overlay" %in% side) {
@@ -506,6 +504,12 @@ guide_gengrob.colorplane <- function(guide, theme) {
       lay$rows[[pos]] <- seq_along(lay$heights)
       lay$cols[[pos]] <- seq_along(lay$widths)
       all_pos <- c(all_pos, pos + 1)
+    } else {
+      # avoid calculating grobsize when side == overlay because attempting to do
+      # so on the segmentsGrobs for the ticks generates an error in some
+      # instances (likely related to missing values in tick positions)
+      w <- grid::convertWidth(grid::grobWidth(grob), "mm", valueOnly = TRUE)
+      h <- grid::convertHeight(grid::grobHeight(grob), "mm", valueOnly = TRUE)
     }
     if ("top" %in% side) {
       pos <- all_pos[length(all_pos)]
