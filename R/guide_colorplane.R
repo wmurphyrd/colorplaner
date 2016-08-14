@@ -564,9 +564,9 @@ guide_gengrob.colorplane <- function(guide, theme) {
                   list(grob.ticks_y, "overlay"),
                   list(grob.label, guide$label.position),
                   list(grob.label_y, guide$label_y.position),
-                  list(grob.title, guide$title.position),
                   list(grob.axis_title, guide$axis_title.position),
                   list(grob.axis_title_y, guide$axis_title_y.position),
+                  list(grob.title, guide$title.position),
                   list(ggplot2::zeroGrob(), c("top", "left", "bottom", "right"))
                 ))
   # background
