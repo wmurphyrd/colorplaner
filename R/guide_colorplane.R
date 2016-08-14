@@ -541,10 +541,6 @@ guide_gengrob.colorplane <- function(guide, theme) {
     lay
   }
 
-  grob.padding <- grid::rectGrob(width = unit(1.5, "mm"),
-                                 height = unit(1.5, "mm"),
-                                 gp = grid::gpar(alpha = 0))
-
   lay <- Reduce(add_to_layout, init = lay,
                 list(
                   list(grob.ticks, "overlay"),
@@ -554,7 +550,7 @@ guide_gengrob.colorplane <- function(guide, theme) {
                   list(grob.label_y, "left"),
                   list(grob.axis_title, "bottom"),
                   list(grob.axis_title_y, "left"),
-                  list(grob.padding, c("top", "left", "bottom", "right"))
+                  list(ggplot2::zeroGrob(), c("top", "left", "bottom", "right"))
                 ))
   # background
   grob.background <- element_render(theme, "legend.background")
