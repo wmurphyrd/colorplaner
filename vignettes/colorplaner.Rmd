@@ -36,7 +36,7 @@ The YUV color space ([wikipedia](https://en.wikipedia.org/wiki/YUV)) was designe
 
 When Y is held constant, remaining color space is a U-V *plane* with corners of saturated green, orange, fuchsia, and blue and smooth gradients in between. 
 
-```{r colorplane-concept, echo = FALSE, warning = FALSE, message =FALSE, fig.cap="Holding Y constant at 25% yields this U-V color plane"}
+```{r colorplane-concept, echo = FALSE, warning = FALSE, message =FALSE, fig.cap="Holding Y constant at 35% yields this U-V color plane"}
 ggplot(expand.grid(a = seq(0, 1, length.out = 50), 
                    b = seq(1, 0, length.out = 50)), 
        aes(x = a, y = b, color = a, color2 = b)) +
@@ -80,6 +80,7 @@ Like ggplot2, colorplaner works with sensible defaults but allows ample tweaking
 3. Improve the guide vertical axis labels (`fill2`, `labels_y`)
 4. Force the percentage based scale to range from 0% to 100% (`limits_y`). 
 5. Change to a different color space projection (`color_projection`, see `?color_projections` for more)
+6. Duplicate guide labels on both sides (`label.position`, `label_y.position`)
 
 View `?scale_color_colorplane` and `?guide_colorplane` for all available options. 
 
@@ -107,7 +108,9 @@ if(require(mapproj)) {
     guides(fill = guide_colorplane(
       title = "State Color Key",
       label.theme = calc_element("axis.text", theme_gray()),
-      label_y.theme = calc_element("axis.text", theme_gray())))
+      label_y.theme = calc_element("axis.text", theme_gray()),
+      label.position = c("top", "bottom"),
+      label_y.position = c("left", "right")))
 }
 ```
 

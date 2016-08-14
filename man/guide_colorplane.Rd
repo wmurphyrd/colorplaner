@@ -5,31 +5,31 @@
 \alias{guide_colourplane}
 \title{Add Guide for Colorplane}
 \usage{
-guide_colorplane(title = waiver(), title.position = NULL,
+guide_colorplane(title = waiver(), title.position = c("top", "bottom"),
   title.theme = NULL, title.hjust = 0.5, title.vjust = NULL,
-  axis_title = waiver(), axis_title.position = NULL,
+  axis_title = waiver(), axis_title.position = c("bottom", "top"),
   axis_title.theme = NULL, axis_title.hjust = NULL,
   axis_title.vjust = NULL, axis_title_y = waiver(),
-  axis_title_y.position = NULL, axis_title_y.theme = NULL,
+  axis_title_y.position = c("left", "right"), axis_title_y.theme = NULL,
   axis_title_y.hjust = NULL, axis_title_y.vjust = NULL, label = TRUE,
-  label.position = NULL, label.theme = NULL, label.hjust = NULL,
-  label.vjust = NULL, label_y.position = NULL, label_y.theme = NULL,
-  label_y.hjust = NULL, label_y.vjust = NULL, planewidth = NULL,
-  planeheight = NULL, nbin = 20, ticks = TRUE, default.unit = "line",
-  order = 0, ...)
+  label.position = c("bottom", "top"), label.theme = NULL,
+  label.hjust = NULL, label.vjust = NULL, label_y.position = c("left",
+  "right"), label_y.theme = NULL, label_y.hjust = NULL,
+  label_y.vjust = NULL, planewidth = NULL, planeheight = NULL,
+  nbin = 20, ticks = TRUE, default.unit = "line", order = 0, ...)
 
-guide_colourplane(title = waiver(), title.position = NULL,
+guide_colourplane(title = waiver(), title.position = c("top", "bottom"),
   title.theme = NULL, title.hjust = 0.5, title.vjust = NULL,
-  axis_title = waiver(), axis_title.position = NULL,
+  axis_title = waiver(), axis_title.position = c("bottom", "top"),
   axis_title.theme = NULL, axis_title.hjust = NULL,
   axis_title.vjust = NULL, axis_title_y = waiver(),
-  axis_title_y.position = NULL, axis_title_y.theme = NULL,
+  axis_title_y.position = c("left", "right"), axis_title_y.theme = NULL,
   axis_title_y.hjust = NULL, axis_title_y.vjust = NULL, label = TRUE,
-  label.position = NULL, label.theme = NULL, label.hjust = NULL,
-  label.vjust = NULL, label_y.position = NULL, label_y.theme = NULL,
-  label_y.hjust = NULL, label_y.vjust = NULL, planewidth = NULL,
-  planeheight = NULL, nbin = 20, ticks = TRUE, default.unit = "line",
-  order = 0, ...)
+  label.position = c("bottom", "top"), label.theme = NULL,
+  label.hjust = NULL, label.vjust = NULL, label_y.position = c("left",
+  "right"), label_y.theme = NULL, label_y.hjust = NULL,
+  label_y.vjust = NULL, planewidth = NULL, planeheight = NULL,
+  nbin = 20, ticks = TRUE, default.unit = "line", order = 0, ...)
 }
 \arguments{
 \item{title}{A character string or expression indicating a title of guide.
@@ -37,9 +37,8 @@ If \code{NULL}, the title is not shown. By default
 (\code{\link{waiver}}), the name of the scale object or the name
 specified in \code{\link{labs}} is used for the title.}
 
-\item{title.position}{A character string indicating the position of a
- title. One of "top" (default for a vertical guide), "bottom", "left"
-(default for a horizontal guide), or "right."}
+\item{title.position}{Character string indicating position for the main
+title. One of "top" (default) or "bottom".}
 
 \item{title.theme}{A theme object for rendering the title text. Usually the
 object of \code{\link{element_text}} is expected. By default, the theme is
@@ -56,10 +55,10 @@ the horizontal and vertical axis titles in the guide, respectively. If
 \code{NULL}, the title is not shown. By default (\link[ggplot2]{waiver}),
 the name of the scale or the name of the variable mapped to the aesthetic.}
 
-\item{axis_title.position, axis_title_y.position}{Character strings indicating
-the positions of the axis titles. \code{axis_title.position}: one of "top"
-or "bottom" (default). \code{axis_title_y.position}: one of "left"
-(default) or "right". Not yet implemented.}
+\item{axis_title.position, axis_title_y.position}{Character vectors indicating
+the position(s) of axis titles. \code{axis_title.position}: "top" and/or
+"bottom" (default). \code{axis_title_y.position}: "left" (default)
+and/or "right".}
 
 \item{axis_title.theme, axis_title_y.theme}{Theme objects for rendering the
 axis title text. Typically an \code{\link[ggplot2]{element_text}} object.
@@ -77,10 +76,9 @@ justification of the axis title text. When \code{NULL}, defaults to
 \item{label}{logical. If \code{TRUE} then the labels are drawn. If
 \code{FALSE} then the labels are invisible.}
 
-\item{label.position, label_y.position}{Character strings indicating the
-positions of axis labels. For \code{label.position}, "top" or "bottom"
-(default). For \code{label_y.position}, "left" (default) or "right". Not
-yet implemented.}
+\item{label.position, label_y.position}{Character vectors indicating the
+position(s) of axis labels. For \code{label.position}, "top" and/or "bottom"
+(default). For \code{label_y.position}, "left" (default) and/or "right".}
 
 \item{label.theme, label_y.theme}{Theme objects for rendering axis label text.
 Usually the object of \code{\link[ggplot2]{element_text}} is expected. By
@@ -135,7 +133,8 @@ if(requireNamespace("mapproj")) {
     expand_limits(x = states_map$long, y = states_map$lat) +
     coord_map() +
     guides(fill = guide_colorplane("My Title", axis_title = "Murder Rate",
-    axis_title_y = "Urban Population \%"))
+    axis_title_y = "Urban Population \%", label.position = c("top", "bottom"),
+    label_y.position = c("left", "right")))
  }
 }
 

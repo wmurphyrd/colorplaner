@@ -13,10 +13,10 @@ NULL
 #'   the horizontal and vertical axis titles in the guide, respectively. If
 #'   \code{NULL}, the title is not shown. By default (\link[ggplot2]{waiver}),
 #'   the name of the scale or the name of the variable mapped to the aesthetic.
-#' @param axis_title.position,axis_title_y.position Character strings indicating
-#'   the positions of the axis titles. \code{axis_title.position}: one of "top"
-#'   or "bottom" (default). \code{axis_title_y.position}: one of "left"
-#'   (default) or "right". Not yet implemented.
+#' @param axis_title.position,axis_title_y.position Character vectors indicating
+#'   the position(s) of axis titles. \code{axis_title.position}: "top" and/or
+#'   "bottom" (default). \code{axis_title_y.position}: "left" (default)
+#'   and/or "right".
 #' @param axis_title.theme,axis_title_y.theme Theme objects for rendering the
 #'   axis title text. Typically an \code{\link[ggplot2]{element_text}} object.
 #'   When \code{NULL}, defaults to settings for \code{axis.title.x} and
@@ -34,10 +34,9 @@ NULL
 #' @param nbin Number specifying how many color pixels are generated for each
 #'   dimension of the colorplane. Higher numbers increase guide color accuracy
 #'   (especially for larger sized guides) at the expense of speed.
-#' @param label.position,label_y.position Character strings indicating the
-#'   positions of axis labels. For \code{label.position}, "top" or "bottom"
-#'   (default). For \code{label_y.position}, "left" (default) or "right". Not
-#'   yet implemented.
+#' @param label.position,label_y.position Character vectors indicating the
+#'   position(s) of axis labels. For \code{label.position}, "top" and/or "bottom"
+#'   (default). For \code{label_y.position}, "left" (default) and/or "right".
 #' @param label.theme,label_y.theme	Theme objects for rendering axis label text.
 #'   Usually the object of \code{\link[ggplot2]{element_text}} is expected. By
 #'   default, the theme is specified by \code{axis.text.*} in the plot theme.
@@ -47,6 +46,8 @@ NULL
 #' @param label.vjust,label_y.vjust Numerics specifying vertical justification
 #'   of the axis label text. Defauls to value in \code{label.theme} /
 #'   \code{label_y.theme} if set or \code{axis.text.*} in the plot theme.
+#' @param title.position Character string indicating position for the main
+#'   title. One of "top" (default) or "bottom".
 #'
 #' @inheritParams ggplot2::guide_colorbar
 #' @examples
@@ -60,26 +61,27 @@ NULL
 #'     expand_limits(x = states_map$long, y = states_map$lat) +
 #'     coord_map() +
 #'     guides(fill = guide_colorplane("My Title", axis_title = "Murder Rate",
-#'     axis_title_y = "Urban Population %"))
+#'     axis_title_y = "Urban Population %", label.position = c("top", "bottom"),
+#'     label_y.position = c("left", "right")))
 #'  }
 #' @export
 guide_colorplane <- function(
 
   # title
   title = waiver(),
-  title.position = NULL,
+  title.position = c("top", "bottom"),
   title.theme = NULL,
   title.hjust = 0.5,
   title.vjust = NULL,
 
   #axis titles
   axis_title = waiver(),
-  axis_title.position = NULL,
+  axis_title.position = c("bottom", "top"),
   axis_title.theme = NULL,
   axis_title.hjust = NULL,
   axis_title.vjust = NULL,
   axis_title_y = waiver(),
-  axis_title_y.position = NULL,
+  axis_title_y.position = c("left", "right"),
   axis_title_y.theme = NULL,
   axis_title_y.hjust = NULL,
   axis_title_y.vjust = NULL,
@@ -87,11 +89,11 @@ guide_colorplane <- function(
 
   # label
   label = TRUE,
-  label.position = NULL,
+  label.position = c("bottom", "top"),
   label.theme = NULL,
   label.hjust = NULL,
   label.vjust = NULL,
-  label_y.position = NULL,
+  label_y.position = c("left", "right"),
   label_y.theme = NULL,
   label_y.hjust = NULL,
   label_y.vjust = NULL,
@@ -117,6 +119,18 @@ guide_colorplane <- function(
       unit(planewidth, default.unit)
   if (!is.null(planeheight) && !grid::is.unit(planeheight)) planeheight <-
       unit(planeheight, default.unit)
+  # make defaults one-sided labeling, while allowing for double labeling when
+  # specified
+  if (missing(axis_title.position)) axis_title.position <- "bottom"
+  if (missing(axis_title_y.position)) axis_title_y.position <- "left"
+  if (missing(label.position)) label.position <- "bottom"
+  if (missing(label_y.position)) label_y.position <- "left"
+  title.position <- match.arg(title.position)
+  axis_title.position <- match.arg(axis_title.position, several.ok = TRUE)
+  axis_title_y.position <- match.arg(axis_title_y.position, several.ok = TRUE)
+  label.position <- match.arg(label.position, several.ok = TRUE)
+  label_y.position <- match.arg(label_y.position, several.ok = TRUE)
+
 
   structure(list(
     # title
@@ -471,101 +485,120 @@ guide_gengrob.colorplane <- function(guide, theme) {
                                      )
   }
 
-  # layout of bar and label
-  pl_widths <- c(label_width_y.c, hgap, planewidth.c)
-  pl_heights <- c(planeheight.c, vgap, label_height.c)
-  vps <- list(plane.row = 1, plane.col = 3,
-              label.row = 3, label.col = 3,
-              label_y.row = 1, label_y.col = 1)
-  # add in axis titles
-  # vertical
-  widths <- c(axis_title_y_width.c, hgap, pl_widths)
-  heights <- c(max(0, axis_title_y_height.c - sum(pl_heights)), pl_heights)
-  vps <- with(vps,
-              list(plane.row = plane.row + 1, plane.col = plane.col + 2,
-                   label.row = label.row + 1, label.col = label.col + 2,
-                   label_y.row = label_y.row + 1, label_y.col = label_y.col + 2,
-                   axis_title_y.row = 1:2, axis_title_y.col = 1))
-  # horizontal
-  widths <- c(widths, max(0, axis_title_width.c - sum(widths)))
-  heights <- c(heights, vgap, axis_title_height.c)
-  vps <- c(vps, list(axis_title.row = length(heights),
-                     axis_title.col = vps$plane.col:length(widths)))
+  #setup layout
+  lay <- list(
+    widths = planewidth.c,
+    heights = planeheight.c,
+    rows = list(1),
+    cols = list(1),
+    grobs = list(grob.plane)
+  )
 
-  # layout with title
-  widths <- c(widths, max(0, title_width.c - sum(widths)))
-  heights <- c(title_height.c, vgap, heights)
-  vps <- with(vps, list(
-    plane.row = plane.row + 2, plane.col = plane.col,
-    label.row = label.row + 2, label.col = label.col,
-    label_y.row = label_y.row + 2, label_y.col = label_y.col,
-    axis_title.row = axis_title.row + 2, axis_title.col = axis_title.col,
-    axis_title_y.row = axis_title_y.row + 2, axis_title_y.col = axis_title_y.col,
-    title.row = 1, title.col = plane.col:length(widths)
-    ))
+  add_to_layout <- function(lay, grobside) {
+    grob <- grobside[[1]]
+    side <- grobside[[2]]
+    # accumulates all list positions used when adding to multiple sides
+    all_pos <- length(lay$grobs) + 1
+    if ("overlay" %in% side) {
+      pos <- all_pos[length(all_pos)]
+      lay$rows[[pos]] <- seq_along(lay$heights)
+      lay$cols[[pos]] <- seq_along(lay$widths)
+      all_pos <- c(all_pos, pos + 1)
+    } else {
+      # avoid calculating grobsize when side == overlay because attempting to do
+      # so on the segmentsGrobs for the ticks generates an error in some
+      # instances (likely related to missing values in tick positions)
+      w <- grid::convertWidth(grid::grobWidth(grob), "mm", valueOnly = TRUE)
+      h <- grid::convertHeight(grid::grobHeight(grob), "mm", valueOnly = TRUE)
+    }
+    if ("top" %in% side) {
+      pos <- all_pos[length(all_pos)]
+      lay$heights <- c(h, vgap, lay$heights)
+      lay$rows <- lapply(lay$rows, function(x){x + 2})
+      lay$rows[[pos]] <- 1
+      lay$cols[[pos]] <- lay$cols[[1]]
+      if (w > sum(lay$widths)) {
+        lay$widths <- c(lay$widths, w - sum(lay$widths))
+        lay$cols[[pos]] <- seq_along(lay$widths)
+      }
+      all_pos <- c(all_pos, pos + 1)
+    }
+    if ("bottom" %in% side) {
+      pos <- all_pos[length(all_pos)]
+      lay$heights <- c(lay$heights, vgap, h)
+      lay$rows[[pos]] <- length(lay$heights)
+      lay$cols[[pos]] <- lay$cols[[1]]
+      if(w > sum(lay$widths)) {
+        lay$widths <- c(lay$widths, w - sum(lay$widths))
+        lay$cols[[pos]] <- seq_along(lay$widths)
 
+      }
+      all_pos <- c(all_pos, pos + 1)
+    }
+    if ("left" %in% side) {
+      pos <- all_pos[length(all_pos)]
+      lay$widths <- c(w, hgap, lay$widths)
+      lay$cols <- lapply(lay$cols, function(x){x + 2})
+      lay$cols[[pos]] <- 1
+      lay$rows[[pos]] <- lay$rows[[1]]
+      if(h > sum(lay$heights)) {
+        lay$heights <- c(lay$heights, h - sum(lay$heights))
+        lay$rows[[pos]] <- seq_along(lay$heights)
+      }
+      all_pos <- c(all_pos, pos + 1)
+    }
+    if ("right" %in% side) {
+      pos <- all_pos[length(all_pos)]
+      lay$widths <- c(lay$widths, hgap, w)
+      lay$cols[[pos]] <- length(lay$widths)
+      lay$rows[[pos]] <- lay$rows[[1]]
+      if(h > sum(lay$heights)) {
+        lay$heights <- c(lay$heights, h - sum(lay$heights))
+        lay$rows[[pos]] <- seq_along(lay$heights)
+      }
+      all_pos <- c(all_pos, pos + 1)
+    }
+    # add the grob to the list multiple times when multiple sides used
+    all_pos <- all_pos[-length(all_pos)]
+    lay$grobs <- c(lay$grobs, rep(list(grob), length(all_pos)))
+    lay
+  }
+
+  lay <- Reduce(add_to_layout, init = lay,
+                list(
+                  list(grob.ticks, "overlay"),
+                  list(grob.ticks_y, "overlay"),
+                  list(grob.label, guide$label.position),
+                  list(grob.label_y, guide$label_y.position),
+                  list(grob.axis_title, guide$axis_title.position),
+                  list(grob.axis_title_y, guide$axis_title_y.position),
+                  list(grob.title, guide$title.position),
+                  list(ggplot2::zeroGrob(), c("top", "left", "bottom", "right"))
+                ))
   # background
   grob.background <- element_render(theme, "legend.background")
 
-  # padding
-  padding <- unit(1.5, "mm")
-  widths <- c(padding, widths, padding)
-  heights <- c(padding, heights, padding)
-
-  gt <- gtable::gtable(widths = unit(widths, "mm"),
-                       heights = unit(heights, "mm"))
+  gt <- gtable::gtable(widths = unit(lay$widths, "mm"),
+                       heights = unit(lay$heights, "mm"))
   gt <- gtable::gtable_add_grob(gt, grob.background,
                                 name = "background", clip = "off",
                                 t = 1, r = -1, b = -1, l = 1)
-  gt <- gtable::gtable_add_grob(gt, grob.plane,
-                                name = "plane", clip = "off",
-                                t = 1 + min(vps$plane.row),
-                                r = 1 + max(vps$plane.col),
-                                b = 1 + max(vps$plane.row),
-                                l = 1 + min(vps$plane.col))
-  gt <- gtable::gtable_add_grob(gt, grob.label,
-                                name = "label", clip = "off",
-                                t = 1 + min(vps$label.row),
-                                r = 1 + max(vps$label.col),
-                                b = 1 + max(vps$label.row),
-                                l = 1 + min(vps$label.col))
-  gt <- gtable::gtable_add_grob(gt, grob.label_y,
-                                name = "label_y", clip = "off",
-                                t = 1 + min(vps$label_y.row),
-                                r = 1 + max(vps$label_y.col),
-                                b = 1 + max(vps$label_y.row),
-                                l = 1 + min(vps$label_y.col))
-  gt <- gtable::gtable_add_grob(gt, grob.axis_title,
-                                name = "axis_title", clip = "off",
-                                t = 1 + min(vps$axis_title.row),
-                                r = 1 + max(vps$axis_title.col),
-                                b = 1 + max(vps$axis_title.row),
-                                l = 1 + min(vps$axis_title.col))
-  gt <- gtable::gtable_add_grob(gt, grob.axis_title_y,
-                                name = "axis_title_y", clip = "off",
-                                t = 1 + min(vps$axis_title_y.row),
-                                r = 1 + max(vps$axis_title_y.col),
-                                b = 1 + max(vps$axis_title_y.row),
-                                l = 1 + min(vps$axis_title_y.col))
-  gt <- gtable::gtable_add_grob(gt, grob.title,
-                                name = "title", clip = "off",
-                                t = 1 + min(vps$title.row),
-                                r = 1 + max(vps$title.col),
-                                b = 1 + max(vps$title.row),
-                                l = 1 + min(vps$title.col))
-  gt <- gtable::gtable_add_grob(gt, grob.ticks,
-                                name = "ticks", clip = "off",
-                                t = 1 + min(vps$plane.row),
-                                r = 1 + max(vps$plane.col),
-                                b = 1 + max(vps$plane.row),
-                                l = 1 + min(vps$plane.col))
-  gt <- gtable::gtable_add_grob(gt, grob.ticks_y,
-                                name = "ticks_y", clip = "off",
-                                t = 1 + min(vps$plane.row),
-                                r = 1 + max(vps$plane.col),
-                                b = 1 + max(vps$plane.row),
-                                l = 1 + min(vps$plane.col))
-  gt
+
+
+  Reduce(
+    f = function(gt, obj) {
+      gtable::gtable_add_grob(gt, obj$grob, clip = "off",
+                              t = min(obj$row), b = max(obj$row),
+                              l = min(obj$col), r = max(obj$col),
+                              name = obj$grob$name)
+    },
+    # grob and position lists need to be transposed for Reduce to traverse them
+    x = mapply(lay$grobs, lay$rows, lay$cols, SIMPLIFY = FALSE,
+           FUN = function(grob, row, col){
+             list(grob = grob, row = row, col = col)
+           }),
+    init = gt
+  )
 }
 
 #' @export
