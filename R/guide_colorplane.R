@@ -67,19 +67,19 @@ guide_colorplane <- function(
 
   # title
   title = waiver(),
-  title.position = NULL,
+  title.position = c("top", "bottom"),
   title.theme = NULL,
   title.hjust = 0.5,
   title.vjust = NULL,
 
   #axis titles
   axis_title = waiver(),
-  axis_title.position = NULL,
+  axis_title.position = c("bottom", "top"),
   axis_title.theme = NULL,
   axis_title.hjust = NULL,
   axis_title.vjust = NULL,
   axis_title_y = waiver(),
-  axis_title_y.position = NULL,
+  axis_title_y.position = c("left", "right"),
   axis_title_y.theme = NULL,
   axis_title_y.hjust = NULL,
   axis_title_y.vjust = NULL,
@@ -87,11 +87,11 @@ guide_colorplane <- function(
 
   # label
   label = TRUE,
-  label.position = NULL,
+  label.position = c("bottom", "top"),
   label.theme = NULL,
   label.hjust = NULL,
   label.vjust = NULL,
-  label_y.position = NULL,
+  label_y.position = c("left", "right"),
   label_y.theme = NULL,
   label_y.hjust = NULL,
   label_y.vjust = NULL,
@@ -117,6 +117,18 @@ guide_colorplane <- function(
       unit(planewidth, default.unit)
   if (!is.null(planeheight) && !grid::is.unit(planeheight)) planeheight <-
       unit(planeheight, default.unit)
+  # make defaults one-sided labeling, while allowing for double labeling when
+  # specified
+  if (missing(axis_title.position)) axis_title.position <- "bottom"
+  if (missing(axis_title_y.position)) axis_title_y.position <- "left"
+  if (missing(label.position)) label.position <- "bottom"
+  if (missing(label_y.position)) label_y.position <- "left"
+  title.position <- match.arg(title.position)
+  axis_title.position <- match.arg(axis_title.position, several.ok = TRUE)
+  axis_title_y.position <- match.arg(axis_title_y.position, several.ok = TRUE)
+  label.position <- match.arg(label.position, several.ok = TRUE)
+  label_y.position <- match.arg(label_y.position, several.ok = TRUE)
+
 
   structure(list(
     # title
@@ -550,11 +562,11 @@ guide_gengrob.colorplane <- function(guide, theme) {
                 list(
                   list(grob.ticks, "overlay"),
                   list(grob.ticks_y, "overlay"),
-                  list(grob.label, "bottom"),
-                  list(grob.label_y, "left"),
-                  list(grob.title, "top"),
-                  list(grob.axis_title, "bottom"),
-                  list(grob.axis_title_y, "left"),
+                  list(grob.label, guide$label.position),
+                  list(grob.label_y, guide$label_y.position),
+                  list(grob.title, guide$title.position),
+                  list(grob.axis_title, guide$axis_title.position),
+                  list(grob.axis_title_y, guide$axis_title_y.position),
                   list(ggplot2::zeroGrob(), c("top", "left", "bottom", "right"))
                 ))
   # background
