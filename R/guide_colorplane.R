@@ -580,18 +580,21 @@ guide_gengrob.colorplane <- function(guide, theme) {
                                 name = "background", clip = "off",
                                 t = 1, r = -1, b = -1, l = 1)
 
-  add_to_table <- function(gt, obj) {
-    gtable::gtable_add_grob(gt, obj$grob, clip = "off",
-                            t = min(obj$row), b = max(obj$row),
-                            l = min(obj$col), r = max(obj$col),
-                            name = obj$grob$name)
-  }
-  # grob and position lists need to be transposed for Reduce to traverse them
-  mapply(lay$grobs, lay$rows, lay$cols, SIMPLIFY = FALSE,
-         FUN = function(grob, row, col){
-           list(grob = grob, row = row, col = col)
-         }) %>%
-    Reduce(f = add_to_table, init = gt)
+
+  Reduce(
+    f = function(gt, obj) {
+      gtable::gtable_add_grob(gt, obj$grob, clip = "off",
+                              t = min(obj$row), b = max(obj$row),
+                              l = min(obj$col), r = max(obj$col),
+                              name = obj$grob$name)
+    },
+    # grob and position lists need to be transposed for Reduce to traverse them
+    x = mapply(lay$grobs, lay$rows, lay$cols, SIMPLIFY = FALSE,
+           FUN = function(grob, row, col){
+             list(grob = grob, row = row, col = col)
+           }),
+    init = gt
+  )
 }
 
 #' @export
