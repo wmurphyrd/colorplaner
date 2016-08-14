@@ -498,20 +498,23 @@ guide_gengrob.colorplane <- function(guide, theme) {
       lay$heights <- c(h, vgap, lay$heights)
       lay$rows <- lapply(lay$rows, function(x){x + 2})
       lay$rows[[pos]] <- 1
+      lay$cols[[pos]] <- lay$cols[[1]]
       if (w > sum(lay$widths)) {
         lay$widths <- c(lay$widths, w - sum(lay$widths))
+        lay$cols[[pos]] <- seq_along(lay$widths)
       }
-      lay$cols[[pos]] <- seq_along(lay$widths)
       all_pos <- c(all_pos, pos + 1)
     }
     if ("bottom" %in% side) {
       pos <- all_pos[length(all_pos)]
       lay$heights <- c(lay$heights, vgap, h)
       lay$rows[[pos]] <- length(lay$heights)
+      lay$cols[[pos]] <- lay$cols[[1]]
       if(w > sum(lay$widths)) {
         lay$widths <- c(lay$widths, w - sum(lay$widths))
+        lay$cols[[pos]] <- seq_along(lay$widths)
+
       }
-      lay$cols[[pos]] <- seq_along(lay$widths)
       all_pos <- c(all_pos, pos + 1)
     }
     if ("left" %in% side) {
@@ -519,20 +522,22 @@ guide_gengrob.colorplane <- function(guide, theme) {
       lay$widths <- c(w, hgap, lay$widths)
       lay$cols <- lapply(lay$cols, function(x){x + 2})
       lay$cols[[pos]] <- 1
+      lay$rows[[pos]] <- lay$rows[[1]]
       if(h > sum(lay$heights)) {
         lay$heights <- c(lay$heights, h - sum(lay$heights))
+        lay$rows[[pos]] <- seq_along(lay$heights)
       }
-      lay$rows[[pos]] <- seq_along(lay$heights)
       all_pos <- c(all_pos, pos + 1)
     }
     if ("right" %in% side) {
       pos <- all_pos[length(all_pos)]
       lay$widths <- c(lay$widths, hgap, w)
       lay$cols[[pos]] <- length(lay$widths)
+      lay$rows[[pos]] <- lay$rows[[1]]
       if(h > sum(lay$heights)) {
         lay$heights <- c(lay$heights, h - sum(lay$heights))
+        lay$rows[[pos]] <- seq_along(lay$heights)
       }
-      lay$rows[[pos]] <- seq_along(lay$heights)
       all_pos <- c(all_pos, pos + 1)
     }
     # add the grob to the list multiple times when multiple sides used
@@ -545,9 +550,9 @@ guide_gengrob.colorplane <- function(guide, theme) {
                 list(
                   list(grob.ticks, "overlay"),
                   list(grob.ticks_y, "overlay"),
-                  list(grob.title, "top"),
                   list(grob.label, "bottom"),
                   list(grob.label_y, "left"),
+                  list(grob.title, "top"),
                   list(grob.axis_title, "bottom"),
                   list(grob.axis_title_y, "left"),
                   list(ggplot2::zeroGrob(), c("top", "left", "bottom", "right"))
