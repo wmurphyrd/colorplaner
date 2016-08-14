@@ -69,8 +69,8 @@ interpolate_projection <- function(x, y,
                                    zero_color,
                                    horizontal_color,
                                    vertical_color) {
-  xc <- colorRamp(c(zero_color, horizontal_color))(x)
-  yc <- colorRamp(c(zero_color, vertical_color))(y)
+  xc <- grDevices::colorRamp(c(zero_color, horizontal_color))(x)
+  yc <- grDevices::colorRamp(c(zero_color, vertical_color))(y)
   grDevices::rgb((xc + yc) / 2, maxColorValue = 255)
 }
 
