@@ -1,6 +1,6 @@
 # colorplaner
 
-[![BuildStatus](https://travis-ci.org/wmurphyrd/colorplaner.svg?branch=master)](https://travis-ci.org/wmurphyrd/colorplaner)
+[![BuildStatus](https://travis-ci.org/wmurphyrd/colorplaner.svg?branch=double_scale_bug)](https://travis-ci.org/wmurphyrd/colorplaner)
 
 
 
@@ -38,7 +38,7 @@ To install:
 
 
 ```r
-devtools::install_github("wmurphyrd/colorplaner")
+devtools::install_github("wmurphyrd/colorplaner", ref = "double_scale_bug")
 ```
 
 #### Known Issues and Incomplete Features
