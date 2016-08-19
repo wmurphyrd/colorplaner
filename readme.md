@@ -41,8 +41,8 @@ To install:
 devtools::install_github("wmurphyrd/colorplaner")
 ```
 
-#### Known Issues and Incomplete Features
-* Colors render incorrectly when both scale_color_colorplane and scale_fill_colorplane used in same plot (#1) 
+#### Version 0.0.0.9005
+* Color aesthetic maps correctly when both scale_color_colorplane and scale_fill_colorplane used in same plot (#1) 
 
 #### Version 0.0.0.9004
 * Can customize positions of title, axis titles, and labels in the colorplane guide. See `?guide_colorplane` for details (#2)

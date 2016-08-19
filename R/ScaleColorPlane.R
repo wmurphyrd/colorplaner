@@ -29,6 +29,7 @@ ScaleColorPlane <- ggplot2::ggproto("ScaleColorPlane", ggplot2::ScaleContinuous,
     }
 
     aesthetics <- self$aesthetics
+    df <- df[ , aesthetics]
 
     xlim <- self$get_limits(dir = "horizontal")
     x <-  self$oob(df[[aesthetics[1]]], xlim)
