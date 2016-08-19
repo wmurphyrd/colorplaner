@@ -41,6 +41,9 @@ To install:
 devtools::install_github("wmurphyrd/colorplaner")
 ```
 
+#### Version 0.0.0.9006
+* Removed unnecessary package version requirements. Still requires at least ggplot2 v2.0.0 for the extension system. 
+
 #### Version 0.0.0.9005
 * Color aesthetic maps correctly when both scale_color_colorplane and scale_fill_colorplane used in same plot (#1) 
 
