@@ -19,12 +19,24 @@ ScaleColorPlane <- ggplot2::ggproto("ScaleColorPlane", ggplot2::ScaleContinuous,
   na.color = NULL,
   projection_function = NULL,
   projection_function_args = list(),
+  # tracks if error has been displayed to avoid repeated messages
+  has_error = FALSE,
   map_df = function(self, df, i = NULL) {
     if (is.null(df) || nrow(df) == 0 || ncol(df) == 0) return()
+    if(length(self$aesthetics) != 2 || self$is_empty()) {
+      if(!self$has_error) {
+        message("No valid colorplane mapping found. ",
+                ifelse("colour" %in% self$aesthetics,
+                       "scale_color_colorplane requires both color and color2",
+                       "scale_fill_colorplane requires both fill and fill2"),
+              " aesthetics to be mapped.")
+        self$has_error <- TRUE
+      }
+      return()
+    }
     aes_check <- intersect(self$aesthetics, names(df))
-    if (length(aes_check) == 0) return()
     if (length(aes_check) != 2) {
-      message("Number of aesthetics not equal to 2:", aesthetics)
+      # silently skip layers that don't have colorplane mapping
       return()
     }
 
@@ -67,10 +79,7 @@ ScaleColorPlane <- ggplot2::ggproto("ScaleColorPlane", ggplot2::ScaleContinuous,
     aesthetics <- aesthetics[c(grep("[[:digit:]]", aesthetics, invert = TRUE),
                                grep("[[:digit:]]", aesthetics))]
     names(aesthetics) <- aesthetics
-
-    if (length(aesthetics) == 0) return()
     if (length(aesthetics) != 2) {
-      message("Number of aesthetics not equal to 2:", aesthetics)
       return()
     }
     self$aesthetics <- aesthetics
