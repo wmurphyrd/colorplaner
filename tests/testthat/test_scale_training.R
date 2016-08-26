@@ -25,3 +25,13 @@ test_that("Plots with no valid mapping give informative message", {
       scale_fill_colorplane())
   }, "scale_fill_colorplane requires both fill and fill2")
 })
+
+test_that("Layer-level mappings produce guide axis titles without error", {
+  expect_silent(
+    print(ggplot(aqd, aes(x = Temp, y = Ozone)) +
+      geom_ribbon(aes(ymin = lwr, ymax = upr), alpha = .35) +
+      geom_point(aes(color = Month, color2 = Day)) +
+      geom_rug() +
+      scale_color_colorplane())
+  )
+})
