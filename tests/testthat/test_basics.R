@@ -48,10 +48,10 @@ test_that("Scale constructors are in sync", {
 
 test_that("Arguments can be passed to projection functions", {
   expect_silent({
-    ggplot(mtcars, aes(x = wt, y = mpg, color = qsec, colour2 = hp)) +
-    geom_point(size = 4) +
-    scale_color_colorplane(limits = c(NA, 18.9), limits_y = c(60, 300),
-                           na.color = "red", Y = .9)
+    print(ggplot(mtcars, aes(x = wt, y = mpg, color = qsec, colour2 = hp)) +
+            geom_point(size = 4) +
+            scale_color_colorplane(limits = c(NA, 18.9), limits_y = c(60, 300),
+                                   na.color = "red", Y = .9))
   })
 })
 
