@@ -56,6 +56,17 @@ test_that("Title options", {
         title.position = "bottom",
         title.theme = element_text(color = "red")))
   ))
+  expect_silent(print(
+    ggplot(iris, aes(x = Sepal.Length, y = Sepal.Width,
+                     colour = Petal.Length, color2 = Petal.Width)) +
+      geom_point() +
+      scale_colour_colourplane(Y = .5) +
+      facet_grid(~Species) +
+      guides(color = guide_colourplane(
+        title = "Test\nTwo Lines",
+        title.position = "bottom",
+        title.theme = theme_void()))
+  ))
 })
 
 test_that("Axis title options", {
@@ -75,7 +86,11 @@ test_that("Axis title options", {
       scale_colour_colourplane(Y = .5) +
       facet_grid(~Species) +
       guides(color = guide_colourplane(axis_title = expression(Test[5]*Sigma),
-                                       axis_title_y = expression(Test^Y*sigma)))
+                                       axis_title_y = expression(Test^Y*sigma),
+                                       axis_title.theme = element_text(
+                                         color = "blue", face = "bold",
+                                         size = 18),
+                                       axis_title_y.theme = text_theme))
   ))
   expect_silent(print(
     ggplot(iris, aes(x = Sepal.Length, y = Sepal.Width,

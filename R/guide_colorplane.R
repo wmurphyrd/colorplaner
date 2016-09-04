@@ -333,9 +333,9 @@ guide_gengrob.colorplane <- function(guide, theme) {
     if (ggplot2::is.theme(item)) {
       ggplot2::calc_element(id, item)
     } else if (inherits(item, "element")) {
-      # the theme argument is passed by the ggplot engine as a plain list
-      # without the theme attributes, preventing the use of theme_add
       if (!ggplot2::is.theme(theme)) {
+        # the theme argument is passed by the ggplot engine as a plain list
+        # without the theme attributes, preventing the use of theme_add
         attributes(theme) <- list(class = c("theme", "gg"),
                                   complete = TRUE, validate = TRUE,
                                   names = names(theme))
