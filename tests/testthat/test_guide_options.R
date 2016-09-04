@@ -45,6 +45,17 @@ test_that("Title options", {
         title.position = "bottom",
         title.theme = text_theme))
   ))
+  expect_silent(print(
+    ggplot(iris, aes(x = Sepal.Length, y = Sepal.Width,
+                     colour = Petal.Length, color2 = Petal.Width)) +
+      geom_point() +
+      scale_colour_colourplane(Y = .5) +
+      facet_grid(~Species) +
+      guides(color = guide_colourplane(
+        title = "Test\nTwo Lines",
+        title.position = "bottom",
+        title.theme = element_text(color = "red")))
+  ))
 })
 
 test_that("Axis title options", {
