@@ -328,11 +328,33 @@ guide_gengrob.colorplane <- function(guide, theme) {
                                  ) * planeheight.c / guide$nbin
   label_pos_y <- unit(tic_pos_y.c, "mm")
 
+  #helper for dealing with incomplete theme objects passed as options
+  complete_theme_item <- function(item, id) {
+    if (ggplot2::is.theme(item)) {
+      ggplot2::calc_element(id, item)
+    } else if (inherits(item, "element")) {
+      # the theme argument is passed by the ggplot engine as a plain list
+      # without the theme attributes, preventing the use of theme_add
+      if (!ggplot2::is.theme(theme)) {
+        attributes(theme) <- list(class = c("theme", "gg"),
+                                  complete = TRUE, validate = TRUE,
+                                  names = names(theme))
+      }
+      # using an incomplete element_text would cause errors in element_grob;
+      # fill in any missing specs using plot theme
+      ggplot2::calc_element(
+        id,
+        theme + do.call(ggplot2::theme, setNames(list(item), id))
+      )
+    } else {
+      ggplot2::calc_element(id, theme)
+    }
+  }
   # title
   grob.title <- ggname(
     "guide.title",
     ggplot2::element_grob(
-      guide$title.theme %||% ggplot2::calc_element("legend.title", theme),
+      complete_theme_item(guide$title.theme, "legend.title"),
       label = guide$title,
       hjust = guide$title.hjust %||% theme$legend.title.align %||%
         calc_element("legend.title", theme)$hjust %||% 0.5,
@@ -350,7 +372,7 @@ guide_gengrob.colorplane <- function(guide, theme) {
   grob.axis_title <- ggname(
     "guide.axis_title",
     ggplot2::element_grob(
-      guide$axis_title.theme %||% ggplot2::calc_element("axis.title.x", theme),
+      complete_theme_item(guide$axis_title.theme, "axis.title.x"),
       label = guide$axis_title,
       hjust = guide$axis_title.hjust %||%
         calc_element("axis.title.x", theme)$hjust %||% 0.5,
@@ -368,8 +390,7 @@ guide_gengrob.colorplane <- function(guide, theme) {
   grob.axis_title_y <- ggname(
     "guide.axis_title_y",
     ggplot2::element_grob(
-      guide$axis_title_y.theme %||%
-        ggplot2::calc_element("axis.title.y", theme),
+      complete_theme_item(guide$axis_title_y.theme, "axis.title.y"),
       label = guide$axis_title_y,
       hjust = guide$axis_title_y.hjust %||%
         calc_element("axis.title.y", theme)$hjust %||% 0.5,
@@ -387,8 +408,7 @@ guide_gengrob.colorplane <- function(guide, theme) {
 
 
   # label
-  label.theme <- guide$label.theme %||%
-    ggplot2::calc_element("axis.text.x", theme)
+  label.theme <- complete_theme_item(guide$label.theme, "axis.text.x")
   grob.label <- ggplot2::zeroGrob()
   if (guide$label) {
     hjust <- guide$label.hjust %||% label.theme$hjust %||%
@@ -418,8 +438,7 @@ guide_gengrob.colorplane <- function(guide, theme) {
   label_height <- grid::convertHeight(grid::grobHeight(grob.label), "mm")
   label_height.c <- c(label_height)
 
-  label_y.theme <- guide$label_y.theme %||%
-    ggplot2::calc_element("axis.text.y", theme)
+  label_y.theme <- complete_theme_item(guide$label_y.theme, "axis.text.y")
   grob.label_y <- ggplot2::zeroGrob()
   if (guide$label) {
     hjust <- x <- guide$label_y.hjust %||% label_y.theme$hjust %||%
