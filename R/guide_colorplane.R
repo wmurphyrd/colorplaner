@@ -293,15 +293,6 @@ guide_geom.colorplane <- function(guide, ...) {
 #' @seealso \code{\link{scale_color_colorplane}}
 #' @export
 guide_gengrob.colorplane <- function(guide, theme) {
-# TODO: implement label and axis title position options
-#   switch(guide$direction,
-#          "horizontal" = {
-#            label.position <- guide$label.position %||% "bottom"
-#            if (!label.position %in% c("top", "bottom")) stop("label position \"", label.position, "\" is invalid")
-#          "vertical" = {
-#            label.position <- guide$label.position %||% "right"
-#            if (!label.position %in% c("left", "right")) stop("label position \"", label.position, "\" is invalid")
-#          })
   planewidth <- grid::convertWidth(guide$planewidth %||%
                                      (theme$legend.key.width * 5), "mm")
   planeheight <- grid::convertHeight(guide$planeheight %||%
