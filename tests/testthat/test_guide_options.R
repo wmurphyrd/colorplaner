@@ -172,7 +172,7 @@ test_that("Label options", {
           label.position = c("both"),
           label_y.position = c("right", "left")
         ))
-  ), "should be one of “bottom”, “top”")
+  ), "should be one of .bottom., .top.")
   expect_error(print(
     ggplot(mtcars, aes(x = drat, y = mpg,
                        color = hp, color2 = disp/max(disp))) +
@@ -181,6 +181,6 @@ test_that("Label options", {
         guide = guide_colorplane(
           label_y.position = c("hello")
         ))
-  ), "should be one of “left”, “right”")
+  ), "should be one of .left., .right.")
 })
 
