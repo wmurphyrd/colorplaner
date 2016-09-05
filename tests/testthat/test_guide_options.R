@@ -1,9 +1,6 @@
-text_theme <- calc_element(
-  "legend.title",
-  theme_bw() %+%
-    theme(legend.title =
+text_theme <- theme_bw() %+%
+    theme(text =
             element_text(color = "red", family = "mono"))
-  )
 
 test_that("Title options", {
   expect_silent(print(
@@ -99,7 +96,7 @@ test_that("Axis title options", {
                                          color = "blue", face = "bold",
                                          size = 18),
                                        axis_title_y.theme = text_theme)) +
-      ggtitle("Guide axis titles: expressions, red&rotate y, blue x")
+      ggtitle("Guide axis titles: expressions, red&mono y, blue x")
   ))
   expect_silent(print(
     ggplot(iris, aes(x = Sepal.Length, y = Sepal.Width,
@@ -124,3 +121,66 @@ test_that("Axis title options", {
   ))
 
 })
+
+test_that("Label options", {
+  expect_silent(print(
+    ggplot(mtcars, aes(x = drat, y = mpg,
+                       color = hp, color2 = disp/max(disp))) +
+      geom_point() +
+      scale_color_colorplane(
+        guide = guide_colorplane(ticks = F, label = F)) +
+      ggtitle("No ticks, no labels")
+  ))
+  expect_silent(print(
+    ggplot(mtcars, aes(x = drat, y = mpg,
+                       color = hp, color2 = disp/max(disp))) +
+      geom_point() +
+      scale_color_colorplane(
+        guide = guide_colorplane(label.hjust = 0, label.vjust = 0,
+                                 label_y.hjust = 1, label_y.vjust = 1)) +
+      ggtitle("Guide label justifications: right, down")
+  ))
+  expect_silent(print(
+    ggplot(mtcars, aes(x = drat, y = mpg,
+                       color = hp, color2 = disp/max(disp))) +
+      geom_point() +
+      scale_color_colorplane(
+        guide = guide_colorplane(
+          label.position = "top", label_y.position = "right",
+          label.theme = element_text(color = "green", size = 7),
+          label_y.theme = text_theme
+        )) +
+      ggtitle("Guide labels: x green&small&top, y red&mono&right")
+  ))
+  expect_silent(print(
+    ggplot(mtcars, aes(x = drat, y = mpg,
+                       color = hp, color2 = disp/max(disp))) +
+      geom_point() +
+      scale_color_colorplane(
+        guide = guide_colorplane(
+          label.position = c("bottom", "top"),
+          label_y.position = c("right", "left")
+        )) +
+      ggtitle("Guide labels: both sides")
+  ))
+  expect_error(print(
+    ggplot(mtcars, aes(x = drat, y = mpg,
+                       color = hp, color2 = disp/max(disp))) +
+      geom_point() +
+      scale_color_colorplane(
+        guide = guide_colorplane(
+          label.position = c("both"),
+          label_y.position = c("right", "left")
+        ))
+  ), "should be one of “bottom”, “top”")
+  expect_error(print(
+    ggplot(mtcars, aes(x = drat, y = mpg,
+                       color = hp, color2 = disp/max(disp))) +
+      geom_point() +
+      scale_color_colorplane(
+        guide = guide_colorplane(
+          label_y.position = c("hello")
+        ))
+  ), "should be one of “left”, “right”")
+})
+
