@@ -344,7 +344,7 @@ guide_gengrob.colorplane <- function(guide, theme) {
       # fill in any missing specs using plot theme
       ggplot2::calc_element(
         id,
-        theme + do.call(ggplot2::theme, setNames(list(item), id))
+        theme + do.call(ggplot2::theme, stats::setNames(list(item), id))
       )
     } else {
       ggplot2::calc_element(id, theme)
