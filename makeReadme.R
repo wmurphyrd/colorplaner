@@ -7,6 +7,7 @@ news_loc <- grep("^## Usage$", readme)[1] - 1
 ins <- c("# colorplaner",
          "",
          "[![BuildStatus](https://travis-ci.org/wmurphyrd/colorplaner.svg?branch=master)](https://travis-ci.org/wmurphyrd/colorplaner)",
+         "[![Coverage Status](https://coveralls.io/repos/github/wmurphyrd/colorplaner/badge.svg?branch=master)](https://coveralls.io/github/wmurphyrd/colorplaner?branch=master)",
          "",
          "```{r include = F}",
          "knitr::opts_chunk$set(fig.width = 5, fig.height = 5)",

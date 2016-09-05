@@ -2,6 +2,8 @@
 
 [![BuildStatus](https://travis-ci.org/wmurphyrd/colorplaner.svg?branch=master)](https://travis-ci.org/wmurphyrd/colorplaner)
 
+[![Coverage Status](https://coveralls.io/repos/github/wmurphyrd/colorplaner/badge.svg?branch=master)](https://coveralls.io/github/wmurphyrd/colorplaner?branch=master)
+
 
 
 
