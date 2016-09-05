@@ -115,6 +115,19 @@ test_that("Axis title options", {
       geom_point() +
       scale_colour_colourplane(Y = .5) +
       facet_grid(~Species) +
+      guides(color =
+               guide_colourplane(axis_title.position = c("top", "bottom"),
+                                 axis_title_y.position = c("left", "right"),
+                                 axis_title = "This is an extra extra long x axis title",
+                                 axis_title_y = "This is an extra extra long y axis title")) +
+      ggtitle("Long guide axis titles on both sides")
+  ))
+  expect_silent(print(
+    ggplot(iris, aes(x = Sepal.Length, y = Sepal.Width,
+                     colour = Petal.Length, color2 = Petal.Width)) +
+      geom_point() +
+      scale_colour_colourplane(Y = .5) +
+      facet_grid(~Species) +
       guides(color = guide_colourplane(axis_title.position = "bottom",
                                        axis_title_y.position = "right")) +
       ggtitle("Guide axis titles: bottom, right")
@@ -184,3 +197,25 @@ test_that("Label options", {
   ), "should be one of .left., .right.")
 })
 
+test_that("Plane options", {
+  expect_silent(print(
+    ggplot(mtcars, aes(x = drat, y = mpg,
+                       color = hp, color2 = disp/max(disp))) +
+      geom_point() +
+      scale_color_colorplane(
+        guide = guide_colorplane(
+          planewidth = 3,
+          planeheight = 4)) +
+      ggtitle("Plane taller than wide")
+  ))
+  expect_silent(print(
+    ggplot(mtcars, aes(x = drat, y = mpg,
+                       color = hp, color2 = disp/max(disp))) +
+      geom_point() +
+      scale_color_colorplane(
+        guide = guide_colorplane(
+          planewidth = grid::unit(15, "mm"),
+          planeheight = grid::unit(10, "mm"))) +
+      ggtitle("Plane wider than tall")
+  ))
+})
