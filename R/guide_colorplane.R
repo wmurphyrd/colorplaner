@@ -363,11 +363,6 @@ guide_gengrob.colorplane <- function(guide, theme) {
     )
   )
 
-  title_width <- grid::convertWidth(grid::grobWidth(grob.title), "mm")
-  title_width.c <- c(title_width)
-  title_height <- grid::convertHeight(grid::grobHeight(grob.title), "mm")
-  title_height.c <- c(title_height)
-
   #axis titles
   grob.axis_title <- ggname(
     "guide.axis_title",
@@ -381,12 +376,6 @@ guide_gengrob.colorplane <- function(guide, theme) {
     )
   )
 
-  axis_title_width <- grid::convertWidth(grid::grobWidth(grob.axis_title), "mm")
-  axis_title_width.c <- c(axis_title_width)
-  axis_title_height <-
-    grid::convertHeight(grid::grobHeight(grob.axis_title), "mm")
-  axis_title_height.c <- c(axis_title_height)
-
   grob.axis_title_y <- ggname(
     "guide.axis_title_y",
     ggplot2::element_grob(
@@ -398,14 +387,6 @@ guide_gengrob.colorplane <- function(guide, theme) {
         calc_element("axis.title.y", theme)$vjust %||% 0.5
     )
   )
-
-  axis_title_y_width <-
-    grid::convertWidth(grid::grobWidth(grob.axis_title_y), "mm")
-  axis_title_y_width.c <- c(axis_title_y_width)
-  axis_title_y_height <-
-    grid::convertHeight(grid::grobHeight(grob.axis_title_y), "mm")
-  axis_title_y_height.c <- c(axis_title_y_height)
-
 
   # label
   label.theme <- complete_theme_item(guide$label.theme, "axis.text.x")
@@ -432,12 +413,6 @@ guide_gengrob.colorplane <- function(guide, theme) {
     grob.label <- ggname("guide.label", g)
   }
 
-
-  label_width <- grid::convertWidth(grid::grobWidth(grob.label), "mm")
-  label_width.c <- c(label_width)
-  label_height <- grid::convertHeight(grid::grobHeight(grob.label), "mm")
-  label_height.c <- c(label_height)
-
   label_y.theme <- complete_theme_item(guide$label_y.theme, "axis.text.y")
   grob.label_y <- ggplot2::zeroGrob()
   if (guide$label) {
@@ -461,11 +436,6 @@ guide_gengrob.colorplane <- function(guide, theme) {
                       x = x, y = y, hjust = hjust, vjust = vjust)
     grob.label_y <- ggname("guide.label_y", g)
   }
-
-  label_width_y <- grid::convertWidth(grid::grobWidth(grob.label_y), "mm")
-  label_width_y.c <- c(label_width_y)
-  label_height_y <- grid::convertHeight(grid::grobHeight(grob.label_y), "mm")
-  label_height_y.c <- c(label_height_y)
 
   # ticks - horiz
   grob.ticks <- ggplot2::zeroGrob()
@@ -593,8 +563,6 @@ guide_gengrob.colorplane <- function(guide, theme) {
   gt <- gtable::gtable_add_grob(gt, grob.background,
                                 name = "background", clip = "off",
                                 t = 1, r = -1, b = -1, l = 1)
-
-
   Reduce(
     f = function(gt, obj) {
       gtable::gtable_add_grob(gt, obj$grob, clip = "off",
