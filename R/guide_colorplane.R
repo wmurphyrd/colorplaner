@@ -196,7 +196,7 @@ guide_colorplane <- function(
 #' @export
 guide_train.colorplane <- function(guide, scale) {
   # do nothing if scale inappropriate
-  if (!is(scale, "ScaleColorPlane")) {
+  if (!inherits(scale, "ScaleColorPlane")) {
     warning("colorplane guide needs scale_color_colorplane or scale_fill_colorplane.")
     return(NULL)
   }
