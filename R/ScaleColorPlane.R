@@ -8,6 +8,7 @@ NULL
 #' implements methods and default values needed for color plane scale instances.
 #' See \code{\link{scale_color_colorplane}} for usage.
 #' @export
+#' @keywords internal
 ScaleColorPlane <- ggplot2::ggproto("ScaleColorPlane", ggplot2::ScaleContinuous,
   limits_y = NULL,
   breaks_y = ggplot2::waiver(),

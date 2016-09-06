@@ -15,4 +15,5 @@ guide_merge.colorplane(guide, new_guide)
 \description{
 Called by ggplot2 engine. Ignores attempts to merge guides.
 }
+\keyword{internal}
 

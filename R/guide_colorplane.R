@@ -198,8 +198,8 @@ guide_colorplane <- function(
 #' @param guide Object of class "colorplane" generate by
 #'   \code{\link{guide_colorplane}}
 #' @param scale ggproto object instance of \code{\link{ScaleColorPlane}}
-#'
 #' @export
+#' @keywords internal
 guide_train.colorplane <- function(guide, scale) {
   # do nothing if scale inappropriate
   if (!inherits(scale, "ScaleColorPlane")) {
@@ -272,8 +272,8 @@ guide_train.colorplane <- function(guide, scale) {
 #'
 #' @inheritParams guide_train.colorplane
 #' @param new_guide New guide object
-#'
 #' @export
+#' @keywords internal
 guide_merge.colorplane <- function(guide, new_guide) {
   guide
 }
@@ -285,6 +285,7 @@ guide_merge.colorplane <- function(guide, new_guide) {
 #' @inheritParams guide_train.colorplane
 #' @param ... Not used
 #' @export
+#' @keywords internal
 guide_geom.colorplane <- function(guide, ...) {
   guide
 }
@@ -298,6 +299,7 @@ guide_geom.colorplane <- function(guide, ...) {
 #'
 #' @seealso \code{\link{scale_color_colorplane}}
 #' @export
+#' @keywords internal
 guide_gengrob.colorplane <- function(guide, theme) {
   planewidth <- grid::convertWidth(guide$planewidth %||%
                                      (theme$legend.key.width * 5), "mm")

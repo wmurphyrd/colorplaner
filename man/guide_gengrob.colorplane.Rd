@@ -18,4 +18,5 @@ Called by ggplot2 engine to create graphical objects for the guide.
 \seealso{
 \code{\link{scale_color_colorplane}}
 }
+\keyword{internal}
 

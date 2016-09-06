@@ -15,4 +15,5 @@ guide_train.colorplane(guide, scale)
 \description{
 Called by ggplot2 engine when building the plot.
 }
+\keyword{internal}
 
