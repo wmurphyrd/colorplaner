@@ -91,12 +91,12 @@ ScaleColorPlane <- ggplot2::ggproto("ScaleColorPlane", ggplot2::ScaleContinuous,
        is.waive(self$axis_title_y)) {
       p <- dynGet("plot", ifnotfound = NULL)
       if(is.waive(self$axis_title)) {
-        if(!is.null(p$mapping) && !is.null(p$labels[[aesthetics[1]]])) {
+        if(!is.null(p$labels) && !is.null(p$labels[[aesthetics[1]]])) {
           self$axis_title <- p$labels[[aesthetics[1]]]
         }
       }
       if(is.waive(self$axis_title_y)) {
-        if(!is.null(p$mapping) && !is.null(p$labels[[aesthetics[2]]])) {
+        if(!is.null(p$labels) && !is.null(p$labels[[aesthetics[2]]])) {
           self$axis_title_y <- p$labels[[aesthetics[2]]]
         }
       }
