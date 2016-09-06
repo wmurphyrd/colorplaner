@@ -6,7 +6,7 @@
 #' @title Color Space Projections
 #'
 #' @description Functions to define how variables are mapped into color space.
-#'   Used for the `color_projection` argument to
+#'   Used for the \code{color_projection} argument to
 #'   \code{\link{scale_color_colorplane}} and
 #'   \code{\link{scale_fill_colorplane}}. Custom functions can also be defined
 #'   following this signature.
@@ -15,7 +15,7 @@
 #'   a single character vector of the same length that specifies the colors to
 #'   plot in the form "#rrggbb", as returned by \code{\link[grDevices]{rgb}}.
 #'   Additional projection functions can be defined following the same signature
-#'   and passed to the \code{color_projection} arugment of the
+#'   and passed to the \code{color_projection} argument of the
 #'   \code{scale_*_colorplane} scale constructors. When writing custom
 #'   projection functions, expect two arguments that are numeric vectors scaled
 #'   to a range of 0 to 1 and that do not contain missing values. Custom
@@ -26,9 +26,17 @@
 #'
 #' @param x,y numeric vectors of equal length containing the values to be mapped
 #'   to the horizontal and vertical axes of the colorplane.
-#' @param Y numeric value for the fixed lumosity level in YUV projections.
+#' @param Y numeric value in range 0 to 1 for the fixed luminosity level in YUV
+#'   projections.
 #' @seealso \code{\link{scale_color_colorplane}},
 #'   \code{\link{scale_fill_colorplane}}
+#' @examples
+#' ggplot(mtcars, aes(x = wt, y = mpg, color = disp, colour2 = hp)) +
+#'   geom_point() +
+#'   scale_color_colorplane(color_projection = interpolate_projection,
+#'                          zero_color = "darkorange2",
+#'                          horizontal_color = "mediumspringgreen",
+#'                          vertical_color = "magenta")
 NULL
 
 #' @export
@@ -58,7 +66,7 @@ red_blue_projection <- function(x, y) {
 #' @export
 #' @rdname color_projections
 #' @param zero_color,horizontal_color,vertical_color Character strings
-#'   specifying R colors to use in inerpolation projections. See Details.
+#'   specifying R colors to use in interpolation projections. See Details.
 #'
 #' @details For \code{interpolate_projection}, a color space is created via
 #'   linear RGB-space interpolation for each axis and then blending by averages.
