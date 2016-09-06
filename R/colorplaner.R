@@ -28,5 +28,4 @@
 #' @import ggplot2
 #' @importFrom scales rescale
 #' @importFrom scales censor
-#' @importFrom methods is
 NULL
