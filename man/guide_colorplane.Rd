@@ -124,6 +124,7 @@ of colors with ticks and labels for both variables in the scale.
 }
 \examples{
 if(requireNamespace("mapproj")) {
+  library(ggplot2)
   crimes <- data.frame(state = tolower(rownames(USArrests)), USArrests)
   states_map <- map_data("state")
   ggplot(crimes,

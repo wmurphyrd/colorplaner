@@ -31,6 +31,7 @@
 #' @seealso \code{\link{scale_color_colorplane}},
 #'   \code{\link{scale_fill_colorplane}}
 #' @examples
+#' library(ggplot2)
 #' ggplot(mtcars, aes(x = wt, y = mpg, color = disp, colour2 = hp)) +
 #'   geom_point() +
 #'   scale_color_colorplane(color_projection = interpolate_projection,

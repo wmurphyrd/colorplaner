@@ -123,6 +123,7 @@ The variable values are projected onto YUV color space to create a bivaraite
 gradient that can be interpreted visually...
 }
 \examples{
+library(ggplot2)
 if(requireNamespace("mapproj")) {
   crimes <- data.frame(state = tolower(rownames(USArrests)), USArrests)
   states_map <- map_data("state")

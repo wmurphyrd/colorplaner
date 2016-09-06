@@ -55,6 +55,7 @@ For \code{interpolate_projection}, a color space is created via
   \code{y} values.
 }
 \examples{
+library(ggplot2)
 ggplot(mtcars, aes(x = wt, y = mpg, color = disp, colour2 = hp)) +
   geom_point() +
   scale_color_colorplane(color_projection = interpolate_projection,

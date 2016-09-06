@@ -231,6 +231,7 @@ ScaleColorPlane <- ggplot2::ggproto("ScaleColorPlane", ggplot2::ScaleContinuous,
 #'   See \code{\link{color_projections}}.
 #' @param ... Additional arguments to pass on to \code{color_projection} function.
 #' @examples
+#' library(ggplot2)
 #' if(requireNamespace("mapproj")) {
 #'   crimes <- data.frame(state = tolower(rownames(USArrests)), USArrests)
 #'   states_map <- map_data("state")
