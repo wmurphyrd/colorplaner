@@ -59,8 +59,8 @@ the name of the scale or the name of the variable mapped to the aesthetic.}
     as output
 }}
 
-\item{breaks_y}{As \code{breaks}, but pertaining to vertical axis (i.e.
-\code{color2} or \code{fill2})}
+\item{breaks_y}{As \code{breaks}, but for vertical axis (i.e. \code{color2}
+or \code{fill2})}
 
 \item{labels}{One of: \itemize{
   \item \code{NULL} for no labels
@@ -71,18 +71,18 @@ the name of the scale or the name of the variable mapped to the aesthetic.}
     as output
 }}
 
-\item{labels_y}{As \code{labels}, but pertaining to vertical axis (i.e.
-\code{color2} or \code{fill2})}
+\item{labels_y}{As \code{labels}, but for vertical axis (i.e. \code{color2}
+or \code{fill2})}
 
 \item{limits}{A numeric vector of length two providing limits of the scale.
 Use \code{NA} to refer to the existing minimum or maximum.}
 
-\item{limits_y}{As \code{limits}, but pertaining to vertical axis (i.e.
-\code{color2} or \code{fill2})}
+\item{limits_y}{As \code{limits}, but for vertical axis (i.e. \code{color2}
+or \code{fill2})}
 
 \item{color_projection}{Projection mapping to use. Either the name of an
-included projection or a function that performs the projection.
-See \code{\link{color_projections}}.}
+included projection or a function that performs the projection. See
+\code{\link{color_projections}}.}
 
 \item{rescaler}{Used by diverging and n colour gradients
 (i.e. \code{\link{scale_colour_gradient2}}, \code{\link{scale_colour_gradientn}}).
@@ -111,7 +111,8 @@ plotting missing data or data outside the limits.}
 \code{\link{guide_colorplane}} designed for this scale. Behavior of other
 guides with this scale is not defined.}
 
-\item{...}{Additional arguments to pass on to \code{color_projection} function.}
+\item{...}{Additional arguments to pass on to \code{color_projection}
+function.}
 }
 \description{
 Maps two continutous variables into a single display color, using either the
@@ -134,6 +135,8 @@ if(requireNamespace("mapproj")) {
     expand_limits(x = states_map$long, y = states_map$lat) +
     coord_map()
  }
+# setting upper limit for qsec causes points for higher values to plot
+# as na.color (black)
 ggplot(mtcars, aes(x = wt, y = mpg, color = qsec, colour2 = hp)) +
   geom_point(size = 4) +
   scale_color_colorplane(limits = c(NA, 18.9))

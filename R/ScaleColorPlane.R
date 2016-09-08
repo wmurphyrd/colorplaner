@@ -211,14 +211,16 @@ ScaleColorPlane <- ggplot2::ggproto("ScaleColorPlane", ggplot2::ScaleContinuous,
 #'
 #'
 #'
+#'
+#'
 #' @inheritParams ggplot2::continuous_scale
 #' @inheritParams guide_colorplane
-#' @param breaks_y As \code{breaks}, but pertaining to vertical axis (i.e.
-#'   \code{color2} or \code{fill2})
-#' @param labels_y As \code{labels}, but pertaining to vertical axis (i.e.
-#'   \code{color2} or \code{fill2})
-#' @param limits_y As \code{limits}, but pertaining to vertical axis (i.e.
-#'   \code{color2} or \code{fill2})
+#' @param breaks_y As \code{breaks}, but for vertical axis (i.e. \code{color2}
+#'   or \code{fill2})
+#' @param labels_y As \code{labels}, but for vertical axis (i.e. \code{color2}
+#'   or \code{fill2})
+#' @param limits_y As \code{limits}, but for vertical axis (i.e. \code{color2}
+#'   or \code{fill2})
 #' @param name Character string or expression to be used as guide title.
 #'   Defaults to "Color Key" or "Fill Color Key" to match the scale function
 #'   used.
@@ -228,9 +230,10 @@ ScaleColorPlane <- ggplot2::ggproto("ScaleColorPlane", ggplot2::ScaleContinuous,
 #'   \code{\link{guide_colorplane}} designed for this scale. Behavior of other
 #'   guides with this scale is not defined.
 #' @param color_projection Projection mapping to use. Either the name of an
-#'   included projection or a function that performs the projection.
-#'   See \code{\link{color_projections}}.
-#' @param ... Additional arguments to pass on to \code{color_projection} function.
+#'   included projection or a function that performs the projection. See
+#'   \code{\link{color_projections}}.
+#' @param ... Additional arguments to pass on to \code{color_projection}
+#'   function.
 #' @examples
 #' library(ggplot2)
 #' if(requireNamespace("mapproj")) {
@@ -243,6 +246,8 @@ ScaleColorPlane <- ggplot2::ggproto("ScaleColorPlane", ggplot2::ScaleContinuous,
 #'     expand_limits(x = states_map$long, y = states_map$lat) +
 #'     coord_map()
 #'  }
+#' # setting upper limit for qsec causes points for higher values to plot
+#' # as na.color (black)
 #' ggplot(mtcars, aes(x = wt, y = mpg, color = qsec, colour2 = hp)) +
 #'   geom_point(size = 4) +
 #'   scale_color_colorplane(limits = c(NA, 18.9))
