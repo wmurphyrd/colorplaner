@@ -26,12 +26,12 @@ scale_fill_colorplane(name = waiver(), axis_title = waiver(),
 Defaults to "Color Key" or "Fill Color Key" to match the scale function
 used.}
 
-\item{axis_title}{Character strings or expressions inidicating
+\item{axis_title}{Character strings or expressions indicating
 the horizontal and vertical axis titles in the guide, respectively. If
 \code{NULL}, the title is not shown. By default (\link[ggplot2]{waiver}),
 the name of the scale or the name of the variable mapped to the aesthetic.}
 
-\item{axis_title_y}{Character strings or expressions inidicating
+\item{axis_title_y}{Character strings or expressions indicating
 the horizontal and vertical axis titles in the guide, respectively. If
 \code{NULL}, the title is not shown. By default (\link[ggplot2]{waiver}),
 the name of the scale or the name of the variable mapped to the aesthetic.}
@@ -88,7 +88,7 @@ A function used to scale the input values to the range [0, 1].}
   \code{\link[scales]{boxcox_trans}}. You can create your own
   transformation with \code{\link[scales]{trans_new}}.}
 
-\item{na.color}{Characater string containing a valid R color to use when
+\item{na.color}{Character string containing a valid R color to use when
 plotting missing data or data outside the limits.}
 
 \item{na.value}{Missing values will be replaced with this value.}
@@ -101,13 +101,33 @@ guides with this scale is not defined.}
 function.}
 }
 \description{
-Maps two continutous variables into a single display color, using either the
+Maps two continuous variables into a single display color, using either the
 \code{color} and \code{color2} aesthetics (\code{scale_color_colorplane}) or
 the \code{fill} and \code{fill2} aesthetics (\code{scale_fill_colorplane}).
+Variables mapped to \code{color} or \code{fill} are be mapped to the
+horizontal component of the colorplane scale and \code{color}/\code{fill2}
+are mapped to the vertical component.
 }
 \details{
-The variable values are projected onto YUV color space to create a bivaraite
-gradient that can be interpreted visually...
+Variable values are projected into color space to create a bivariate
+gradient. The default projection maps values to the U and V components of YUV
+color space. In the YUV color space, the full spectrum of chrominance (color
+difference) is encoded into the U and V components and luminosity
+(brightness) is encoded in the Y component. For a fixed value of Y, the
+remaining U-V color space is a plane of all possible colors at that
+brightness. Therefore, mapping data to this projection utilizes the full
+color spectrum to provide visual discrimination between differing values.
+
+The YUV projection colorplane scale is visually divided into four quadrants:
+green when both values are small, fuchsia when both are large, orange when
+the horizontal variable is small and the vertical is large, and blue when the
+horizontal variable is large and the vertical is small. Values closer to the
+extremes are saturated and the center of the scale, representing the
+mid-point of the ranges for both variables, is grey.
+
+Alternative color projections can be used, but may not be as interpretable.
+See \code{\link{color_projections}} for information on specifying or creating
+other color projections.
 }
 \examples{
 library(ggplot2)

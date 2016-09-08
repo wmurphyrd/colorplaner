@@ -202,16 +202,32 @@ ScaleColorPlane <- ggplot2::ggproto("ScaleColorPlane", ggplot2::ScaleContinuous,
 
 #' Bivariate Color Space Projection Scale
 #'
-#' Maps two continutous variables into a single display color, using either the
+#' Maps two continuous variables into a single display color, using either the
 #' \code{color} and \code{color2} aesthetics (\code{scale_color_colorplane}) or
 #' the \code{fill} and \code{fill2} aesthetics (\code{scale_fill_colorplane}).
+#' Variables mapped to \code{color} or \code{fill} are be mapped to the
+#' horizontal component of the colorplane scale and \code{color}/\code{fill2}
+#' are mapped to the vertical component.
 #'
-#' The variable values are projected onto YUV color space to create a bivaraite
-#' gradient that can be interpreted visually...
+#' Variable values are projected into color space to create a bivariate
+#' gradient. The default projection maps values to the U and V components of YUV
+#' color space. In the YUV color space, the full spectrum of chrominance (color
+#' difference) is encoded into the U and V components and luminosity
+#' (brightness) is encoded in the Y component. For a fixed value of Y, the
+#' remaining U-V color space is a plane of all possible colors at that
+#' brightness. Therefore, mapping data to this projection utilizes the full
+#' color spectrum to provide visual discrimination between differing values.
 #'
+#' The YUV projection colorplane scale is visually divided into four quadrants:
+#' green when both values are small, fuchsia when both are large, orange when
+#' the horizontal variable is small and the vertical is large, and blue when the
+#' horizontal variable is large and the vertical is small. Values closer to the
+#' extremes are saturated and the center of the scale, representing the
+#' mid-point of the ranges for both variables, is grey.
 #'
-#'
-#'
+#' Alternative color projections can be used, but may not be as interpretable.
+#' See \code{\link{color_projections}} for information on specifying or creating
+#' other color projections.
 #'
 #' @inheritParams ggplot2::continuous_scale
 #' @inheritParams guide_colorplane
@@ -224,7 +240,7 @@ ScaleColorPlane <- ggplot2::ggproto("ScaleColorPlane", ggplot2::ScaleContinuous,
 #' @param name Character string or expression to be used as guide title.
 #'   Defaults to "Color Key" or "Fill Color Key" to match the scale function
 #'   used.
-#' @param na.color Characater string containing a valid R color to use when
+#' @param na.color Character string containing a valid R color to use when
 #'   plotting missing data or data outside the limits.
 #' @param guide Name of guide object, or object itself. Defaults to
 #'   \code{\link{guide_colorplane}} designed for this scale. Behavior of other

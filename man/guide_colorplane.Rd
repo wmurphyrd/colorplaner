@@ -37,47 +37,41 @@ title text.}
 \item{title.vjust}{A number specifying vertical justification of the title
 text.}
 
-\item{axis_title, axis_title_y}{Character strings or expressions inidicating
+\item{axis_title, axis_title_y}{Character strings or expressions indicating
 the horizontal and vertical axis titles in the guide, respectively. If
 \code{NULL}, the title is not shown. By default (\link[ggplot2]{waiver}),
 the name of the scale or the name of the variable mapped to the aesthetic.}
 
 \item{axis_title.position, axis_title_y.position}{Character vectors indicating
 the position(s) of axis titles. \code{axis_title.position}: "top" and/or
-"bottom" (default). \code{axis_title_y.position}: "left" (default)
-and/or "right".}
+"bottom" (default). \code{axis_title_y.position}: "left" (default) and/or
+"right".}
 
 \item{axis_title.theme, axis_title_y.theme}{Theme objects for rendering the
 axis title text. Typically an \code{\link[ggplot2]{element_text}} object.
 When \code{NULL}, defaults to settings for \code{axis.title.x} and
 \code{axis.title.y} in the plot theme.}
 
-\item{axis_title.hjust, axis_title_y.hjust}{Numbers specifying horizontal
-justification of the axis title text. When \code{NULL}, defaults to
-\code{axis_title.theme} or \code{axis.title.x} in plot theme.}
-
-\item{axis_title.vjust, axis_title_y.vjust}{Numbers specifing veritcal
-justification of the axis title text. When \code{NULL}, defaults to
-\code{axis_title*.theme} if set or \code{axis.title.*} in plot theme.}
+\item{axis_title.hjust, axis_title.vjust, axis_title_y.vjust, axis_title_y.hjust}{Numerics specifying the horizontal (\code{hjust}) and vertical
+(\code{vjust}) justifications of the horizontal (\code{axis_title}) and
+vertical (\code{axis_title_y}) axis title text.}
 
 \item{label}{logical. If \code{TRUE} then the labels are drawn. If
 \code{FALSE} then the labels are invisible.}
 
 \item{label.position, label_y.position}{Character vectors indicating the
-position(s) of axis labels. For \code{label.position}, "top" and/or "bottom"
-(default). For \code{label_y.position}, "left" (default) and/or "right".}
+position(s) of axis labels. For \code{label.position}, "top" and/or
+"bottom" (default). For \code{label_y.position}, "left" (default) and/or
+"right".}
 
 \item{label.theme, label_y.theme}{Theme objects for rendering axis label text.
 Usually the object of \code{\link[ggplot2]{element_text}} is expected. By
 default, the theme is specified by \code{axis.text.*} in the plot theme.}
 
-\item{label.hjust, label_y.hjust}{Numerics specifying horizontal justification
-of the axis label text. Defauls to value in \code{label.theme} /
-\code{label_y.theme} if set or \code{axis.text.*} in the plot theme.}
-
-\item{label.vjust, label_y.vjust}{Numerics specifying vertical justification
-of the axis label text. Defauls to value in \code{label.theme} /
-\code{label_y.theme} if set or \code{axis.text.*} in the plot theme.}
+\item{label.hjust, label.vjust, label_y.hjust, label_y.vjust}{Numerics
+specifying the horizontal (\code{hjust}) and vertical (\code{vjust})
+justifications of the horizontal (\code{label}) and vertical
+(\code{label_y}) axis label text.}
 
 \item{planewidth, planeheight}{Numeric or \code{\link[grid]{unit}} objects
 specifying the width and height of the colorplane. Default values are 5
@@ -91,8 +85,8 @@ dimension of the colorplane. Higher numbers increase guide color accuracy
 \item{ticks}{A logical specifying if tick marks on colorbar should be
 visible.}
 
-\item{default.unit}{A character string indicating \code{\link[grid]{unit}}
-for \code{barwidth} and \code{barheight}.}
+\item{default.unit}{A character string indicating unit for \code{planewidth}
+and \code{planeheight}.}
 
 \item{order}{positive integer less that 99 that specifies the order of
 this guide among multiple guides. This controls the order in which
@@ -106,8 +100,19 @@ Generates a guide to explain the colors plotted via
 \code{\link{scale_color_colorplane}} and \code{\link{scale_fill_colorplane}}.
 }
 \details{
-The guide is similar to \code{\link[ggplot2]{guide_colorbar}}, but as a plane
-of colors with ticks and labels for both variables in the scale.
+The guide is based on \code{\link[ggplot2]{guide_colorbar}}, but extended to
+be a plane of colors with ticks and labels for both variables in the scale.
+All \code{*.theme} arguments accept two types of arguments: a complete theme
+object (e.g. the object returned by \code{\link[ggplot2]{theme_grey}}) or an
+\code{\link[ggplot2]{element_text}}. If a theme is given, the related element
+will be extracted from the theme and used as-is. If an element is given, any
+missing parameters will be inherited from the plot's theme before use. If not
+specified, \code{*.hjust} and \code{*.vjust} parameters will draw from the
+corresponding \code{*.theme} argument, the plot's theme, or a default of 0.5
+(centered). One exception is \code{title.hjust} which has been given a
+default value of 0.5 to override a undesirable default value in the default
+ggplot theme. Specify \code{title.hjust = NULL} to restore normal inheritance
+if needed.
 }
 \examples{
 if(requireNamespace("mapproj")) {
