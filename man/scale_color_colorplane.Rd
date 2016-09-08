@@ -20,20 +20,6 @@ scale_fill_colorplane(name = waiver(), axis_title = waiver(),
   limits_y = NULL, color_projection = "YUV", rescaler = rescale,
   oob = censor, trans = "identity", na.color = "black",
   na.value = NA_real_, guide = "colorplane", ...)
-
-scale_colour_colourplane(name = waiver(), axis_title = waiver(),
-  axis_title_y = waiver(), breaks = waiver(), breaks_y = waiver(),
-  labels = waiver(), labels_y = waiver(), limits = NULL,
-  limits_y = NULL, color_projection = "YUV", rescaler = rescale,
-  oob = censor, trans = "identity", na.color = "black",
-  na.value = NA_real_, guide = "colorplane", ...)
-
-scale_fill_colourplane(name = waiver(), axis_title = waiver(),
-  axis_title_y = waiver(), breaks = waiver(), breaks_y = waiver(),
-  labels = waiver(), labels_y = waiver(), limits = NULL,
-  limits_y = NULL, color_projection = "YUV", rescaler = rescale,
-  oob = censor, trans = "identity", na.color = "black",
-  na.value = NA_real_, guide = "colorplane", ...)
 }
 \arguments{
 \item{name}{Character string or expression to be used as guide title.

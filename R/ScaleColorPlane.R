@@ -252,6 +252,7 @@ ScaleColorPlane <- ggplot2::ggproto("ScaleColorPlane", ggplot2::ScaleContinuous,
 #'   geom_point(size = 4) +
 #'   scale_color_colorplane(limits = c(NA, 18.9))
 #' @export
+#' @aliases scale_colour_colourplane scale_fill_colourplane
 scale_color_colorplane <- function(name = waiver(),
                                    axis_title = waiver(),
                                    axis_title_y = waiver(),
@@ -394,8 +395,6 @@ scale_fill_colorplane <- function(name = waiver(),
   )
 }
 #' @export
-#' @rdname scale_color_colorplane
 scale_colour_colourplane <- scale_color_colorplane
 #' @export
-#' @rdname scale_color_colorplane
 scale_fill_colourplane <- scale_fill_colorplane

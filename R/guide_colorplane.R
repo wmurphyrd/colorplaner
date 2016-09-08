@@ -66,6 +66,7 @@ NULL
 #'     label_y.position = c("left", "right")))
 #'  }
 #' @export
+#' @aliases guide_colourplane
 guide_colorplane <- function(
 
   # title
@@ -588,5 +589,4 @@ guide_gengrob.colorplane <- function(guide, theme) {
 }
 
 #' @export
-#' @rdname guide_colorplane
 guide_colourplane <- guide_colorplane

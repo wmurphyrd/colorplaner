@@ -17,19 +17,6 @@ guide_colorplane(title = waiver(), title.position = c("top", "bottom"),
   "right"), label_y.theme = NULL, label_y.hjust = NULL,
   label_y.vjust = NULL, planewidth = NULL, planeheight = NULL,
   nbin = 20, ticks = TRUE, default.unit = "line", order = 0, ...)
-
-guide_colourplane(title = waiver(), title.position = c("top", "bottom"),
-  title.theme = NULL, title.hjust = 0.5, title.vjust = NULL,
-  axis_title = waiver(), axis_title.position = c("bottom", "top"),
-  axis_title.theme = NULL, axis_title.hjust = NULL,
-  axis_title.vjust = NULL, axis_title_y = waiver(),
-  axis_title_y.position = c("left", "right"), axis_title_y.theme = NULL,
-  axis_title_y.hjust = NULL, axis_title_y.vjust = NULL, label = TRUE,
-  label.position = c("bottom", "top"), label.theme = NULL,
-  label.hjust = NULL, label.vjust = NULL, label_y.position = c("left",
-  "right"), label_y.theme = NULL, label_y.hjust = NULL,
-  label_y.vjust = NULL, planewidth = NULL, planeheight = NULL,
-  nbin = 20, ticks = TRUE, default.unit = "line", order = 0, ...)
 }
 \arguments{
 \item{title}{A character string or expression indicating a title of guide.
