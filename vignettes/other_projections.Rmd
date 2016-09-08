@@ -1,0 +1,12 @@
+---
+title: "Alternate Color Projections"
+author: "Will Murphy"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Alternate Color Projections}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+How to use and create other color projections

@@ -7,7 +7,7 @@
 \alias{red_blue_projection}
 \title{Color Space Projections}
 \usage{
-YUV_projection(x, y, Y = 0.35)
+YUV_projection(x, y, Y = 0.3)
 
 red_blue_projection(x, y)
 

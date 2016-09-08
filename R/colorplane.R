@@ -46,7 +46,7 @@ NULL
 #' \url{https://en.wikipedia.org/wiki/YUV}. UV limits sourced from
 #' \href{http://downloads.bbc.co.uk/rd/pubs/reports/1987-22.pdf}{Deveroux VG. Limiting of YUV Video Signals. British Broadcasting System. 1987}
 #' .
-YUV_projection <- function(x, y, Y = .35) {
+YUV_projection <- function(x, y, Y = .3) {
   YUV <- cbind(Y,
                scales::rescale(x, to = c(-0.886, .886), from = c(0, 1)),
                scales::rescale(y, to = c(-0.701, 0.701), from = c(0, 1)))
