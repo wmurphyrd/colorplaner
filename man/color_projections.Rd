@@ -54,7 +54,10 @@ For \code{interpolate_projection}, a color space is created via
   \code{y} values.
 }
 \references{
-YUV conversion matrix from \url{https://en.wikipedia.org/wiki/YUV}
+YUV conversion matrix from
+\url{https://en.wikipedia.org/wiki/YUV}. UV limits sourced from
+\href{http://downloads.bbc.co.uk/rd/pubs/reports/1987-22.pdf}{Deveroux VG. Limiting of YUV Video Signals. British Broadcasting System. 1987}
+.
 }
 \seealso{
 \code{\link{scale_color_colorplane}},
