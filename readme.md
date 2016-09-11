@@ -1,7 +1,6 @@
 # colorplaner
 
 [![BuildStatus](https://travis-ci.org/wmurphyrd/colorplaner.svg?branch=master)](https://travis-ci.org/wmurphyrd/colorplaner)
-
 [![Coverage Status](https://coveralls.io/repos/github/wmurphyrd/colorplaner/badge.svg?branch=master)](https://coveralls.io/github/wmurphyrd/colorplaner?branch=master)
 
 
@@ -42,6 +41,9 @@ To install:
 ```r
 devtools::install_github("wmurphyrd/colorplaner")
 ```
+
+#### Version 0.0.0.9007
+* Changed UV conversion scaling to match limits from BBC research. Colorplane scale is now a more accurate representation of YUV color space. See `?YUV_projection` for references.
 
 #### Version 0.0.0.9006
 * Removed unnecessary package version requirements. Still requires at least ggplot2 v2.0.0 for the extension system. 
