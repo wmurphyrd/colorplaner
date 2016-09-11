@@ -33,11 +33,14 @@ NULL
 
 #' @export
 #' @rdname color_projections
-#' @references YUV conversion matrix from \url{https://en.wikipedia.org/wiki/YUV}
+#' @references YUV conversion matrix from
+#' \url{https://en.wikipedia.org/wiki/YUV}. UV limits sourced from
+#' \href{http://downloads.bbc.co.uk/rd/pubs/reports/1987-22.pdf}{Deveroux VG. Limiting of YUV Video Signals. British Broadcasting System. 1987}
+#' .
 YUV_projection <- function(x, y, Y = .35) {
   YUV <- cbind(Y,
-               scales::rescale(x, to = c(-0.436, .436), from = c(0, 1)),
-               scales::rescale(y, to = c(-0.615, 0.615), from = c(0, 1)))
+               scales::rescale(x, to = c(-0.886, .886), from = c(0, 1)),
+               scales::rescale(y, to = c(-0.701, 0.701), from = c(0, 1)))
   out <- t(matrix(c(1, 0, 1.13983,
                     1, -0.39465, -0.58060,
                     1, 2.03211, 0), ncol = 3, byrow = TRUE) %*%
