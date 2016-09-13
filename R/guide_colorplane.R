@@ -131,6 +131,11 @@ guide_colorplane <- function(
   label.position <- match.arg(label.position, several.ok = TRUE)
   label_y.position <- match.arg(label_y.position, several.ok = TRUE)
 
+  if(!"colorplaner" %in% .packages()) {
+    warning("At present, package colorplaner must be attached for ",
+            "guide_colorplaner to function. See ?colorplaner for more info.")
+  }
+
 
   structure(list(
     # title
