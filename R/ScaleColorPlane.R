@@ -250,6 +250,10 @@ ScaleColorPlane <- ggplot2::ggproto("ScaleColorPlane", ggplot2::ScaleContinuous,
 #'   \code{\link{color_projections}}.
 #' @param ... Additional arguments to pass on to \code{color_projection}
 #'   function.
+#' @param axis_title,axis_title_y Character strings or expressions indicating
+#'   the horizontal and vertical axis titles in the guide, respectively. If
+#'   \code{NULL}, the title is not shown. By default (\link[ggplot2]{waiver}),
+#'   the name of the scale or the name of the variable mapped to the aesthetic.
 #' @examples
 #' library(ggplot2)
 #' if(requireNamespace("mapproj")) {

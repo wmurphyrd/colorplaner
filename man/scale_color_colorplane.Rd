@@ -26,12 +26,7 @@ scale_fill_colorplane(name = waiver(), axis_title = waiver(),
 Defaults to "Color Key" or "Fill Color Key" to match the scale function
 used.}
 
-\item{axis_title}{Character strings or expressions indicating
-the horizontal and vertical axis titles in the guide, respectively. If
-\code{NULL}, the title is not shown. By default (\link[ggplot2]{waiver}),
-the name of the scale or the name of the variable mapped to the aesthetic.}
-
-\item{axis_title_y}{Character strings or expressions indicating
+\item{axis_title, axis_title_y}{Character strings or expressions indicating
 the horizontal and vertical axis titles in the guide, respectively. If
 \code{NULL}, the title is not shown. By default (\link[ggplot2]{waiver}),
 the name of the scale or the name of the variable mapped to the aesthetic.}

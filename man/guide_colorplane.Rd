@@ -7,15 +7,15 @@
 \usage{
 guide_colorplane(title = waiver(), title.position = c("top", "bottom"),
   title.theme = NULL, title.hjust = 0.5, title.vjust = NULL,
-  axis_title = waiver(), axis_title.position = c("bottom", "top"),
-  axis_title.theme = NULL, axis_title.hjust = NULL,
-  axis_title.vjust = NULL, axis_title_y = waiver(),
-  axis_title_y.position = c("left", "right"), axis_title_y.theme = NULL,
-  axis_title_y.hjust = NULL, axis_title_y.vjust = NULL, label = TRUE,
+  axis.title = waiver(), axis.title.position = c("bottom", "top"),
+  axis.title.theme = NULL, axis.title.hjust = NULL,
+  axis.title.vjust = NULL, axis.title.y = waiver(),
+  axis.title.y.position = c("left", "right"), axis.title.y.theme = NULL,
+  axis.title.y.hjust = NULL, axis.title.y.vjust = NULL, label = TRUE,
   label.position = c("bottom", "top"), label.theme = NULL,
-  label.hjust = NULL, label.vjust = NULL, label_y.position = c("left",
-  "right"), label_y.theme = NULL, label_y.hjust = NULL,
-  label_y.vjust = NULL, planewidth = NULL, planeheight = NULL,
+  label.hjust = NULL, label.vjust = NULL, label.y.position = c("left",
+  "right"), label.y.theme = NULL, label.y.hjust = NULL,
+  label.y.vjust = NULL, planewidth = NULL, planeheight = NULL,
   nbin = 20, ticks = TRUE, default.unit = "line", order = 0, ...)
 }
 \arguments{
@@ -37,41 +37,41 @@ title text.}
 \item{title.vjust}{A number specifying vertical justification of the title
 text.}
 
-\item{axis_title, axis_title_y}{Character strings or expressions indicating
+\item{axis.title, axis.title.y}{Character strings or expressions indicating
 the horizontal and vertical axis titles in the guide, respectively. If
 \code{NULL}, the title is not shown. By default (\link[ggplot2]{waiver}),
 the name of the scale or the name of the variable mapped to the aesthetic.}
 
-\item{axis_title.position, axis_title_y.position}{Character vectors indicating
-the position(s) of axis titles. \code{axis_title.position}: "top" and/or
-"bottom" (default). \code{axis_title_y.position}: "left" (default) and/or
+\item{axis.title.position, axis.title.y.position}{Character vectors indicating
+the position(s) of axis titles. \code{axis.title.position}: "top" and/or
+"bottom" (default). \code{axis.title.y.position}: "left" (default) and/or
 "right".}
 
-\item{axis_title.theme, axis_title_y.theme}{Theme objects for rendering the
+\item{axis.title.theme, axis.title.y.theme}{Theme objects for rendering the
 axis title text. Typically an \code{\link[ggplot2]{element_text}} object.
 When \code{NULL}, defaults to settings for \code{axis.title.x} and
 \code{axis.title.y} in the plot theme.}
 
-\item{axis_title.hjust, axis_title.vjust, axis_title_y.vjust, axis_title_y.hjust}{Numerics specifying the horizontal (\code{hjust}) and vertical
-(\code{vjust}) justifications of the horizontal (\code{axis_title}) and
-vertical (\code{axis_title_y}) axis title text.}
+\item{axis.title.hjust, axis.title.vjust, axis.title.y.vjust, axis.title.y.hjust}{Numerics specifying the horizontal (\code{hjust}) and vertical
+(\code{vjust}) justifications of the horizontal (\code{axis.title}) and
+vertical (\code{axis.title.y}) axis title text.}
 
 \item{label}{logical. If \code{TRUE} then the labels are drawn. If
 \code{FALSE} then the labels are invisible.}
 
-\item{label.position, label_y.position}{Character vectors indicating the
+\item{label.position, label.y.position}{Character vectors indicating the
 position(s) of axis labels. For \code{label.position}, "top" and/or
-"bottom" (default). For \code{label_y.position}, "left" (default) and/or
+"bottom" (default). For \code{label.y.position}, "left" (default) and/or
 "right".}
 
-\item{label.theme, label_y.theme}{Theme objects for rendering axis label text.
+\item{label.theme, label.y.theme}{Theme objects for rendering axis label text.
 Usually the object of \code{\link[ggplot2]{element_text}} is expected. By
 default, the theme is specified by \code{axis.text.*} in the plot theme.}
 
-\item{label.hjust, label.vjust, label_y.hjust, label_y.vjust}{Numerics
+\item{label.hjust, label.vjust, label.y.hjust, label.y.vjust}{Numerics
 specifying the horizontal (\code{hjust}) and vertical (\code{vjust})
 justifications of the horizontal (\code{label}) and vertical
-(\code{label_y}) axis label text.}
+(\code{label.y}) axis label text.}
 
 \item{planewidth, planeheight}{Numeric or \code{\link[grid]{unit}} objects
 specifying the width and height of the colorplane. Default values are 5
@@ -125,9 +125,9 @@ if(requireNamespace("mapproj")) {
     scale_fill_colorplane() +
     expand_limits(x = states_map$long, y = states_map$lat) +
     coord_map() +
-    guides(fill = guide_colorplane("My Title", axis_title = "Murder Rate",
-    axis_title_y = "Urban Population \%", label.position = c("top", "bottom"),
-    label_y.position = c("left", "right")))
+    guides(fill = guide_colorplane("My Title", axis.title = "Murder Rate",
+    axis.title.y = "Urban Population \%", label.position = c("top", "bottom"),
+    label.y.position = c("left", "right")))
  }
 }
 
