@@ -15,12 +15,35 @@ library(ggplot2)
 library(colorplaner)
 ```
 
-The colorplaner R package is a ggplot2 extension to visualize two variables through one color aesthetic via mapping to a color space projection. The extension implements two new scales, `scale_color_colorplane` and `scale_fill_colorplane`, two new aesthetics, `color2` and `fill2`, and a new guide `guide_colorplane`. 
+The colorplaner R package is a ggplot2 extension to visualize two variables through one color aesthetic via mapping to a color space projection. With this technique for 2-D color mapping, one can create a dichotomous choropleth in R as
+well as other visualizations with bivariate color scales. The extension implements two new scales, `scale_color_colorplane` and `scale_fill_colorplane`, two new aesthetics, `color2` and `fill2`, and a new guide `guide_colorplane`. 
+
+```{r intro, echo = FALSE, fig.cap="Example use of colorplane with the iris dataset."}
+data(iris)
+
+iris_plot <- ggplot(iris, 
+                aes(x = Petal.Length, y = Petal.Width, shape = Species)) +
+  geom_point(aes(color = Sepal.Length, color2 = Sepal.Width),
+             position = "jitter") +
+  scale_color_colorplane(limits = range(iris$Sepal.Length),
+                         limits_y = range(iris$Sepal.Width),
+                         breaks_y = function(x)seq.int(x[1], x[2]),
+                         guide = guide_colorplane(
+                           nbin = 10, 
+                           planewidth = 2.5, 
+                           planeheight = 2.5,
+                           axis_title.theme = element_text(size = 8),
+                           axis_title_y.theme = element_text(size = 8))) +
+  theme(legend.text = element_text(size = 8))
+
+iris_plot
+
+```
 
 ## Motivation
 
-In _The Visual Display of Quantitative Information_, Edward Tufte praises map 
-visualizations as inherently highly
+In _The Visual Display of Quantitative Information_, Edward Tufte praises 
+cartographic visualizations as inherently highly
 dimensional due to their geographic data. However, in practice these
 visualizations
 are generally not used to describe the intricacies of borders but
@@ -45,8 +68,8 @@ The spectrum of possible colors can be defined though a variety of different col
 
 The YUV color space ([wikipedia](https://en.wikipedia.org/wiki/YUV)) was designed at the advent of color television broadcasting to encode color data in a manner that would be backwards-compatible with monochrome displays. To do this, the luminance of each pixel is encoded into one component (Y), which provides all of the information for monochromatic display, and all of the color information (chrominance) is encoded into the remaining two components (U & V). 
 
-When Y is held constant, the remaining color space is a U-V plane which 
-appears as if delineated into four quadrants of color: green, orange, magenta, 
+When Y is held constant, the remaining color space is a U-V plane of all 
+possible colors as that brightness level, and it appears as if delineated into four quadrants of color regions: green, orange, magenta, 
 and blue. 
 
 ```{r colorplane-concept, echo = FALSE, warning = FALSE, message =FALSE, fig.cap="With Y held at 30%, this U-V color plane can be visually divided into 4 color quadrants."}
@@ -72,37 +95,25 @@ ggplot(expand.grid(a = seq(0, 1, length.out = 75),
            label = scales::percent(setdiff(seq(0, 1, by = .1), .5)), vjust = 1)
 ```
 
-Mapping data variables to these U and V components transforms this color plane into a 
+Mapping data variables to these U and V components transforms this 
+color plane into a 
 scale that produces a unique color for each combination of values of the two 
 variables. 
-
-Due to the the quadrant-like color regions,.
+Due to the the quadrant-like color regions, 
 one may readily determine
-whether the values each mapped point are i
-the values of the mapped 
-variables can be readily interpreted in terms of 
+whether the values each mapped point are above or below the midpoint of the 
+range of each variable. 
+For example, a point in rendered in a shade of blue will 
+represent a value greater than the midpoint of the horizontal variable and 
+below the midpoint of the vertical variable. The gradient blending of colors
+also allows for more granular comparisons. If comparing two points rendered
+in shades of green, a a shade with more blue, such as teal, indicates a higher
+value for the horizontal variable, a shade with more red, such as olive, 
+indicates a higher value for the vertical variable. As both variables approach
+their midpoints, the rendered shades are less saturated 
+leading towards gray at the center, and, as both variables approach their 
+limits, the shades are more saturated versions of the respective quadrant color. 
 
-for general values of the
-mapped cariables to be readily ascertained
-faciliates rapid identification of 
-The most extreme values will appear as the saturated shades of the 
-color for the quadrant, and values closer to the mid-point of the range will
-be mapped to colors resuling from 
-and values closer to the midpoints of variables will appear less saturated, leading to grey at the . 
-
-This creates the 
-appearance of a scale divided into four quadrants, 
-facilitate
-with
-with
-red and pink colors marking the border of the orange and magenta quadrants, 
-purples and blues delineating 
-intersection regions with shades of olive, pink, purple, and teal. 
-Colors are also more saturated near the extremes and desaturated (gray) at the center.
-
-, and using these colors for the `color` or `fill` aesthetics of 
-plotted objects allows the viewer to easily approximate the values of
-the two mapped variables and to discern relative values by comparing colors. 
 
 ## Interpretation
 
@@ -146,17 +157,6 @@ ggplot(sepal_grid, aes(x = Sepal.Length, y = Sepal.Width)) +
   scale_shape_manual(values = c("setosa" = 1, "versicolor" = 2, "virginica" = 0),
                      guide = "none") +
   theme(panel.background = element_blank())
-p_dat <- ggplot(iris[iris$labeled, ], 
-                aes(x = Petal.Length, y = Petal.Width, shape = Species)) +
-  geom_point(aes(color = Sepal.Length, color2 = Sepal.Width)) +
-  geom_text(aes(label = let), nudge_x = .2, nudge_y = -.05) +
-  scale_color_colorplane(limits = range(iris$Sepal.Length),
-                         limits_y = range(iris$Sepal.Width),
-                         guide = "none") +
-  theme(legend.position = "bottom", legend.text = element_text(size = 8), 
-        legend.key.width = grid::unit(3, "mm"))
-print(p_key)
-print(p_dat)
 
 ```
 
@@ -167,14 +167,14 @@ The annotated colorplane scale confirms these observations, revealing that both
 have sepal
 lengths of approximately 5cm and that flower *c* has the shorter sepal width.
 
-Points *b*, *d*, and *n* appear in shades of fuchsia, blue, and purple, 
-respectively. This indicates that all three have sepal lengths in the upper 
-half of the data range and that they can be ranked from longest to shortest sepal width 
-as *b*, *n*, and *d*.
+Points *b* and *d* appear in shades of fuchsia and blue, 
+respectively. This indicates that both have sepal lengths in the upper 
+half of the data range and that *b* has a longer sepal width.
 
-Points *a*, *f*, and *o* have colors in the olive region at the intersection
-of the green and red quadrants, indicating shorter sepal lengths and increasing
-sepal width can be ranked by decreasing amounts of green: *o*, *f*, *a*.
+Points *a*, *f*, and *o* have colors in the region at the intersection
+of the green and red quadrants. Comparing the shades of the points reveals
+increasing quantities of red from *o* to *f* to *a* and thus also
+indicates the same ranking for increasing sepal width of the flowers. 
 
 ### Visualized Variable Relationships
 
@@ -182,11 +182,11 @@ Just as the positional scales of the plot reveal the positive correlation
 between petal length and petal width, the colorplane scale reveals relationships 
 between sepal length and sepal width as well as relationships between these 
 variables and the petal length and width. The concentration of green and olive 
-in the lower left quadrant of the plot and blue, purple, and fuchsia in the upper right
+in the lower left quadrant of the plot and blue and purple in the upper right
 indicates that sepal length increases with petal length and petal width. 
-Conversely, the presence of olive and blue alongside green and fuchsia reveals
+Conversely, the presence of olive and blue alongside green and purple reveals
 that sepal width is not simply correlated with the other variables. 
-Analysis with Pearson's correlation coefficient confirms these observations. 
+Analysis via Pearson's correlation coefficient confirms these observations. 
 
 ```{r correlations}
 cor(as.matrix(iris[ , 1:4]), method = "pearson") 
@@ -200,7 +200,8 @@ are all greater than 0.8 while those including sepal width are all lesser than
 The colorplane scale can also reveal details about the distributions of
 mapped variables. Olive 
 appearing alongside saturated green suggests high variance in sepal width when
-sepal length is small, yet the lack of bright blues or fuchsias also indicates
+sepal length is small, yet the lack of bright blue or magenta shades also
+indicates
 lower variance in sepal width when sepal length is large. Calculating the 
 variance for each segment confirms that sepal width varies more than
 twice as much when the sepal length is small. 
@@ -219,7 +220,7 @@ will appear as a
 yellow to blue gradient. Conversely, for Tritanopia, vertical changes
 will be visible as a teal to pink gradient and no horizontal changes will be visible. Differences in computer displays and printers can also
 cause the colors and scale to appear differently, offsetting the apparent 
-intersections of color regions and the location of the grey center. Finally,
+intersections of color regions and the location of the gray center. Finally,
 optical illusions can also
 affect perception of the colorplane scale. The color for the point labeled *a* 
 in the interpretation example appears brown on the main plot, but the
@@ -255,7 +256,7 @@ if(require(mapproj)) {
 Modeled after ggplot2, colorplaner provides sensible defaults yet allows ample
 adjustment of
 options to refine the output. The example crime statistics map can be 
-improved with the following changes:
+modified with the following changes:
 
 1. Alter plot theme to remove unnecessary positional scales from the main plot (`axis.text`, `axis.ticks`) and move the guide below the map (`legend.position`). 
 2. Restore the theme defaults for the axis titles (`label.theme`, `label_y.theme`), as they would otherwise inherit the changes made to the main plot theme. 
@@ -290,8 +291,8 @@ if(require("maps")) {
     guides(fill = guide_colorplane(
       title = "State Color Key",
       title.theme = element_text(size = 13),
-      label.theme = theme_grey(),
-      label_y.theme = theme_grey(),
+      label.theme = theme_gray(),
+      label_y.theme = theme_gray(),
       axis_title.position = "top",
       label.position = c("top", "bottom"),
       label_y.position = c("left", "right")))
