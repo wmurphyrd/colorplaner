@@ -23,3 +23,28 @@ test_that("Interpolation projection can be used", {
             ggtitle("Orange-green-magenta projection"))
   })
 })
+
+test_that("Invalid Y arguments handled by YUV_projection", {
+  expect_warning(print(
+    ggplot(mtcars, aes(x = wt, y = mpg, color = disp, colour2 = hp)) +
+      geom_point() +
+      scale_color_colorplane(Y = c(.5, 1, 1, 1, 1)) +
+      ggtitle("normal colorplane points")
+  ), "YUV_projection: Y argument length > 1, using first element", fixed = TRUE)
+
+  expect_error(print(
+    ggplot(mtcars, aes(x = wt, y = mpg, color = disp, colour2 = hp)) +
+      geom_point() +
+      scale_color_colorplane(Y = "hello") +
+      ggtitle("error")
+  ), "Invalid Y specification. Needs numeric in [0,1]", fixed = TRUE)
+
+  expect_error(print(
+    ggplot(mtcars, aes(x = wt, y = mpg, color = disp, colour2 = hp)) +
+      geom_point() +
+      scale_color_colorplane(Y = 2) +
+      ggtitle("error")
+  ), "Invalid Y specification. Needs numeric in [0,1]", fixed = TRUE)
+})
+
+

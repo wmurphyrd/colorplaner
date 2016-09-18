@@ -47,6 +47,13 @@ NULL
 #' \href{http://downloads.bbc.co.uk/rd/pubs/reports/1987-22.pdf}{Deveroux VG. Limiting of YUV Video Signals. British Broadcasting System. 1987}
 #' .
 YUV_projection <- function(x, y, Y = .3) {
+  if(length(Y) > 1) {
+    warning("YUV_projection: Y argument length > 1, using first element")
+    Y <- Y[1]
+  }
+  if(!(is.numeric(Y) && Y <= 1 && Y >= 0)) {
+    stop("YUV_projection: Invalid Y specification. Needs numeric in [0,1]")
+  }
   YUV <- cbind(Y,
                scales::rescale(x, to = c(-0.886, .886), from = c(0, 1)),
                scales::rescale(y, to = c(-0.701, 0.701), from = c(0, 1)))
