@@ -8,6 +8,7 @@ NULL
 #' implements methods and default values needed for color plane scale instances.
 #' See \code{\link{scale_color_colorplane}} for usage.
 #' @export
+#' @keywords internal
 ScaleColorPlane <- ggplot2::ggproto("ScaleColorPlane", ggplot2::ScaleContinuous,
   limits_y = NULL,
   breaks_y = ggplot2::waiver(),
@@ -201,36 +202,60 @@ ScaleColorPlane <- ggplot2::ggproto("ScaleColorPlane", ggplot2::ScaleContinuous,
 
 #' Bivariate Color Space Projection Scale
 #'
-#' Maps two continutous variables into a single display color, using either the
+#' Maps two continuous variables into a single display color, using either the
 #' \code{color} and \code{color2} aesthetics (\code{scale_color_colorplane}) or
 #' the \code{fill} and \code{fill2} aesthetics (\code{scale_fill_colorplane}).
+#' Variables mapped to \code{color} or \code{fill} are be mapped to the
+#' horizontal component of the colorplane scale and \code{color}/\code{fill2}
+#' are mapped to the vertical component.
 #'
-#' The variable values are projected onto YUV color space to create a bivaraite
-#' gradient that can be interpreted visually...
+#' Variable values are projected into color space to create a bivariate
+#' gradient. The default projection maps values to the U and V components of YUV
+#' color space. In the YUV color space, the full spectrum of chrominance (color
+#' difference) is encoded into the U and V components and luminosity
+#' (brightness) is encoded in the Y component. For a fixed value of Y, the
+#' remaining U-V color space is a plane of all possible colors at that
+#' brightness. Therefore, mapping data to this projection utilizes the full
+#' color spectrum to provide visual discrimination between differing values.
 #'
+#' The YUV projection colorplane scale is visually divided into four quadrants:
+#' green when both values are small, fuchsia when both are large, orange when
+#' the horizontal variable is small and the vertical is large, and blue when the
+#' horizontal variable is large and the vertical is small. Values closer to the
+#' extremes are saturated and the center of the scale, representing the
+#' mid-point of the ranges for both variables, is grey.
 #'
+#' Alternative color projections can be used, but may not be as interpretable.
+#' See \code{\link{color_projections}} for information on specifying or creating
+#' other color projections.
 #'
 #' @inheritParams ggplot2::continuous_scale
 #' @inheritParams guide_colorplane
-#' @param breaks_y As \code{breaks}, but pertaining to vertical axis (i.e.
-#'   \code{color2} or \code{fill2})
-#' @param labels_y As \code{labels}, but pertaining to vertical axis (i.e.
-#'   \code{color2} or \code{fill2})
-#' @param limits_y As \code{limits}, but pertaining to vertical axis (i.e.
-#'   \code{color2} or \code{fill2})
+#' @param breaks_y As \code{breaks}, but for vertical axis (i.e. \code{color2}
+#'   or \code{fill2})
+#' @param labels_y As \code{labels}, but for vertical axis (i.e. \code{color2}
+#'   or \code{fill2})
+#' @param limits_y As \code{limits}, but for vertical axis (i.e. \code{color2}
+#'   or \code{fill2})
 #' @param name Character string or expression to be used as guide title.
 #'   Defaults to "Color Key" or "Fill Color Key" to match the scale function
 #'   used.
-#' @param na.color Characater string containing a valid R color to use when
+#' @param na.color Character string containing a valid R color to use when
 #'   plotting missing data or data outside the limits.
 #' @param guide Name of guide object, or object itself. Defaults to
 #'   \code{\link{guide_colorplane}} designed for this scale. Behavior of other
 #'   guides with this scale is not defined.
 #' @param color_projection Projection mapping to use. Either the name of an
-#'   included projection or a function that performs the projection.
-#'   See \code{\link{color_projections}}.
-#' @param ... Additional arguments to pass on to \code{color_projection} function.
+#'   included projection or a function that performs the projection. See
+#'   \code{\link{color_projections}}.
+#' @param ... Additional arguments to pass on to \code{color_projection}
+#'   function.
+#' @param axis_title,axis_title_y Character strings or expressions indicating
+#'   the horizontal and vertical axis titles in the guide, respectively. If
+#'   \code{NULL}, the title is not shown. By default (\link[ggplot2]{waiver}),
+#'   the name of the scale or the name of the variable mapped to the aesthetic.
 #' @examples
+#' library(ggplot2)
 #' if(requireNamespace("mapproj")) {
 #'   crimes <- data.frame(state = tolower(rownames(USArrests)), USArrests)
 #'   states_map <- map_data("state")
@@ -241,10 +266,13 @@ ScaleColorPlane <- ggplot2::ggproto("ScaleColorPlane", ggplot2::ScaleContinuous,
 #'     expand_limits(x = states_map$long, y = states_map$lat) +
 #'     coord_map()
 #'  }
+#' # setting upper limit for qsec causes points for higher values to plot
+#' # as na.color (black)
 #' ggplot(mtcars, aes(x = wt, y = mpg, color = qsec, colour2 = hp)) +
 #'   geom_point(size = 4) +
 #'   scale_color_colorplane(limits = c(NA, 18.9))
 #' @export
+#' @aliases scale_colour_colourplane scale_fill_colourplane
 scale_color_colorplane <- function(name = waiver(),
                                    axis_title = waiver(),
                                    axis_title_y = waiver(),
@@ -387,8 +415,6 @@ scale_fill_colorplane <- function(name = waiver(),
   )
 }
 #' @export
-#' @rdname scale_color_colorplane
 scale_colour_colourplane <- scale_color_colorplane
 #' @export
-#' @rdname scale_color_colorplane
 scale_fill_colourplane <- scale_fill_colorplane

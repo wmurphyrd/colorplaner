@@ -13,5 +13,5 @@ This ggproto object inherits from \code{\link[ggplot2]{ScaleContinuous}} and
 implements methods and default values needed for color plane scale instances.
 See \code{\link{scale_color_colorplane}} for usage.
 }
-\keyword{datasets}
+\keyword{internal}
 

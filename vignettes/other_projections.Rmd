@@ -1,0 +1,133 @@
+---
+title: "Alternate Color Projections"
+author: "Will Murphy"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Using and Creating Other Color Projections}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+
+```{r setup, include=FALSE}
+library(knitr)
+require(maps)
+opts_chunk$set(fig.width = 6)
+```
+
+The YUV projection has been selected as the default for its interpretability,
+but the colorplaner package framework can allow for other projections as well. 
+This vignette explains the usage for the other color projections included in
+the colorplaner package as well as instructions for creating custom color
+projections. 
+
+## The color_projection Option
+
+The `color_projection` option in `scale_color_colorplane` and
+`scale_fill_colorplane` can be used to alter how the mapped variables are 
+mapped to color space. The argument can be provided either as a name of a
+built-in color projection ("YUV", "red_blue", or "interpolate") or as a
+function that will be used to perform the projection. Additional options to 
+the color projection function can be provided to the scale function and will be 
+passed through. For example, a value for `Y` can be provided in the scale call
+to override the default for the fixed luminance level to be used in the YUV
+projection. 
+
+## Red/Blue Projection
+
+The `red_blue_projection` option creates a scale wherein increasing values
+for the horizontal variable are mapped on a white-to-red gradient and
+increasing values for the vertical variable are mapped on a white-to-blue 
+gradient. The colors from each gradient are blended by averaging the RGB
+values so that the colors for large values of both variables are purple.
+
+```{R redblue}
+library(ggplot2)
+library(colorplaner)
+
+if(require(maps)) {
+ crimes <- data.frame(state = tolower(rownames(USArrests)), USArrests)
+  states_map <- map_data("state")
+  ggplot(crimes,
+         aes(map_id = state, fill = Murder, fill2 = UrbanPop)) +
+    geom_map(map = states_map) +
+    scale_fill_colorplane(color_projection = "red_blue") +
+    expand_limits(x = states_map$long, y = states_map$lat) +
+    coord_map() 
+}
+```
+
+## Arbitrary Interpolation Projections
+
+A generalized version of the average-of-gradients concept used in the red/blue
+projection is available in `interpolate_projection`. By specifying the baseline
+color (`zero_color`) and the colors to interpolate towards for each of the variables (`horizontal_color`, `vertical_color`), 
+one can create customized color plane scales. The `interpolate_projection`
+function will map each variable on a `colorRamp` from the baseline color to
+the corresponding target color and blend the two gradient colors together by
+averaging to determine the display color. 
+
+```{R interpolate}
+if(require(maps)) {
+ crimes <- data.frame(state = tolower(rownames(USArrests)), USArrests)
+  states_map <- map_data("state")
+  ggplot(crimes,
+         aes(map_id = state, fill = Murder, fill2 = UrbanPop)) +
+    geom_map(map = states_map) +
+    scale_fill_colorplane(color_projection = "interpolate",
+                          zero_color = "darkorange2",
+                          horizontal_color = "mediumspringgreen",
+                          vertical_color = "#CD00CD") +
+    expand_limits(x = states_map$long, y = states_map$lat) +
+    coord_map()
+}
+```
+
+## Creating New Color Projections
+
+It is also possible to provide custom color projection functions to the 
+colorplane scales. A custom projection function must accept as arguments two
+numeric vectors and return a character vector of colors in `rgb` format 
+(e.g., "#FFFFFF"). The function may safely assume that the input vectors will 
+be of equal length, and the output vector must match this length. The input
+vectors will represent the values of the horizontal and vertical mapped 
+variables, but the will be scaled to the range of [0,1]. The projection
+function does not need to handle missing values, these are handled at a higher
+level in the scale and no missing values will be included in the vectors
+passed to the function. The projection function can accept additional arguments
+beyond the two numeric input vectors. In use, these should be provided as named
+arguments in the `scale_color_colorplane`/`scale_fill_colorplane` call, and 
+they will
+be passed on to the color projection function when it is called. 
+
+```{r, custom}
+# Define a custom projection function that uses HSV color space by
+# mapping the data to hue and saturation with a fixed level for value
+hsv_projection <- function(x, y, v) {
+  # Convert y value from a position to a hue angle
+  h <- atan(scales::rescale(y, from = c(0,1), to = c(-1, 1)) / 
+              scales::rescale(x, from =  c(0, 1), to = c(-1, 1)))
+  # There are no missing values in the input, but atan can create some
+  h <- ifelse(is.na(h), 0, h)
+  h <- scales::rescale(h, from = c(-pi / 2, pi / 2), to = c(0, 1))
+  # hsv takes inputs on a scale of [0, 1] and returns an RGB color string
+  grDevices::hsv(h, x, v)
+}
+
+if(require(maps)) {
+ crimes <- data.frame(state = tolower(rownames(USArrests)), USArrests)
+  states_map <- map_data("state")
+  ggplot(crimes,
+         aes(map_id = state, fill = Murder, fill2 = UrbanPop)) +
+    geom_map(map = states_map) +
+    # The v argument will be passed on to hsv_projection
+    scale_fill_colorplane(color_projection = hsv_projection, v = 0.75) +
+    expand_limits(x = states_map$long, y = states_map$lat) +
+    coord_map() 
+}
+````
+
+The custom projection defined above creates a scale from HSV color space, yet
+this scale is largely uninterpretable. Creating customized projections should 
+be done with care to ensure the result is a meaningful and intuitive scale. 

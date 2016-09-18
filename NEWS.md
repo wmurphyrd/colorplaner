@@ -1,5 +1,6 @@
 # Version 0.0.0.9007
 * Changed UV conversion scaling to match limits from BBC research. Colorplane scale is now a more accurate representation of YUV color space. See `?YUV_projection` for references.
+* Streamline dependcies, imports, and documentation index
 
 # Version 0.0.0.9006
 * Removed unnecessary package version requirements. Still requires at least ggplot2 v2.0.0 for the extension system. 

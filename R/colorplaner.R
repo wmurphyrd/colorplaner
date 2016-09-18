@@ -23,10 +23,8 @@
 #' Check \url{https://github.com/wmurphyrd/colorplaner/issues/27} for current
 #' status and progress towards resolving this issue.
 #'
-#' @docType package
 #' @name colorplaner
 #' @import ggplot2
 #' @importFrom scales rescale
 #' @importFrom scales censor
-#' @importFrom methods is
 NULL

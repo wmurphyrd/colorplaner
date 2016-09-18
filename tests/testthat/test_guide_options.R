@@ -80,8 +80,8 @@ test_that("Axis title options", {
       geom_point() +
       scale_colour_colourplane(Y = .5) +
       facet_grid(~Species) +
-      guides(color = guide_colourplane(axis_title = "Test Title",
-                                       axis_title_y = "Y test Title")) +
+      guides(color = guide_colourplane(axis.title = "Test Title",
+                                       axis.title.y = "Y test Title")) +
       ggtitle("Guide axis titles")
   ))
   expect_silent(print(
@@ -90,12 +90,12 @@ test_that("Axis title options", {
       geom_point() +
       scale_colour_colourplane(Y = .5) +
       facet_grid(~Species) +
-      guides(color = guide_colourplane(axis_title = expression(Test[5]*Sigma),
-                                       axis_title_y = expression(Test^Y*sigma),
-                                       axis_title.theme = element_text(
+      guides(color = guide_colourplane(axis.title = expression(Test[5]*Sigma),
+                                       axis.title.y = expression(Test^Y*sigma),
+                                       axis.title.theme = element_text(
                                          color = "blue", face = "bold",
                                          size = 18),
-                                       axis_title_y.theme = text_theme)) +
+                                       axis.title.y.theme = text_theme)) +
       ggtitle("Guide axis titles: expressions, red&mono y, blue x")
   ))
   expect_silent(print(
@@ -105,8 +105,8 @@ test_that("Axis title options", {
       scale_colour_colourplane(Y = .5) +
       facet_grid(~Species) +
       guides(color =
-               guide_colourplane(axis_title.position = c("top", "bottom"),
-                                 axis_title_y.position = c("left", "right"))) +
+               guide_colourplane(axis.title.position = c("top", "bottom"),
+                                 axis.title.y.position = c("left", "right"))) +
       ggtitle("Guide axis titles on both sides")
   ))
   expect_silent(print(
@@ -116,10 +116,10 @@ test_that("Axis title options", {
       scale_colour_colourplane(Y = .5) +
       facet_grid(~Species) +
       guides(color =
-               guide_colourplane(axis_title.position = c("top", "bottom"),
-                                 axis_title_y.position = c("left", "right"),
-                                 axis_title = "This is an extra extra long x axis title",
-                                 axis_title_y = "This is an extra extra long y axis title")) +
+               guide_colourplane(axis.title.position = c("top", "bottom"),
+                                 axis.title.y.position = c("left", "right"),
+                                 axis.title = "This is an extra extra long x axis title",
+                                 axis.title.y = "This is an extra extra long y axis title")) +
       ggtitle("Long guide axis titles on both sides")
   ))
   expect_silent(print(
@@ -128,8 +128,8 @@ test_that("Axis title options", {
       geom_point() +
       scale_colour_colourplane(Y = .5) +
       facet_grid(~Species) +
-      guides(color = guide_colourplane(axis_title.position = "bottom",
-                                       axis_title_y.position = "right")) +
+      guides(color = guide_colourplane(axis.title.position = "bottom",
+                                       axis.title.y.position = "right")) +
       ggtitle("Guide axis titles: bottom, right")
   ))
 
@@ -150,7 +150,7 @@ test_that("Label options", {
       geom_point() +
       scale_color_colorplane(
         guide = guide_colorplane(label.hjust = 0, label.vjust = 0,
-                                 label_y.hjust = 1, label_y.vjust = 1)) +
+                                 label.y.hjust = 1, label.y.vjust = 1)) +
       ggtitle("Guide label justifications: right, down")
   ))
   expect_silent(print(
@@ -159,9 +159,9 @@ test_that("Label options", {
       geom_point() +
       scale_color_colorplane(
         guide = guide_colorplane(
-          label.position = "top", label_y.position = "right",
+          label.position = "top", label.y.position = "right",
           label.theme = element_text(color = "green", size = 7),
-          label_y.theme = text_theme
+          label.y.theme = text_theme
         )) +
       ggtitle("Guide labels: x green&small&top, y red&mono&right")
   ))
@@ -172,7 +172,7 @@ test_that("Label options", {
       scale_color_colorplane(
         guide = guide_colorplane(
           label.position = c("bottom", "top"),
-          label_y.position = c("right", "left")
+          label.y.position = c("right", "left")
         )) +
       ggtitle("Guide labels: both sides")
   ))
@@ -183,7 +183,7 @@ test_that("Label options", {
       scale_color_colorplane(
         guide = guide_colorplane(
           label.position = c("both"),
-          label_y.position = c("right", "left")
+          label.y.position = c("right", "left")
         ))
   ), "should be one of .bottom., .top.")
   expect_error(print(
@@ -192,7 +192,7 @@ test_that("Label options", {
       geom_point() +
       scale_color_colorplane(
         guide = guide_colorplane(
-          label_y.position = c("hello")
+          label.y.position = c("hello")
         ))
   ), "should be one of .left., .right.")
 })

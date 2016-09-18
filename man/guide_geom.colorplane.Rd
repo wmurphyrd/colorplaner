@@ -15,4 +15,5 @@ guide_geom.colorplane(guide, ...)
 \description{
 Called by ggplot2 engine. Takes no action as this guide is not geom-based.
 }
+\keyword{internal}
 

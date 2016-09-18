@@ -6,27 +6,37 @@ NULL
 #' Generates a guide to explain the colors plotted via
 #' \code{\link{scale_color_colorplane}} and \code{\link{scale_fill_colorplane}}.
 #'
-#' The guide is similar to \code{\link[ggplot2]{guide_colorbar}}, but as a plane
-#' of colors with ticks and labels for both variables in the scale.
+#' The guide is based on \code{\link[ggplot2]{guide_colorbar}}, but extended to
+#' be a plane of colors with ticks and labels for both variables in the scale.
+#' All \code{*.theme} arguments accept two types of arguments: a complete theme
+#' object (e.g. the object returned by \code{\link[ggplot2]{theme_grey}}) or an
+#' \code{\link[ggplot2]{element_text}}. If a theme is given, the related element
+#' will be extracted from the theme and used as-is. If an element is given, any
+#' missing parameters will be inherited from the plot's theme before use. If not
+#' specified, \code{*.hjust} and \code{*.vjust} parameters will draw from the
+#' corresponding \code{*.theme} argument, the plot's theme, or a default of 0.5
+#' (centered). One exception is \code{title.hjust} which has been given a
+#' default value of 0.5 to override a undesirable default value in the default
+#' ggplot theme. Specify \code{title.hjust = NULL} to restore normal inheritance
+#' if needed.
 #'
-#' @param axis_title,axis_title_y Character strings or expressions inidicating
+#' @param axis.title,axis.title.y Character strings or expressions indicating
 #'   the horizontal and vertical axis titles in the guide, respectively. If
 #'   \code{NULL}, the title is not shown. By default (\link[ggplot2]{waiver}),
 #'   the name of the scale or the name of the variable mapped to the aesthetic.
-#' @param axis_title.position,axis_title_y.position Character vectors indicating
-#'   the position(s) of axis titles. \code{axis_title.position}: "top" and/or
-#'   "bottom" (default). \code{axis_title_y.position}: "left" (default)
-#'   and/or "right".
-#' @param axis_title.theme,axis_title_y.theme Theme objects for rendering the
+#' @param axis.title.position,axis.title.y.position Character vectors indicating
+#'   the position(s) of axis titles. \code{axis.title.position}: "top" and/or
+#'   "bottom" (default). \code{axis.title.y.position}: "left" (default) and/or
+#'   "right".
+#' @param axis.title.theme,axis.title.y.theme Theme objects for rendering the
 #'   axis title text. Typically an \code{\link[ggplot2]{element_text}} object.
 #'   When \code{NULL}, defaults to settings for \code{axis.title.x} and
 #'   \code{axis.title.y} in the plot theme.
-#' @param axis_title.hjust,axis_title_y.hjust Numbers specifying horizontal
-#'   justification of the axis title text. When \code{NULL}, defaults to
-#'   \code{axis_title.theme} or \code{axis.title.x} in plot theme.
-#' @param axis_title.vjust,axis_title_y.vjust Numbers specifing veritcal
-#'   justification of the axis title text. When \code{NULL}, defaults to
-#'   \code{axis_title*.theme} if set or \code{axis.title.*} in plot theme.
+#' @param
+#'   axis.title.hjust,axis.title.vjust,axis.title.y.vjust,axis.title.y.hjust
+#'   Numerics specifying the horizontal (\code{hjust}) and vertical
+#'   (\code{vjust}) justifications of the horizontal (\code{axis.title}) and
+#'   vertical (\code{axis.title.y}) axis title text.
 #' @param planewidth,planeheight Numeric or \code{\link[grid]{unit}} objects
 #'   specifying the width and height of the colorplane. Default values are 5
 #'   times the \code{legend.key.width/height} or \code{legend.key.size} in the
@@ -34,24 +44,26 @@ NULL
 #' @param nbin Number specifying how many color pixels are generated for each
 #'   dimension of the colorplane. Higher numbers increase guide color accuracy
 #'   (especially for larger sized guides) at the expense of speed.
-#' @param label.position,label_y.position Character vectors indicating the
-#'   position(s) of axis labels. For \code{label.position}, "top" and/or "bottom"
-#'   (default). For \code{label_y.position}, "left" (default) and/or "right".
-#' @param label.theme,label_y.theme	Theme objects for rendering axis label text.
+#' @param label.position,label.y.position Character vectors indicating the
+#'   position(s) of axis labels. For \code{label.position}, "top" and/or
+#'   "bottom" (default). For \code{label.y.position}, "left" (default) and/or
+#'   "right".
+#' @param label.theme,label.y.theme	Theme objects for rendering axis label text.
 #'   Usually the object of \code{\link[ggplot2]{element_text}} is expected. By
 #'   default, the theme is specified by \code{axis.text.*} in the plot theme.
-#' @param label.hjust,label_y.hjust Numerics specifying horizontal justification
-#'   of the axis label text. Defauls to value in \code{label.theme} /
-#'   \code{label_y.theme} if set or \code{axis.text.*} in the plot theme.
-#' @param label.vjust,label_y.vjust Numerics specifying vertical justification
-#'   of the axis label text. Defauls to value in \code{label.theme} /
-#'   \code{label_y.theme} if set or \code{axis.text.*} in the plot theme.
+#' @param label.hjust,label.vjust,label.y.hjust,label.y.vjust Numerics
+#'   specifying the horizontal (\code{hjust}) and vertical (\code{vjust})
+#'   justifications of the horizontal (\code{label}) and vertical
+#'   (\code{label.y}) axis label text.
 #' @param title.position Character string indicating position for the main
 #'   title. One of "top" (default) or "bottom".
+#' @param default.unit A character string indicating unit for \code{planewidth}
+#' and \code{planeheight}.
 #'
 #' @inheritParams ggplot2::guide_colorbar
 #' @examples
 #' if(requireNamespace("mapproj")) {
+#'   library(ggplot2)
 #'   crimes <- data.frame(state = tolower(rownames(USArrests)), USArrests)
 #'   states_map <- map_data("state")
 #'   ggplot(crimes,
@@ -60,11 +72,12 @@ NULL
 #'     scale_fill_colorplane() +
 #'     expand_limits(x = states_map$long, y = states_map$lat) +
 #'     coord_map() +
-#'     guides(fill = guide_colorplane("My Title", axis_title = "Murder Rate",
-#'     axis_title_y = "Urban Population %", label.position = c("top", "bottom"),
-#'     label_y.position = c("left", "right")))
+#'     guides(fill = guide_colorplane("My Title", axis.title = "Murder Rate",
+#'     axis.title.y = "Urban Population %", label.position = c("top", "bottom"),
+#'     label.y.position = c("left", "right")))
 #'  }
 #' @export
+#' @aliases guide_colourplane
 guide_colorplane <- function(
 
   # title
@@ -75,16 +88,16 @@ guide_colorplane <- function(
   title.vjust = NULL,
 
   #axis titles
-  axis_title = waiver(),
-  axis_title.position = c("bottom", "top"),
-  axis_title.theme = NULL,
-  axis_title.hjust = NULL,
-  axis_title.vjust = NULL,
-  axis_title_y = waiver(),
-  axis_title_y.position = c("left", "right"),
-  axis_title_y.theme = NULL,
-  axis_title_y.hjust = NULL,
-  axis_title_y.vjust = NULL,
+  axis.title = waiver(),
+  axis.title.position = c("bottom", "top"),
+  axis.title.theme = NULL,
+  axis.title.hjust = NULL,
+  axis.title.vjust = NULL,
+  axis.title.y = waiver(),
+  axis.title.y.position = c("left", "right"),
+  axis.title.y.theme = NULL,
+  axis.title.y.hjust = NULL,
+  axis.title.y.vjust = NULL,
 
 
   # label
@@ -93,10 +106,10 @@ guide_colorplane <- function(
   label.theme = NULL,
   label.hjust = NULL,
   label.vjust = NULL,
-  label_y.position = c("left", "right"),
-  label_y.theme = NULL,
-  label_y.hjust = NULL,
-  label_y.vjust = NULL,
+  label.y.position = c("left", "right"),
+  label.y.theme = NULL,
+  label.y.hjust = NULL,
+  label.y.vjust = NULL,
 
   # plane
   planewidth = NULL,
@@ -121,15 +134,15 @@ guide_colorplane <- function(
       unit(planeheight, default.unit)
   # make defaults one-sided labeling, while allowing for double labeling when
   # specified
-  if (missing(axis_title.position)) axis_title.position <- "bottom"
-  if (missing(axis_title_y.position)) axis_title_y.position <- "left"
+  if (missing(axis.title.position)) axis.title.position <- "bottom"
+  if (missing(axis.title.y.position)) axis.title.y.position <- "left"
   if (missing(label.position)) label.position <- "bottom"
-  if (missing(label_y.position)) label_y.position <- "left"
+  if (missing(label.y.position)) label.y.position <- "left"
   title.position <- match.arg(title.position)
-  axis_title.position <- match.arg(axis_title.position, several.ok = TRUE)
-  axis_title_y.position <- match.arg(axis_title_y.position, several.ok = TRUE)
+  axis.title.position <- match.arg(axis.title.position, several.ok = TRUE)
+  axis.title.y.position <- match.arg(axis.title.y.position, several.ok = TRUE)
   label.position <- match.arg(label.position, several.ok = TRUE)
-  label_y.position <- match.arg(label_y.position, several.ok = TRUE)
+  label.y.position <- match.arg(label.y.position, several.ok = TRUE)
 
   if(!"colorplaner" %in% .packages()) {
     warning("At present, package colorplaner must be attached for ",
@@ -146,16 +159,16 @@ guide_colorplane <- function(
     title.vjust = title.vjust,
 
     #axis titles
-    axis_title = axis_title,
-    axis_title.position = axis_title.position,
-    axis_title.theme = axis_title.theme,
-    axis_title.hjust = axis_title.hjust,
-    axis_title.vjust = axis_title.vjust,
-    axis_title_y = axis_title_y,
-    axis_title_y.position = axis_title_y.position,
-    axis_title_y.theme = axis_title_y.theme,
-    axis_title_y.hjust = axis_title_y.hjust,
-    axis_title_y.vjust = axis_title_y.vjust,
+    axis.title = axis.title,
+    axis.title.position = axis.title.position,
+    axis.title.theme = axis.title.theme,
+    axis.title.hjust = axis.title.hjust,
+    axis.title.vjust = axis.title.vjust,
+    axis.title.y = axis.title.y,
+    axis.title.y.position = axis.title.y.position,
+    axis.title.y.theme = axis.title.y.theme,
+    axis.title.y.hjust = axis.title.y.hjust,
+    axis.title.y.vjust = axis.title.y.vjust,
 
     # label
     label = label,
@@ -163,10 +176,10 @@ guide_colorplane <- function(
     label.theme = label.theme,
     label.hjust = label.hjust,
     label.vjust = label.vjust,
-    label_y.position = label_y.position,
-    label_y.theme = label_y.theme,
-    label_y.hjust = label_y.hjust,
-    label_y.vjust = label_y.vjust,
+    label.y.position = label.y.position,
+    label.y.theme = label.y.theme,
+    label.y.hjust = label.y.hjust,
+    label.y.vjust = label.y.vjust,
 
     # plane
     planewidth = planewidth,
@@ -197,8 +210,8 @@ guide_colorplane <- function(
 #' @param guide Object of class "colorplane" generate by
 #'   \code{\link{guide_colorplane}}
 #' @param scale ggproto object instance of \code{\link{ScaleColorPlane}}
-#'
 #' @export
+#' @keywords internal
 guide_train.colorplane <- function(guide, scale) {
   # do nothing if scale inappropriate
   if (!inherits(scale, "ScaleColorPlane")) {
@@ -210,9 +223,9 @@ guide_train.colorplane <- function(guide, scale) {
     return(NULL)
   }
   # determine axis labels
-  if(is.waive(guide$axis_title)) guide$axis_title <-
+  if(is.waive(guide$axis.title)) guide$axis.title <-
       scale$axis_title
-  if(is.waive(guide$axis_title_y)) guide$axis_title_y <-
+  if(is.waive(guide$axis.title.y)) guide$axis.title.y <-
       scale$axis_title_y
   # create data frames for tick display
   breaks <- scale$get_breaks(dir = "horizontal")
@@ -259,7 +272,7 @@ guide_train.colorplane <- function(guide, scale) {
 #     guide$key <- guide$key[nrow(guide$key):1, ]
 #     guide$bar <- guide$bar[nrow(guide$bar):1, ]
 #   }
-  guide$hash <- with(guide, digest::digest(list(title, axis_title, axis_title_y,
+  guide$hash <- with(guide, digest::digest(list(title, axis.title, axis.title.y,
                                                 key$.label, key_y$.label,
                                                 plane, name)))
   guide
@@ -271,8 +284,8 @@ guide_train.colorplane <- function(guide, scale) {
 #'
 #' @inheritParams guide_train.colorplane
 #' @param new_guide New guide object
-#'
 #' @export
+#' @keywords internal
 guide_merge.colorplane <- function(guide, new_guide) {
   guide
 }
@@ -284,6 +297,7 @@ guide_merge.colorplane <- function(guide, new_guide) {
 #' @inheritParams guide_train.colorplane
 #' @param ... Not used
 #' @export
+#' @keywords internal
 guide_geom.colorplane <- function(guide, ...) {
   guide
 }
@@ -297,6 +311,7 @@ guide_geom.colorplane <- function(guide, ...) {
 #'
 #' @seealso \code{\link{scale_color_colorplane}}
 #' @export
+#' @keywords internal
 guide_gengrob.colorplane <- function(guide, theme) {
   planewidth <- grid::convertWidth(guide$planewidth %||%
                                      (theme$legend.key.width * 5), "mm")
@@ -369,24 +384,24 @@ guide_gengrob.colorplane <- function(guide, theme) {
   )
 
   #axis titles
-  grob.axis_title <- ggname(
-    "guide.axis_title",
+  grob.axis.title <- ggname(
+    "guide.axis.title",
     ggplot2::element_grob(
-      complete_theme_item(guide$axis_title.theme, "axis.title.x"),
-      label = guide$axis_title,
-      hjust = guide$axis_title.hjust %||%
+      complete_theme_item(guide$axis.title.theme, "axis.title.x"),
+      label = guide$axis.title,
+      hjust = guide$axis.title.hjust %||%
         calc_element("axis.title.x", theme)$hjust %||% 0.5,
       vjust = guide$title.vjust %||%
         calc_element("axis.title.x", theme)$vjust %||% 0.5
     )
   )
 
-  grob.axis_title_y <- ggname(
-    "guide.axis_title_y",
+  grob.axis.title.y <- ggname(
+    "guide.axis.title.y",
     ggplot2::element_grob(
-      complete_theme_item(guide$axis_title_y.theme, "axis.title.y"),
-      label = guide$axis_title_y,
-      hjust = guide$axis_title_y.hjust %||%
+      complete_theme_item(guide$axis.title.y.theme, "axis.title.y"),
+      label = guide$axis.title.y,
+      hjust = guide$axis.title.y.hjust %||%
         calc_element("axis.title.y", theme)$hjust %||% 0.5,
       vjust = guide$title_y.vjust %||%
         calc_element("axis.title.y", theme)$vjust %||% 0.5
@@ -418,12 +433,12 @@ guide_gengrob.colorplane <- function(guide, theme) {
     grob.label <- ggname("guide.label", g)
   }
 
-  label_y.theme <- complete_theme_item(guide$label_y.theme, "axis.text.y")
-  grob.label_y <- ggplot2::zeroGrob()
+  label.y.theme <- complete_theme_item(guide$label.y.theme, "axis.text.y")
+  grob.label.y <- ggplot2::zeroGrob()
   if (guide$label) {
-    hjust <- x <- guide$label_y.hjust %||% label_y.theme$hjust %||%
+    hjust <- x <- guide$label.y.hjust %||% label.y.theme$hjust %||%
       if (any(is.expression(guide$key_y$.label))) 1 else 0.5
-    vjust <- guide$label_y.vjust %||% label_y.theme$vjust %||% 0.5
+    vjust <- guide$label.y.vjust %||% label.y.theme$vjust %||% 0.5
     y <- label_pos_y
 
     label <- guide$key_y$.label
@@ -437,9 +452,9 @@ guide_gengrob.colorplane <- function(guide, theme) {
       })
       label <- do.call(c, label)
     }
-    g <- ggplot2::element_grob(element = label_y.theme, label = label,
+    g <- ggplot2::element_grob(element = label.y.theme, label = label,
                       x = x, y = y, hjust = hjust, vjust = vjust)
-    grob.label_y <- ggname("guide.label_y", g)
+    grob.label.y <- ggname("guide.label.y", g)
   }
 
   # ticks - horiz
@@ -554,9 +569,9 @@ guide_gengrob.colorplane <- function(guide, theme) {
                   list(grob.ticks, "overlay"),
                   list(grob.ticks_y, "overlay"),
                   list(grob.label, guide$label.position),
-                  list(grob.label_y, guide$label_y.position),
-                  list(grob.axis_title, guide$axis_title.position),
-                  list(grob.axis_title_y, guide$axis_title_y.position),
+                  list(grob.label.y, guide$label.y.position),
+                  list(grob.axis.title, guide$axis.title.position),
+                  list(grob.axis.title.y, guide$axis.title.y.position),
                   list(grob.title, guide$title.position),
                   list(ggplot2::zeroGrob(), c("top", "left", "bottom", "right"))
                 ))
@@ -585,5 +600,4 @@ guide_gengrob.colorplane <- function(guide, theme) {
 }
 
 #' @export
-#' @rdname guide_colorplane
 guide_colourplane <- guide_colorplane

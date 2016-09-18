@@ -7,7 +7,7 @@
 \alias{red_blue_projection}
 \title{Color Space Projections}
 \usage{
-YUV_projection(x, y, Y = 0.35)
+YUV_projection(x, y, Y = 0.3)
 
 red_blue_projection(x, y)
 
@@ -17,10 +17,11 @@ interpolate_projection(x, y, zero_color, horizontal_color, vertical_color)
 \item{x, y}{numeric vectors of equal length containing the values to be mapped
 to the horizontal and vertical axes of the colorplane.}
 
-\item{Y}{numeric value for the fixed lumosity level in YUV projections.}
+\item{Y}{numeric value in range 0 to 1 for the fixed luminosity level in YUV
+projections.}
 
 \item{zero_color, horizontal_color, vertical_color}{Character strings
-specifying R colors to use in inerpolation projections. See Details.}
+specifying R colors to use in interpolation projections. See Details.}
 }
 \value{
 Character vector of colors of the same length as \code{x} and
@@ -28,7 +29,7 @@ Character vector of colors of the same length as \code{x} and
 }
 \description{
 Functions to define how variables are mapped into color space.
-  Used for the `color_projection` argument to
+  Used for the \code{color_projection} argument to
   \code{\link{scale_color_colorplane}} and
   \code{\link{scale_fill_colorplane}}. Custom functions can also be defined
   following this signature.
@@ -38,7 +39,7 @@ Color space projection functions take two numeric vectors and return
   a single character vector of the same length that specifies the colors to
   plot in the form "#rrggbb", as returned by \code{\link[grDevices]{rgb}}.
   Additional projection functions can be defined following the same signature
-  and passed to the \code{color_projection} arugment of the
+  and passed to the \code{color_projection} argument of the
   \code{scale_*_colorplane} scale constructors. When writing custom
   projection functions, expect two arguments that are numeric vectors scaled
   to a range of 0 to 1 and that do not contain missing values. Custom
@@ -52,6 +53,15 @@ For \code{interpolate_projection}, a color space is created via
   for increasing \code{x} values and \code{vertical_color} for \code{y}. The
   plotted color will be a simple average of the interpolated \code{x} and
   \code{y} values.
+}
+\examples{
+library(ggplot2)
+ggplot(mtcars, aes(x = wt, y = mpg, color = disp, colour2 = hp)) +
+  geom_point() +
+  scale_color_colorplane(color_projection = interpolate_projection,
+                         zero_color = "darkorange2",
+                         horizontal_color = "mediumspringgreen",
+                         vertical_color = "magenta")
 }
 \references{
 YUV conversion matrix from

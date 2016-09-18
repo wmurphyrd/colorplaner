@@ -20,32 +20,13 @@ scale_fill_colorplane(name = waiver(), axis_title = waiver(),
   limits_y = NULL, color_projection = "YUV", rescaler = rescale,
   oob = censor, trans = "identity", na.color = "black",
   na.value = NA_real_, guide = "colorplane", ...)
-
-scale_colour_colourplane(name = waiver(), axis_title = waiver(),
-  axis_title_y = waiver(), breaks = waiver(), breaks_y = waiver(),
-  labels = waiver(), labels_y = waiver(), limits = NULL,
-  limits_y = NULL, color_projection = "YUV", rescaler = rescale,
-  oob = censor, trans = "identity", na.color = "black",
-  na.value = NA_real_, guide = "colorplane", ...)
-
-scale_fill_colourplane(name = waiver(), axis_title = waiver(),
-  axis_title_y = waiver(), breaks = waiver(), breaks_y = waiver(),
-  labels = waiver(), labels_y = waiver(), limits = NULL,
-  limits_y = NULL, color_projection = "YUV", rescaler = rescale,
-  oob = censor, trans = "identity", na.color = "black",
-  na.value = NA_real_, guide = "colorplane", ...)
 }
 \arguments{
 \item{name}{Character string or expression to be used as guide title.
 Defaults to "Color Key" or "Fill Color Key" to match the scale function
 used.}
 
-\item{axis_title}{Character strings or expressions inidicating
-the horizontal and vertical axis titles in the guide, respectively. If
-\code{NULL}, the title is not shown. By default (\link[ggplot2]{waiver}),
-the name of the scale or the name of the variable mapped to the aesthetic.}
-
-\item{axis_title_y}{Character strings or expressions inidicating
+\item{axis_title, axis_title_y}{Character strings or expressions indicating
 the horizontal and vertical axis titles in the guide, respectively. If
 \code{NULL}, the title is not shown. By default (\link[ggplot2]{waiver}),
 the name of the scale or the name of the variable mapped to the aesthetic.}
@@ -59,8 +40,8 @@ the name of the scale or the name of the variable mapped to the aesthetic.}
     as output
 }}
 
-\item{breaks_y}{As \code{breaks}, but pertaining to vertical axis (i.e.
-\code{color2} or \code{fill2})}
+\item{breaks_y}{As \code{breaks}, but for vertical axis (i.e. \code{color2}
+or \code{fill2})}
 
 \item{labels}{One of: \itemize{
   \item \code{NULL} for no labels
@@ -71,18 +52,18 @@ the name of the scale or the name of the variable mapped to the aesthetic.}
     as output
 }}
 
-\item{labels_y}{As \code{labels}, but pertaining to vertical axis (i.e.
-\code{color2} or \code{fill2})}
+\item{labels_y}{As \code{labels}, but for vertical axis (i.e. \code{color2}
+or \code{fill2})}
 
 \item{limits}{A numeric vector of length two providing limits of the scale.
 Use \code{NA} to refer to the existing minimum or maximum.}
 
-\item{limits_y}{As \code{limits}, but pertaining to vertical axis (i.e.
-\code{color2} or \code{fill2})}
+\item{limits_y}{As \code{limits}, but for vertical axis (i.e. \code{color2}
+or \code{fill2})}
 
 \item{color_projection}{Projection mapping to use. Either the name of an
-included projection or a function that performs the projection.
-See \code{\link{color_projections}}.}
+included projection or a function that performs the projection. See
+\code{\link{color_projections}}.}
 
 \item{rescaler}{Used by diverging and n colour gradients
 (i.e. \code{\link{scale_colour_gradient2}}, \code{\link{scale_colour_gradientn}}).
@@ -102,7 +83,7 @@ A function used to scale the input values to the range [0, 1].}
   \code{\link[scales]{boxcox_trans}}. You can create your own
   transformation with \code{\link[scales]{trans_new}}.}
 
-\item{na.color}{Characater string containing a valid R color to use when
+\item{na.color}{Character string containing a valid R color to use when
 plotting missing data or data outside the limits.}
 
 \item{na.value}{Missing values will be replaced with this value.}
@@ -111,18 +92,40 @@ plotting missing data or data outside the limits.}
 \code{\link{guide_colorplane}} designed for this scale. Behavior of other
 guides with this scale is not defined.}
 
-\item{...}{Additional arguments to pass on to \code{color_projection} function.}
+\item{...}{Additional arguments to pass on to \code{color_projection}
+function.}
 }
 \description{
-Maps two continutous variables into a single display color, using either the
+Maps two continuous variables into a single display color, using either the
 \code{color} and \code{color2} aesthetics (\code{scale_color_colorplane}) or
 the \code{fill} and \code{fill2} aesthetics (\code{scale_fill_colorplane}).
+Variables mapped to \code{color} or \code{fill} are be mapped to the
+horizontal component of the colorplane scale and \code{color}/\code{fill2}
+are mapped to the vertical component.
 }
 \details{
-The variable values are projected onto YUV color space to create a bivaraite
-gradient that can be interpreted visually...
+Variable values are projected into color space to create a bivariate
+gradient. The default projection maps values to the U and V components of YUV
+color space. In the YUV color space, the full spectrum of chrominance (color
+difference) is encoded into the U and V components and luminosity
+(brightness) is encoded in the Y component. For a fixed value of Y, the
+remaining U-V color space is a plane of all possible colors at that
+brightness. Therefore, mapping data to this projection utilizes the full
+color spectrum to provide visual discrimination between differing values.
+
+The YUV projection colorplane scale is visually divided into four quadrants:
+green when both values are small, fuchsia when both are large, orange when
+the horizontal variable is small and the vertical is large, and blue when the
+horizontal variable is large and the vertical is small. Values closer to the
+extremes are saturated and the center of the scale, representing the
+mid-point of the ranges for both variables, is grey.
+
+Alternative color projections can be used, but may not be as interpretable.
+See \code{\link{color_projections}} for information on specifying or creating
+other color projections.
 }
 \examples{
+library(ggplot2)
 if(requireNamespace("mapproj")) {
   crimes <- data.frame(state = tolower(rownames(USArrests)), USArrests)
   states_map <- map_data("state")
@@ -133,6 +136,8 @@ if(requireNamespace("mapproj")) {
     expand_limits(x = states_map$long, y = states_map$lat) +
     coord_map()
  }
+# setting upper limit for qsec causes points for higher values to plot
+# as na.color (black)
 ggplot(mtcars, aes(x = wt, y = mpg, color = qsec, colour2 = hp)) +
   geom_point(size = 4) +
   scale_color_colorplane(limits = c(NA, 18.9))
