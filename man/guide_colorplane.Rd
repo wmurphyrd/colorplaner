@@ -130,4 +130,7 @@ if(requireNamespace("mapproj")) {
     label.y.position = c("left", "right")))
  }
 }
+\references{
+Based on \code{\link[ggplot2]{guide_colorbar}}, modified 2016.
+}
 

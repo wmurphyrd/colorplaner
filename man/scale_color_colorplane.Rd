@@ -142,4 +142,7 @@ ggplot(mtcars, aes(x = wt, y = mpg, color = qsec, colour2 = hp)) +
   geom_point(size = 4) +
   scale_color_colorplane(limits = c(NA, 18.9))
 }
+\references{
+Based on \code{\link[ggplot2]{continuous_scale}}, modified 2016.
+}
 
