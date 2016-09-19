@@ -1,3 +1,18 @@
+# This file is part of colorplaner. Code in this file is derived from modifying
+# guide_colorbar in ggplot2 (copyright RStudio 2016), 2016-09-18.
+#
+# colorplaner is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, version 2.
+#
+# colorplaner is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with colorplaner.  If not, see <http://www.gnu.org/licenses/>.
+
 #' @include other_package_compatibility.R
 NULL
 
@@ -78,6 +93,7 @@ NULL
 #'  }
 #' @export
 #' @aliases guide_colourplane
+#' @references Based on \code{\link[ggplot2]{guide_colorbar}}, modified 2016.
 guide_colorplane <- function(
 
   # title

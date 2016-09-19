@@ -1,8 +1,25 @@
+# This file is part of colorplaner. Code in this file is modified or
+# redistributed from scales and ggplot2 as noted below, 2016-09-18.
+#
+# colorplaner is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, version 2.
+#
+# colorplaner is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
+
 # copies of utility functions needed from other packages that are not currently
 # exported or that need tweaking to work in this package namespace
 
 #### scales ####
-# this version of as.trans will work without importing all *_trans functions
+# This is a modified version of as.trans from package scales, copyright
+# Hadley Wickham, 2010-2014 and distributed under an MIT license
+# This version of as.trans will work without importing all *_trans functions
 # from scales (unlike scales::as.trans)
 as.trans <- function(x) {
   if (scales::is.trans(x)) return(x)
@@ -10,6 +27,9 @@ as.trans <- function(x) {
 }
 
 #### ggplot2 ####
+# The remainder of this file is a portion of ggplot2 that is
+#distributed unmodified. Copyright RStudio, 2016 and distributed under the GPL-2
+#license.
 `%||%` <- function (a, b)
 {
   if (!is.null(a))
