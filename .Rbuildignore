@@ -3,3 +3,4 @@
 ^figure.*
 [rR]eadme
 \.travis\.yml
+cran-comments.md

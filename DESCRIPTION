@@ -2,15 +2,20 @@ Package: colorplaner
 Type: Package
 Title: ggplot2 Extension to Visualize Two Variables per Color Aesthetic Through
     Color Space Projection
-Version: 0.0.0.9007
-Date: 2016-07-21
-Author: William Murphy
-Maintainer: William Murphy <william.murphy.rd@gmail.com>
-Description: Add additional dimensionality to visualizations by using the color
-    and/or fill aesthetics to convey the values of two continuous variables each. By
-    projecting variable values onto YUV color space, a scale is created that allows
-    viewers to intuitively determine the values of both variables from the single
-    displayed color. Includes two new scales and a new guide for ggplot2.
+Version: 0.1.0
+Date: 2016-09-18
+Authors@R: c(person("William", "Murphy",
+                  email = "william.murphy.rd@gmail.com",
+                  role = c("aut", "cre")),
+             person("Hadley", "Wickham", role = "ctb",
+                    comment = "Original author for copied and derived code"),
+              person("Winston", "Chang", role = "ctb",
+                    comment = "Original author for copied and derived code"))
+Description: The colorplaner R package is a ggplot2 extension to visualize two
+    variables through one color aesthetic via mapping to a color space
+    projection. With this technique for 2-D color mapping, one can create a
+    dichotomous choropleth in R as well as other visualizations with
+    bivariate color scales. Includes two new scales and a new guide for ggplot2.
 License: GPL-2
 LazyData: TRUE
 Imports:
@@ -38,6 +43,8 @@ Copyright: Copyright 2016 William Murphy. colorplaner is free software: you
     of the GNU General Public License along with this program. If not, see <http://
     www.gnu.org/licenses/>.
 VignetteBuilder: knitr
+URL: https://github.com/wmurphyrd/colorplaner
+BugReports: https://github.com/wmurphyrd/colorplaner/issues
 Collate:
     'other_package_compatibility.R'
     'colorplane.R'
