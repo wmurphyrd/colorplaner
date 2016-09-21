@@ -1,9 +1,9 @@
 Package: colorplaner
 Type: Package
-Title: ggplot2 Extension to Visualize Two Variables per Color Aesthetic Through
-    Color Space Projection
-Version: 0.1.0
-Date: 2016-09-18
+Title: A ggplot2 Extension to Visualize Two Variables per Color Aesthetic
+    Through Color Space Projections
+Version: 0.1.1
+Date: 2016-09-20
 Authors@R: c(person("William", "Murphy",
                   email = "william.murphy.rd@gmail.com",
                   role = c("aut", "cre")),
@@ -11,7 +11,7 @@ Authors@R: c(person("William", "Murphy",
                     comment = "Original author for copied and derived code"),
               person("Winston", "Chang", role = "ctb",
                     comment = "Original author for copied and derived code"))
-Description: The colorplaner R package is a ggplot2 extension to visualize two
+Description: A ggplot2 extension to visualize two
     variables through one color aesthetic via mapping to a color space
     projection. With this technique for 2-D color mapping, one can create a
     dichotomous choropleth in R as well as other visualizations with
