@@ -1,3 +1,7 @@
+## Resubmission
+This is a resubmission. I have edited the description to remove the repetition 
+of the package title.
+
 ## Test environments
 * local Windows 10 install, R 3.3.1
 * ubuntu 12.04 (on travis-ci), R 3.3.1
@@ -11,8 +15,7 @@ There is one NOTE for CRAN incoming feasibility:
 * The spelling of the flagged words is as intended
     * bivariate (correct)
     * choropleth (correct)
-    * colorplaner (package title)
     * ggplot (package title)
 
 ## Downstream dependencies
-There are no downstram dependencies for this package
+There are no downstream dependencies for this package
