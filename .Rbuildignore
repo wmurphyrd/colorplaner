@@ -4,3 +4,4 @@
 [rR]eadme
 \.travis\.yml
 cran-comments.md
+^revdep$
