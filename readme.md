@@ -2,7 +2,8 @@
 
 [![BuildStatus](https://travis-ci.org/wmurphyrd/colorplaner.svg?branch=master)](https://travis-ci.org/wmurphyrd/colorplaner)
 [![Coverage Status](https://coveralls.io/repos/github/wmurphyrd/colorplaner/badge.svg?branch=master)](https://coveralls.io/github/wmurphyrd/colorplaner?branch=master)
-
+[![CRAN Version](http://www.r-pkg.org/badges/version/colorplaner)](https://cran.r-project.org/package=colorplaner)
+[![CRAN Downloads](http://cranlogs.r-pkg.org/badges/grand-total/colorplaner)](https://cran.r-project.org/package=colorplaner)
 
 
 
@@ -12,6 +13,31 @@ The colorplaner R package is a ggplot2 extension to visualize two variables thro
 well as other visualizations with bivariate color scales. The extension implements two new scales, `scale_color_colorplane` and `scale_fill_colorplane`, two new aesthetics, `color2` and `fill2`, and a new guide `guide_colorplane`. 
 
 ![Example use of colorplane with the iris dataset.](figure/intro-1.png)
+
+
+## Installation
+
+To install:
+
+
+```r
+# CRAN Version:
+install.packages("colorplaner")
+# Current development version: 
+devtools::install_github("wmurphyrd/colorplaner")
+```
+
+#### Version 0.1.2
+* Fixed an issue that was preventing updated vignettes from building
+* Complete versions of `colorplaner` and `other_projections` vignettes 
+now included
+
+#### Version 0.1.1
+* Initial release of the colorplaner package
+* Implements two new gglot2 scales: `scale_color_colorplane` and 
+`scale_fill_colorplane`
+* Implements one new ggplot2 guide: `guide_colorplane`
+
 
 ## Motivation
 
@@ -173,23 +199,6 @@ Both
 are rendered as identically colored pixels, but the surrounding colors lead to
 differing perceptions. 
 
-
-## Installation
-
-To install:
-
-
-```r
-devtools::install_github("wmurphyrd/colorplaner")
-```
-
-#### Version 0.1.1
-* Initial release of the colorplaner package
-* Implements two new gglot2 scales: `scale_color_colorplane` and 
-`scale_fill_colorplane`
-* Implements one new ggplot2 guide: `guide_colorplane`
-
-
 ## Usage
 
 To implement color plane mapping in a `ggplot`, simply create aesthetic mappings to `color` and `color2` or `fill` and `fill2` and add the corresponding colorplane scale to the plot. The colorplane guide is added by default. 
@@ -230,8 +239,8 @@ modified with the following changes:
 4. Improve the guide titles (`axis_title`, `axis_title_y`, `title`)
 3. Change the guide vertical axis labels to a percentage scale (`fill2`, `labels_y`)
 4. Force the percentage scale to range from 0% to 100% (`limits_y`). 
-6. Duplicate guide labels on both sides (`label.position`, `label_y.position`)
-6. Move the x-axis title between the guide title and upper labels (`axis_title.position`)
+6. Duplicate guide labels on both sides (`label.position`, `label.y.position`)
+6. Move the x-axis title between the guide title and upper labels (`axis.title.position`)
 
 Additional options and details are described in the package documentation:
 `?scale_color_colorplane` and `?guide_colorplane`. 
@@ -260,10 +269,10 @@ if(require("maps")) {
       title = "State Color Key",
       title.theme = element_text(size = 13),
       label.theme = theme_gray(),
-      label_y.theme = theme_gray(),
-      axis_title.position = "top",
+      label.y.theme = theme_gray(),
+      axis.title.position = "top",
       label.position = c("top", "bottom"),
-      label_y.position = c("left", "right")))
+      label.y.position = c("left", "right")))
 }
 ```
 

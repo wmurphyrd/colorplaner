@@ -276,8 +276,8 @@ modified with the following changes:
 4. Improve the guide titles (`axis_title`, `axis_title_y`, `title`)
 3. Change the guide vertical axis labels to a percentage scale (`fill2`, `labels_y`)
 4. Force the percentage scale to range from 0% to 100% (`limits_y`). 
-6. Duplicate guide labels on both sides (`label.position`, `label_y.position`)
-6. Move the x-axis title between the guide title and upper labels (`axis_title.position`)
+6. Duplicate guide labels on both sides (`label.position`, `label.y.position`)
+6. Move the x-axis title between the guide title and upper labels (`axis.title.position`)
 
 Additional options and details are described in the package documentation:
 `?scale_color_colorplane` and `?guide_colorplane`. 
@@ -305,10 +305,10 @@ if(require("maps")) {
       title = "State Color Key",
       title.theme = element_text(size = 13),
       label.theme = theme_gray(),
-      label_y.theme = theme_gray(),
-      axis_title.position = "top",
+      label.y.theme = theme_gray(),
+      axis.title.position = "top",
       label.position = c("top", "bottom"),
-      label_y.position = c("left", "right")))
+      label.y.position = c("left", "right")))
 }
 ```
 

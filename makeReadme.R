@@ -15,13 +15,14 @@
 readme <- readLines("vignettes/colorplaner.Rmd")
 loc <- grep("^---$", readme)
 
-news_loc <- grep("^## Usage$", readme)[1] - 1
+news_loc <- grep("^## Motivation$", readme)[1] - 1
 
 ins <- c("# colorplaner",
          "",
          "[![BuildStatus](https://travis-ci.org/wmurphyrd/colorplaner.svg?branch=master)](https://travis-ci.org/wmurphyrd/colorplaner)",
          "[![Coverage Status](https://coveralls.io/repos/github/wmurphyrd/colorplaner/badge.svg?branch=master)](https://coveralls.io/github/wmurphyrd/colorplaner?branch=master)",
-         "",
+         "[![CRAN Version](http://www.r-pkg.org/badges/version/colorplaner)](https://cran.r-project.org/package=colorplaner)",
+         "[![CRAN Downloads](http://cranlogs.r-pkg.org/badges/grand-total/colorplaner)](https://cran.r-project.org/package=colorplaner)",
          "```{r include = F}",
          "knitr::opts_chunk$set(fig.width = 5, fig.height = 5)",
          "```",
@@ -34,6 +35,9 @@ news_ins <- c("",
               "To install:",
               "",
               "```{r, eval=FALSE}",
+              "# CRAN Version:",
+              "install.packages(\"colorplaner\")",
+              "# Current development version: ",
               "devtools::install_github(\"wmurphyrd/colorplaner\")",
               "```",
               "",
