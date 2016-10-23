@@ -2,4 +2,4 @@
 .Rhistory
 .RData
 vignettes/*.pdf
-tests/*/*.pdf
+
