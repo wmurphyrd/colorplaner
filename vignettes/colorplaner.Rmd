@@ -35,9 +35,9 @@ well as other visualizations with bivariate color scales. The extension implemen
 data(iris)
 
 iris_plot <- ggplot(iris, 
-                aes(x = Petal.Length, y = Petal.Width, shape = Species)) +
-  geom_point(aes(color = Sepal.Length, color2 = Sepal.Width),
-             position = "jitter") +
+                aes(x = Petal.Length, y = Petal.Width, shape = Species,
+                    color = Sepal.Length, color2 = Sepal.Width)) +
+  geom_point(position = "jitter") +
   scale_color_colorplane(limits = range(iris$Sepal.Length),
                          limits_y = range(iris$Sepal.Width),
                          breaks_y = function(x)seq.int(x[1], x[2]),

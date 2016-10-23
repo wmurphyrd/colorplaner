@@ -13,8 +13,8 @@
 # along with colorplaner.  If not, see <http://www.gnu.org/licenses/>.
 
 text_theme <- theme_bw() %+%
-    theme(text =
-            element_text(color = "red", family = "mono"))
+  theme(text = element_text(color = "red", family = "mono"),
+        axis.text = element_text(color = "red", family = "mono"))
 
 test_that("Title options", {
   expect_silent(print(

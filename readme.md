@@ -12,6 +12,11 @@
 The colorplaner R package is a ggplot2 extension to visualize two variables through one color aesthetic via mapping to a color space projection. With this technique for 2-D color mapping, one can create a dichotomous choropleth in R as
 well as other visualizations with bivariate color scales. The extension implements two new scales, `scale_color_colorplane` and `scale_fill_colorplane`, two new aesthetics, `color2` and `fill2`, and a new guide `guide_colorplane`. 
 
+
+```
+## Warning: Ignoring unknown aesthetics: color2
+```
+
 ![Example use of colorplane with the iris dataset.](figure/intro-1.png)
 
 
@@ -26,6 +31,10 @@ install.packages("colorplaner")
 # Current development version: 
 devtools::install_github("wmurphyrd/colorplaner")
 ```
+
+#### Version 0.1.2.9000 (devel)
+* Change tests to compensate for ggplot2 2.2.0 changes
+* Due to ggplot2 2.2.0 changes, mapping a colorplane at the level of an individual layer will now produce a false warning messsage, but full functionality remains intact
 
 #### Version 0.1.2
 * Fixed an issue that was preventing updated vignettes from building
