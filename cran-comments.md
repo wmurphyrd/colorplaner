@@ -1,19 +1,9 @@
-## Request for Early Update
-This a request to update the colorplaner package shortly after initial
-publication. 
-
-I am requesting this update because the published package contains
-incomplete versions of the package vignettes. This occurred because I had 
-inadvertently left files in /inst/docs/ from previous test building of vignettes
-and was unaware that this would prevent the current vignettes from being 
-built. 
-
-I have submitted a pull request for the devtools package to 
-add a check for this mistake to prevent it from happening to others: 
-https://github.com/hadley/devtools/pull/1362
-
-I apologize for the inefficient use of CRAN volunteer and server resources. 
-Thank you for considering this early update. 
+## Update Due To Upstream Dependency Changes
+Hello. Sorry for another update request so soon, but I received a downstream
+depenency failure message, as changes in ggplot2 v2.2.0
+were causing this package's build to fail. 
+Also made some minor changes to DESCRIPTION Description and Copyright fields
+based on feedback from Uwe on a submission for a different package. 
 
 ## Test environments
 * local Windows 10 install, R 3.3.1

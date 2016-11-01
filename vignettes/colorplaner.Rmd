@@ -161,8 +161,9 @@ iris_plot %+% iris[iris$labeled, ] +
   theme(legend.position = "bottom", legend.text = element_text(size = 8), 
         legend.key.width = grid::unit(3, "mm"))
 
-ggplot(sepal_grid, aes(x = Sepal.Length, y = Sepal.Width)) +
-  geom_point(aes(color = Sepal.Length, color2 = Sepal.Width), size = 5) +
+ggplot(sepal_grid, aes(x = Sepal.Length, y = Sepal.Width, 
+                       color2 = Sepal.Width)) +
+  geom_point(aes(color = Sepal.Length), size = 5) +
   geom_point(aes(shape = Species), data = iris[iris$labeled, ], size = 1.5) +
   geom_text(aes(label = let), data = iris[iris$labeled, ], 
             nudge_x = .14, nudge_y = -.04) +

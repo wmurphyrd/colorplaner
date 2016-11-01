@@ -47,3 +47,14 @@ test_that("Multiple data layer plots", {
       ggtitle("Points over histogram, petal width > 1, length > 3")
   ))
 })
+
+test_that("Colorplane only on some layers without warning", {
+  expect_silent(print(
+    ggplot(iris, aes(x = Sepal.Length, y = Sepal.Width,
+                     colour2 = Petal.Width)) +
+      geom_point(aes(colour = Petal.Length)) +
+      geom_line(aes(linetype = Species)) +
+      scale_color_colorplane() +
+      ggtitle("Colorplane points with black lines")
+  ))
+})

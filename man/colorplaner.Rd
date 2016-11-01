@@ -29,3 +29,23 @@ Check \url{https://github.com/wmurphyrd/colorplaner/issues/27} for current
 status and progress towards resolving this issue.
 }
 
+\section{Warning Message About Ignoring Unknown Aesthetics}{
+
+Layers now produce a warning message when unrecognized aesthetics are found
+but have no mechanism for notifying them of aesthetics handled by scales.
+The warning can be avoided by mapping \code{color2}/\code{fill2} at the plot
+level (i.e. in the initial \code{ggplot()} statement). If you want to avoid
+colorplane mapping on all layers, map \code{color}/\code{fill} only on the
+layers you want, as in the example below.
+}
+\examples{
+library(ggplot2)
+ggplot(iris, aes(x = Sepal.Length, y = Sepal.Width,
+  colour2 = Petal.Width)) +
+ geom_point(aes(colour = Petal.Length)) +
+ geom_line(aes(linetype = Species)) +
+ scale_color_colorplane()
+
+
+}
+

@@ -1,9 +1,9 @@
 Package: colorplaner
 Type: Package
-Title: A ggplot2 Extension to Visualize Two Variables per Color Aesthetic
+Title: A 'ggplot2' Extension to Visualize Two Variables per Color Aesthetic
     Through Color Space Projections
-Version: 0.1.2.9000
-Date: 2016-10-02
+Version: 0.1.3
+Date: 2016-10-31
 Authors@R: c(person("William", "Murphy",
                   email = "william.murphy.rd@gmail.com",
                   role = c("aut", "cre")),
@@ -11,11 +11,11 @@ Authors@R: c(person("William", "Murphy",
                     comment = "Original author for copied and derived code"),
               person("Winston", "Chang", role = "ctb",
                     comment = "Original author for copied and derived code"))
-Description: A ggplot2 extension to visualize two
+Description: A 'ggplot2' extension to visualize two
     variables through one color aesthetic via mapping to a color space
     projection. With this technique for 2-D color mapping, one can create a
-    dichotomous choropleth in R as well as other visualizations with
-    bivariate color scales. Includes two new scales and a new guide for ggplot2.
+    bivariate choropleth in R as well as other visualizations with multivariate
+    color scales. Includes two new scales and a new guide for 'ggplot2'.
 License: GPL-2
 LazyData: TRUE
 Imports:
@@ -34,14 +34,7 @@ Suggests:
     rmarkdown,
     covr
 RoxygenNote: 5.0.1
-Copyright: Copyright 2016 William Murphy. colorplaner is free software: you
-    can redistribute it and/or modify it under the terms of the GNU General Public
-    License as published by the Free Software Foundation,version 2. This program is distributed
-    in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the
-    implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See
-    the GNU General Public License for more details. You should have received a copy
-    of the GNU General Public License along with this program. If not, see <http://
-    www.gnu.org/licenses/>.
+Copyright: Copyright 2016 William Murphy
 VignetteBuilder: knitr
 URL: https://github.com/wmurphyrd/colorplaner
 BugReports: https://github.com/wmurphyrd/colorplaner/issues
