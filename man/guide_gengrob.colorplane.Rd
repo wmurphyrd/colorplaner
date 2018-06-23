@@ -4,7 +4,7 @@
 \alias{guide_gengrob.colorplane}
 \title{Colorplane method for guide_gengrob}
 \usage{
-guide_gengrob.colorplane(guide, theme)
+\method{guide_gengrob}{colorplane}(guide, theme)
 }
 \arguments{
 \item{guide}{Object of class "colorplane" generate by

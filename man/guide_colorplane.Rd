@@ -21,15 +21,15 @@ guide_colorplane(title = waiver(), title.position = c("top", "bottom"),
 \arguments{
 \item{title}{A character string or expression indicating a title of guide.
 If \code{NULL}, the title is not shown. By default
-(\code{\link{waiver}}), the name of the scale object or the name
-specified in \code{\link{labs}} is used for the title.}
+(\code{\link[=waiver]{waiver()}}), the name of the scale object or the name
+specified in \code{\link[=labs]{labs()}} is used for the title.}
 
 \item{title.position}{Character string indicating position for the main
 title. One of "top" (default) or "bottom".}
 
 \item{title.theme}{A theme object for rendering the title text. Usually the
-object of \code{\link{element_text}} is expected. By default, the theme is
-specified by \code{legend.title} in \code{\link{theme}} or theme.}
+object of \code{\link[=element_text]{element_text()}} is expected. By default, the theme is
+specified by \code{legend.title} in \code{\link[=theme]{theme()}} or theme.}
 
 \item{title.hjust}{A number specifying horizontal justification of the
 title text.}
@@ -100,6 +100,9 @@ Generates a guide to explain the colors plotted via
 \code{\link{scale_color_colorplane}} and \code{\link{scale_fill_colorplane}}.
 }
 \details{
+NOTE: ggplot2 now attempts to draw guides for all new aesthetics. This
+can result in duplicate colorplane guides. To avoid this, set the guide
+for the secondary dimension (color2/fill2) to FALSE, as in the example below.
 The guide is based on \code{\link[ggplot2]{guide_colorbar}}, but extended to
 be a plane of colors with ticks and labels for both variables in the scale.
 All \code{*.theme} arguments accept two types of arguments: a complete theme
@@ -127,7 +130,7 @@ if(requireNamespace("mapproj")) {
     coord_map() +
     guides(fill = guide_colorplane("My Title", axis.title = "Murder Rate",
     axis.title.y = "Urban Population \%", label.position = c("top", "bottom"),
-    label.y.position = c("left", "right")))
+    label.y.position = c("left", "right")), fill2 = FALSE)
  }
 }
 \references{

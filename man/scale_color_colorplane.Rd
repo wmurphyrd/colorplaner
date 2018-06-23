@@ -31,25 +31,27 @@ the horizontal and vertical axis titles in the guide, respectively. If
 \code{NULL}, the title is not shown. By default (\link[ggplot2]{waiver}),
 the name of the scale or the name of the variable mapped to the aesthetic.}
 
-\item{breaks}{One of: \itemize{
-  \item \code{NULL} for no breaks
-  \item \code{waiver()} for the default breaks computed by the
-    transformation object
-  \item A numeric vector of positions
-  \item A function that takes the limits as input and returns breaks
-    as output
+\item{breaks}{One of:
+\itemize{
+\item \code{NULL} for no breaks
+\item \code{waiver()} for the default breaks computed by the
+transformation object
+\item A numeric vector of positions
+\item A function that takes the limits as input and returns breaks
+as output
 }}
 
 \item{breaks_y}{As \code{breaks}, but for vertical axis (i.e. \code{color2}
 or \code{fill2})}
 
-\item{labels}{One of: \itemize{
-  \item \code{NULL} for no labels
-  \item \code{waiver()} for the default labels computed by the
-    transformation object
-  \item A character vector giving labels (must be same length as \code{breaks})
-  \item A function that takes the breaks as input and returns labels
-    as output
+\item{labels}{One of:
+\itemize{
+\item \code{NULL} for no labels
+\item \code{waiver()} for the default labels computed by the
+transformation object
+\item A character vector giving labels (must be same length as \code{breaks})
+\item A function that takes the breaks as input and returns labels
+as output
 }}
 
 \item{labels_y}{As \code{labels}, but for vertical axis (i.e. \code{color2}
@@ -66,22 +68,22 @@ included projection or a function that performs the projection. See
 \code{\link{color_projections}}.}
 
 \item{rescaler}{Used by diverging and n colour gradients
-(i.e. \code{\link{scale_colour_gradient2}}, \code{\link{scale_colour_gradientn}}).
-A function used to scale the input values to the range [0, 1].}
+(i.e. \code{\link[=scale_colour_gradient2]{scale_colour_gradient2()}}, \code{\link[=scale_colour_gradientn]{scale_colour_gradientn()}}).
+A function used to scale the input values to the range \eqn{[0, 1]}.}
 
 \item{oob}{Function that handles limits outside of the scale limits
 (out of bounds). The default replaces out of bounds values with NA.}
 
 \item{trans}{Either the name of a transformation object, or the
-  object itself. Built-in transformations include "asn", "atanh",
-  "boxcox", "exp", "identity", "log", "log10", "log1p", "log2",
-  "logit", "probability", "probit", "reciprocal", "reverse" and "sqrt".
+object itself. Built-in transformations include "asn", "atanh",
+"boxcox", "exp", "identity", "log", "log10", "log1p", "log2",
+"logit", "probability", "probit", "reciprocal", "reverse" and "sqrt".
 
-  A transformation object bundles together a transform, it's inverse,
-  and methods for generating breaks and labels. Transformation objects
-  are defined in the scales package, and are called \code{name_trans}, e.g.
-  \code{\link[scales]{boxcox_trans}}. You can create your own
-  transformation with \code{\link[scales]{trans_new}}.}
+A transformation object bundles together a transform, it's inverse,
+and methods for generating breaks and labels. Transformation objects
+are defined in the scales package, and are called \code{name_trans}, e.g.
+\code{\link[scales:boxcox_trans]{scales::boxcox_trans()}}. You can create your own
+transformation with \code{\link[scales:trans_new]{scales::trans_new()}}.}
 
 \item{na.color}{Character string containing a valid R color to use when
 plotting missing data or data outside the limits.}

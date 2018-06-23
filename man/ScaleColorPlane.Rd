@@ -4,7 +4,7 @@
 \name{ScaleColorPlane}
 \alias{ScaleColorPlane}
 \title{Color Plane Scale ggproto Object}
-\format{An object of class \code{ScaleColorPlane} (inherits from \code{ScaleContinuous}, \code{Scale}, \code{ggproto}) of length 20.}
+\format{An object of class \code{ScaleColorPlane} (inherits from \code{ScaleContinuous}, \code{Scale}, \code{ggproto}, \code{gg}) of length 20.}
 \usage{
 ScaleColorPlane
 }
