@@ -76,17 +76,3 @@ test_that("Arguments can be passed to projection functions", {
             ggtitle("Bright colored points"))
   })
 })
-
-test_that("Attachment warning given when appropriate", {
-  detach("package:colorplaner")
-  expect_warning(
-    ggplot(mtcars, aes(x = wt, y = mpg, color = disp, colour2 = hp)) +
-      geom_point() +
-      colorplaner::scale_color_colorplane(guide =
-                                            colorplaner::guide_colorplane()),
-    "colorplaner must be attached")
-
-})
-
-#reattach package after detachment for testing
-library(colorplaner)
