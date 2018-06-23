@@ -5,7 +5,7 @@ Title: A 'ggplot2' Extension to Visualize Two Variables per Color Aesthetic
 Version: 0.1.4
 Date: 2016-10-31
 Authors@R: c(person("William", "Murphy",
-                  email = "william.murphy.rd@gmail.com",
+                  email = "william@datatitian.com",
                   role = c("aut", "cre")),
              person("Hadley", "Wickham", role = "ctb",
                     comment = "Original author for copied and derived code"),
@@ -23,7 +23,7 @@ Imports:
     scales,
     gtable,
     digest,
-    ggplot2 (>= 2.0.0)
+    ggplot2 (>= 2.3.0)
 Depends:
     R (>= 3.1)
 Suggests:
