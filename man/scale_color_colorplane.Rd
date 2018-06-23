@@ -3,8 +3,8 @@
 \name{scale_color_colorplane}
 \alias{scale_color_colorplane}
 \alias{scale_colour_colourplane}
-\alias{scale_fill_colorplane}
 \alias{scale_fill_colourplane}
+\alias{scale_fill_colorplane}
 \title{Bivariate Color Space Projection Scale}
 \usage{
 scale_color_colorplane(name = waiver(), axis_title = waiver(),
@@ -147,4 +147,3 @@ ggplot(mtcars, aes(x = wt, y = mpg, color = qsec, colour2 = hp)) +
 \references{
 Based on \code{\link[ggplot2]{continuous_scale}}, modified 2016.
 }
-

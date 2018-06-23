@@ -16,4 +16,3 @@
 Called by ggplot2 engine when building the plot.
 }
 \keyword{internal}
-

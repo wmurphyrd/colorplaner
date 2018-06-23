@@ -16,4 +16,3 @@
 Called by ggplot2 engine. Ignores attempts to merge guides.
 }
 \keyword{internal}
-

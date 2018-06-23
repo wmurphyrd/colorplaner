@@ -136,4 +136,3 @@ if(requireNamespace("mapproj")) {
 \references{
 Based on \code{\link[ggplot2]{guide_colorbar}}, modified 2016.
 }
-
