@@ -14,6 +14,7 @@
 # along with colorplaner.  If not, see <http://www.gnu.org/licenses/>.
 
 #' @include other_package_compatibility.R
+#' @importFrom ggplot2 guide_train guide_gengrob guide_geom guide_merge
 NULL
 
 #' Add Guide for Colorplane
@@ -21,6 +22,9 @@ NULL
 #' Generates a guide to explain the colors plotted via
 #' \code{\link{scale_color_colorplane}} and \code{\link{scale_fill_colorplane}}.
 #'
+#' NOTE: ggplot2 now attempts to draw guides for all new aesthetics. This
+#' can result in duplicate colorplane guides. To avoid this, set the guide
+#' for the secondary dimension (color2/fill2) to FALSE, as in the example below.
 #' The guide is based on \code{\link[ggplot2]{guide_colorbar}}, but extended to
 #' be a plane of colors with ticks and labels for both variables in the scale.
 #' All \code{*.theme} arguments accept two types of arguments: a complete theme
@@ -89,7 +93,7 @@ NULL
 #'     coord_map() +
 #'     guides(fill = guide_colorplane("My Title", axis.title = "Murder Rate",
 #'     axis.title.y = "Urban Population %", label.position = c("top", "bottom"),
-#'     label.y.position = c("left", "right")))
+#'     label.y.position = c("left", "right")), fill2 = FALSE)
 #'  }
 #' @export
 #' @aliases guide_colourplane
@@ -160,12 +164,6 @@ guide_colorplane <- function(
   label.position <- match.arg(label.position, several.ok = TRUE)
   label.y.position <- match.arg(label.y.position, several.ok = TRUE)
 
-  if(!"colorplaner" %in% .packages()) {
-    warning("At present, package colorplaner must be attached for ",
-            "guide_colorplaner to function. See ?colorplaner for more info.")
-  }
-
-
   structure(list(
     # title
     title = title,
@@ -228,7 +226,7 @@ guide_colorplane <- function(
 #' @param scale ggproto object instance of \code{\link{ScaleColorPlane}}
 #' @export
 #' @keywords internal
-guide_train.colorplane <- function(guide, scale) {
+guide_train.colorplane <- function(guide, scale, aesthetic = NULL) {
   # do nothing if scale inappropriate
   if (!inherits(scale, "ScaleColorPlane")) {
     warning("colorplane guide needs scale_color_colorplane or scale_fill_colorplane.")

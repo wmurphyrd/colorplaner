@@ -82,7 +82,7 @@ The spectrum of possible colors can be defined though a variety of different col
 The YUV color space ([wikipedia](https://en.wikipedia.org/wiki/YUV)) was designed at the advent of color television broadcasting to encode color data in a manner that would be backwards-compatible with monochrome displays. To do this, the luminance of each pixel is encoded into one component (Y), which provides all of the information for monochromatic display, and all of the color information (chrominance) is encoded into the remaining two components (U & V). 
 
 When Y is held constant, the remaining color space is a U-V plane of all 
-possible colors as that brightness level, and it appears as if delineated into four quadrants of color regions: green, orange, magenta, 
+possible colors at that brightness level, and it appears as if delineated into four quadrants of color regions: green, orange, magenta, 
 and blue. 
 
 ```{r colorplane-concept, echo = FALSE, warning = FALSE, message =FALSE, fig.cap="With Y held at 30%, this U-V color plane can be visually divided into 4 color quadrants."}
@@ -157,7 +157,7 @@ sepal_grid <- expand.grid(
 
 iris_plot %+% iris[iris$labeled, ] + 
   geom_text(aes(label = let),  nudge_x = .2, nudge_y = -.05) +
-  guides(color = FALSE) +
+  guides(color = FALSE, color2 = FALSE) +
   theme(legend.position = "bottom", legend.text = element_text(size = 8), 
         legend.key.width = grid::unit(3, "mm"))
 
@@ -309,7 +309,8 @@ if(require("maps")) {
       label.y.theme = theme_gray(),
       axis.title.position = "top",
       label.position = c("top", "bottom"),
-      label.y.position = c("left", "right")))
+      label.y.position = c("left", "right")),
+      fill2 = FALSE)
 }
 ```
 

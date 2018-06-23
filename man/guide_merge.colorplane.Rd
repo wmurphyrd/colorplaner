@@ -4,7 +4,7 @@
 \alias{guide_merge.colorplane}
 \title{Colorplane method for guide_merge}
 \usage{
-guide_merge.colorplane(guide, new_guide)
+\method{guide_merge}{colorplane}(guide, new_guide)
 }
 \arguments{
 \item{guide}{Object of class "colorplane" generate by

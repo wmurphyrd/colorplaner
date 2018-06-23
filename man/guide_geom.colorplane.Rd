@@ -4,7 +4,7 @@
 \alias{guide_geom.colorplane}
 \title{Colorplane method for guide_geom}
 \usage{
-guide_geom.colorplane(guide, ...)
+\method{guide_geom}{colorplane}(guide, ...)
 }
 \arguments{
 \item{guide}{Object of class "colorplane" generate by

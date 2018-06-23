@@ -4,7 +4,7 @@
 \alias{guide_train.colorplane}
 \title{Colorplane method for guide_train}
 \usage{
-guide_train.colorplane(guide, scale)
+\method{guide_train}{colorplane}(guide, scale, aesthetic = NULL)
 }
 \arguments{
 \item{guide}{Object of class "colorplane" generate by
