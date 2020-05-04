@@ -69,9 +69,9 @@ ScaleColorPlane <- ggplot2::ggproto("ScaleColorPlane", ggplot2::ScaleContinuous,
 
     # prefill with the NA color so we can do the projection as an inset, process
     # the NA color to ensure proper #xxxxxx form regardless of unput type
-    df[[aesthetics[1]]] <- grDevices::rgb(
-      t(grDevices::col2rgb(self$na.color[1])),
-      maxColorValue = 255)
+    df[[aesthetics[1]]] <- do.call(grDevices::rgb,
+      c(as.list(grDevices::col2rgb(self$na.color[1],TRUE)),
+        maxColorValue = 255))
     whichOK <- !is.na(x) & !is.na(y)
     # TODO: support extra argument pass_through
     df[whichOK, aesthetics[1]] <- do.call(self$projection_function,
@@ -256,7 +256,8 @@ ScaleColorPlane <- ggplot2::ggproto("ScaleColorPlane", ggplot2::ScaleContinuous,
 #'   Defaults to "Color Key" or "Fill Color Key" to match the scale function
 #'   used.
 #' @param na.color Character string containing a valid R color to use when
-#'   plotting missing data or data outside the limits.
+#'   plotting missing data or data outside the limits. Color can be transparent.
+#'   By providing NA, missing values will be fully transparent.
 #' @param guide Name of guide object, or object itself. Defaults to
 #'   \code{\link{guide_colorplane}} designed for this scale. Behavior of other
 #'   guides with this scale is not defined.
